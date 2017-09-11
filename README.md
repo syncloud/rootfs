@@ -1,0 +1,2 @@
+# rootfs
+Syncloud rootfs
