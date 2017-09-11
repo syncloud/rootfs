@@ -1,0 +1,14 @@
+syncloud_setup.sh
+*.img
+*.img.xz
+kernel-qemu
+.idea
+*.tar.gz
+*.tar.xz
+rootfs
+build
+dst
+*.iml
+*tar.gz*
+*.log
+*.pyc
