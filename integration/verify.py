@@ -74,7 +74,7 @@ def test_activate_device(auth, device_host):
     email, password, domain, release = auth
 
     run_ssh(device_host, '/opt/app/sam/bin/sam --debug upgrade platform', password=DEFAULT_DEVICE_PASSWORD)
-    wait_for_platform_web(device_host)
+    # wait_for_platform_web(device_host)
     response = requests.post('http://{0}:81/rest/activate'.format(device_host),
                              data={'main_domain': 'syncloud.info', 'redirect_email': email,
                                    'redirect_password': password,
@@ -85,8 +85,8 @@ def test_activate_device(auth, device_host):
     LOGS_SSH_PASSWORD = DEVICE_PASSWORD
 
 
-def wait_for_platform_web(device_host):
-    print(check_output('while ! nc -w 1 -z {0} 80; do sleep 1; done'.format(device_host), shell=True))
+# def wait_for_platform_web(device_host):
+#     print(check_output('while ! nc -w 1 -z {0} 80; do sleep 1; done'.format(device_host), shell=True))
 
 
 def wait_for_sam(device_host, syncloud_session):
