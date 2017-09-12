@@ -15,19 +15,19 @@ export DEBIAN_FRONTEND=noninteractive
 export TMPDIR=/tmp
 export TMP=/tmp
 
-ROOTFS=${DIR}/rootfs
+ROOTFS=${DIR}/build
 
 function cleanup {
 
-    mount | grep rootfs || true
-    mount | grep rootfs | awk '{print "umounting "$1; system("umount "$3)}' || true
-    mount | grep rootfs || true
+    mount | grep $ROOTFS || true
+    mount | grep $ROOTFS | awk '{print "umounting "$1; system("umount "$3)}' || true
+    mount | grep $ROOTFS || true
 
     echo "killing chroot services"
-    lsof 2>&1 | grep rootfs | awk '{print $1 $2}' | sort | uniq
-    #lsof 2>&1 | grep rootfs | awk '{print $2}' | sort | uniq | xargs kill -9 || true
+    lsof 2>&1 | grep $ROOTFS | awk '{print $1 $2}' | sort | uniq
+    lsof 2>&1 | grep $ROOTFS | awk '{print $2}' | sort | uniq | xargs kill -9 || true
     echo "chroot services after kill"
-    lsof 2>&1 | grep rootfs || true
+    lsof 2>&1 | grep $ROOTFS || true
 }
 
 cleanup
