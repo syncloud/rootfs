@@ -34,16 +34,16 @@ else
 fi
 
 function cleanup {
-    mount | grep rootfs
-    mount | grep rootfs | awk '{print "umounting "$1; system("umount "$3)}'
-    mount | grep rootfs
+    mount | grep $ROOTFS
+    mount | grep $ROOTFS | awk '{print "umounting "$1; system("umount "$3)}'
+    mount | grep $ROOTFS
 
     echo "killing chroot services"
-    lsof 2>&1 | grep rootfs | grep -v docker | grep -v rootfs.sh | awk '{print $1" "$2}' | sort | uniq
+    lsof 2>&1 | grep $ROOTFS | grep -v docker | grep -v rootfs.sh | awk '{print $1" "$2}' | sort | uniq
 
-    lsof 2>&1 | grep rootfs | grep -v docker | grep -v rootfs.sh | awk '{print $2}' | sort | uniq | xargs kill -9
+    #lsof 2>&1 | grep $ROOTFS | grep -v docker | grep -v rootfs.sh | awk '{print $2}' | sort | uniq | xargs kill -9
 
-    lsof 2>&1 | grep rootfs
+    lsof 2>&1 | grep $ROOTFS
 }
 
 if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
