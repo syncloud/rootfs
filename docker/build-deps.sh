@@ -9,5 +9,5 @@ if [ -z "$1" ]; then
 fi
 
 ARCH=$1
-docker build -f Dockerfile.deps.${ARCH} -t syncloud/image-deps-${ARCH} .
-docker push syncloud/image-deps-${ARCH}
+docker build -f Dockerfile.deps.${ARCH} -t syncloud/rootfs-deps-${ARCH} .
+docker push syncloud/rootfs-deps-${ARCH}
