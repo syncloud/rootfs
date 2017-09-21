@@ -7,7 +7,7 @@ clone:
 
 pipeline:
   rootfs:
-    image: syncloud/image-deps-${arch}
+    image: syncloud/rootfs-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
       - ./bootstrap/bootstrap.sh
@@ -15,7 +15,7 @@ pipeline:
     privileged: true
  
   syncloud-rootfs:
-    image: syncloud/image-deps-${arch}
+    image: syncloud/rootfs-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
       - ./rootfs.sh rc stable
@@ -23,13 +23,13 @@ pipeline:
     privileged: true
  
   test:
-    image: syncloud/image-deps-${arch}
+    image: syncloud/rootfs-deps-${arch}
     commands:
       - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master device ${installer}
     privileged: true
      
   ci-artifact:
-    image: syncloud/image-deps-${arch}
+    image: syncloud/rootfs-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
       - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-$(dpkg --print-architecture)
