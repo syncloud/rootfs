@@ -28,13 +28,13 @@ pipeline:
 #      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master device ${installer}
 #    privileged: true
      
-  ci-artifact:
-    image: syncloud/rootfs-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
-    commands:
-      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-$(dpkg --print-architecture)
-    when:
-      status: [ failure, success ] 
+#  ci-artifact:
+#    image: syncloud/rootfs-deps-${arch}
+#    secrets: [ARTIFACT_SSH_KEY]
+#    commands:
+#      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-$(dpkg --print-architecture)
+#    when:
+#      status: [ failure, success ] 
       
 services:
   device:
