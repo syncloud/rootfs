@@ -22,11 +22,11 @@ pipeline:
       - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture).tar.gz
     privileged: true
  
-  test:
-    image: syncloud/rootfs-deps-${arch}
-    commands:
-      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master device ${installer}
-    privileged: true
+#  test:
+#    image: syncloud/rootfs-deps-${arch}
+#    commands:
+#      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master device ${installer}
+#    privileged: true
      
   ci-artifact:
     image: syncloud/rootfs-deps-${arch}
