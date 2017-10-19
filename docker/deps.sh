@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 apt-get -qq update
-apt-get install kpartx pigz pxz parted \
+apt-get -y install kpartx pigz pxz parted \
     wget p7zip unzip dosfstools xz-utils \
     debootstrap lsof ssh sshpass python \
     build-essential \
