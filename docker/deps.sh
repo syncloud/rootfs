@@ -8,7 +8,7 @@ apt-get install kpartx pigz pxz parted \
     debootstrap lsof ssh sshpass python \
     build-essential \
     libxml2-dev autoconf libjpeg-dev libpng12-dev libfreetype6-dev \
-    libzip-dev zlib1g-dev libcurl4-gnutls-dev dpkg-dev \
+    libzip-dev zlib1g-dev dpkg-dev \
     libpq-dev libreadline-dev libldap2-dev libsasl2-dev libssl-dev libldb-dev \
     libtool wget cmake libncurses5-dev libldap2-dev libsasl2-dev libssl-dev libldb-dev \
     uuid-dev libjansson-dev libxslt1-dev liburiparser1 libxml2 sqlite3 libsqlite3-dev libicu-dev \
@@ -23,7 +23,7 @@ apt-get install kpartx pigz pxz parted \
     libpq-dev libreadline-dev libldap2-dev libsasl2-dev libssl-dev libldb-dev \
     p7zip libtool libmcrypt-dev libicu-dev \
     libxml2-dev autoconf libjpeg-dev libpng-dev libfreetype6-dev \
-    libzip-dev zlib1g-dev libcurl4-gnutls-dev dpkg-dev \
+    libzip-dev zlib1g-dev dpkg-dev \
     libpq-dev libreadline-dev libldap2-dev libsasl2-dev libssl-dev libldb-dev \
     p7zip libtool libmcrypt-dev libicu-dev libldap2-dev libsasl2-dev libssl-dev \
     libldb-dev libdb-dev libreadline-dev zlib1g-dev \
