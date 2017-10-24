@@ -7,7 +7,8 @@ xargs apt-get -y install < apt.pkg.list
 
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
-pip install coin
+pip install -r python.dev.requirements.txt
+
 ARCH=$(uname -m)
 if [ $ARCH == "x86_64" ]; then
   wget --progress dot:giga http://artifact.syncloud.org/3rdparty/phantomjs-2.1.1-linux-x86_64.tar.bz2
