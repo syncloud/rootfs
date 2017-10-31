@@ -13,14 +13,15 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [ "$#" -lt 2 ]; then
-    echo "Usage: $0 release point_to_release"
+if [ "$#" -lt 3 ]; then
+    echo "Usage: $0 release point_to_release installer"
     exit 1
 fi
 
 ARCH=$(dpkg --print-architecture)
 RELEASE=$1
 POINT_TO_RELEASE=$2
+INSTALLER=$3
 SAM_VERSION=85
 SAM_ARCH=$(uname -m)
 
@@ -88,6 +89,6 @@ echo "enable restart"
 cp enable-service-restart.sh ${ROOTFS}/root
 chroot ${ROOTFS} /root/enable-service-restart.sh
 
-rm -rf syncloud-rootfs-${ARCH}.tar.gz
-tar czf syncloud-rootfs-${ARCH}.tar.gz -C ${ROOTFS} .
+rm -rf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz
+tar czf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz -C ${ROOTFS} .
 rm -rf ${ROOTFS}
