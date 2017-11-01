@@ -63,7 +63,7 @@ chroot ${ROOTFS} apt-get -y install sudo openssh-server wget less parted lsb-rel
 chroot ${ROOTFS} ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
 chroot ${ROOTFS} /bin/bash -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
-sed -i "s/^#PermitRootLogin .*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
+sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
 cat ${ROOTFS}/etc/ssh/sshd_config
 
 chroot ${ROOTFS} systemctl disable apt-daily.timer
