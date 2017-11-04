@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xe
 
 echo "Running from: $PWD"
 

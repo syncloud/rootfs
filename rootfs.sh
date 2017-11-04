@@ -60,8 +60,6 @@ echo "extracting rootfs"
 
 tar xzf ${BASE_ROOTFS_ZIP} -C ${ROOTFS}
 rm -rf ${BASE_ROOTFS_ZIP}
-echo "setting version ${BUILD_NUMBER}"
-echo ${BUILD_NUMBER} > ${ROOTFS}/version
 
 echo "disable service restart"
 cp disable-service-restart.sh ${ROOTFS}/root
