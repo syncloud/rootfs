@@ -19,6 +19,13 @@ else
   cp phantomjs-2.1.1-armhf /usr/bin/phantomjs
 fi
 chmod +x /usr/bin/phantomjs
+
+if [[ $(. /etc/os-release; echo $VERSION) =~ .*jessie.* ]]; then
+    echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
+fi
+apt-get update
+apt-get install -y golang-1.6
+
 ${DIR}/install-sam.sh 85 stable
 ${DIR}/install-s3cmd.sh
 
