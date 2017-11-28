@@ -12,6 +12,8 @@ dosfstools
 dpkg-dev
 flex
 gettext
+git
+golang-1.6
 groff
 kpartx
 libasound2
