@@ -11,7 +11,6 @@ xargs apt-get -y install < apt.pkg.list
 
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
-pip install --upgrade pip
 pip install -r python.dev.requirements.txt
 
 ARCH=$(uname -m)
