@@ -18,6 +18,7 @@ groff
 kpartx
 libasound2
 libbz2-dev
+libcap-dev
 libcurl4-openssl-dev
 libdb5.3-dev
 libdb-dev
@@ -46,6 +47,7 @@ libpng-dev
 libpq-dev
 libreadline-dev
 libsasl2-dev
+libseccomp-dev
 libspeex1
 libspeex-dev
 libspeexdsp1
