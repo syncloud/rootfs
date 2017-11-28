@@ -82,6 +82,7 @@ sshpass
 unzip
 uuid-dev
 wget
+xfslibs-dev
 xmlto
 xvfb
 xz-utils
