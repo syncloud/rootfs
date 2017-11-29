@@ -1,4 +1,5 @@
 apache2-utils
+apparmor
 asciidoc
 autoconf
 bison
@@ -13,9 +14,11 @@ dpkg-dev
 flex
 gettext
 git
+gnupg2
 golang-1.6
 groff
 kpartx
+libapparmor1
 libasound2
 libbz2-dev
 libcap-dev
@@ -29,6 +32,7 @@ libffi-dev
 libfontconfig
 libfreetype6-dev
 libgcrypt20-dev
+libglib2.0-dev
 libgsm1-dev
 libgtk-3-0
 libicu-dev
@@ -38,6 +42,7 @@ libjson-c-dev
 libldap2-dev
 libldb-dev
 liblogging-stdlog-dev
+liblz4-dev
 libmcrypt-dev
 libncurses5-dev
 libopus-dev
@@ -48,6 +53,7 @@ libpq-dev
 libreadline-dev
 libsasl2-dev
 libseccomp-dev
+libseccomp2
 libspeex1
 libspeex-dev
 libspeexdsp1
@@ -57,6 +63,8 @@ libsrtp0-dev
 libssl-dev
 libtool
 liburiparser1
+libudev-dev
+libusb-dev
 libvorbis-dev
 libxml2
 libxml2-dev
@@ -74,12 +82,15 @@ pxz
 python
 python-dateutil
 python-dev
+python-docutils
 python-magic
+seccomp
 sqlite3
 squashfs-tools
 ssh
 sshpass
 unzip
+util-linux
 uuid-dev
 wget
 xfslibs-dev
