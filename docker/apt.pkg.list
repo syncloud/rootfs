@@ -89,6 +89,7 @@ sqlite3
 squashfs-tools
 ssh
 sshpass
+systemd-container
 unzip
 util-linux
 uuid-dev
