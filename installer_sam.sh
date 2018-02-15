@@ -34,5 +34,4 @@ tar xzf ${SAM} -C ${ROOTFS}/opt/app
 #This is needed to make sure that update is properly done on fresh platform
 /opt/app/sam/bin/sam --debug update --release ${RELEASE}
 /opt/app/sam/bin/sam list
-/opt/app/sam/bi
-n/sam set_release ${POINT_TO_RELEASE}
+/opt/app/sam/bin/sam set_release ${POINT_TO_RELEASE}
