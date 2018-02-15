@@ -21,7 +21,7 @@ pipeline:
       - ./rootfs.sh rc stable ${installer}
       - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
     privileged: true
- 
+    
 #  test:
 #    image: syncloud/build-deps-${arch}
 #    commands:
@@ -36,17 +36,17 @@ pipeline:
 #    when:
 #      status: [ failure, success ] 
       
-services:
-  device:
-    image: syncloud/systemd-${arch}
-    privileged: true
-    volumes:
-      - /var/run/dbus:/var/run/dbus
+#services:
+#  device:
+#    image: syncloud/systemd-${arch}
+#    privileged: true
+#    volumes:
+#      - /var/run/dbus:/var/run/dbus
      
 matrix:
   arch:
     - arm
     - amd64
   installer:
-    - sam
+#    - sam
     - snapd

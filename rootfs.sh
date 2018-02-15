@@ -59,9 +59,9 @@ echo "extracting rootfs"
 tar xzf ${BASE_ROOTFS_ZIP} -C ${ROOTFS}
 rm -rf ${BASE_ROOTFS_ZIP}
 
-echo "disable service restart"
-cp disable-service-restart.sh ${ROOTFS}/root
-chroot ${ROOTFS} /root/disable-service-restart.sh
+#echo "disable service restart"
+#cp disable-service-restart.sh ${ROOTFS}/root
+#chroot ${ROOTFS} /root/disable-service-restart.sh
 
 echo "configuring rootfs"
 mount -v --bind /dev ${ROOTFS}/dev
@@ -79,9 +79,9 @@ rm -rf ${ROOTFS}/tmp/*
 
 cleanup || true
 
-echo "enable restart"
-cp enable-service-restart.sh ${ROOTFS}/root
-chroot ${ROOTFS} /root/enable-service-restart.sh
+#echo "enable restart"
+#cp enable-service-restart.sh ${ROOTFS}/root
+#chroot ${ROOTFS} /root/enable-service-restart.sh
 
 rm -rf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz
 tar czf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz -C ${ROOTFS} .
