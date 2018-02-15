@@ -37,5 +37,7 @@ systemctl enable snapd.service
 systemctl enable snapd.socket
 systemctl start snapd.service snapd.socket
 
+/lib/systemd/systemd-activate /run/snapd.socket -l /run/snapd-snap.socket /usr/lib/snapd/snapd &
+
 snap --version
 snap install platform
