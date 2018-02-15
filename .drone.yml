@@ -49,4 +49,4 @@ matrix:
     - amd64
   installer:
     - sam
-    #- snapd
+    - snapd
