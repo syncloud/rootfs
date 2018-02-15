@@ -22,8 +22,6 @@ ARCH=$(dpkg --print-architecture)
 RELEASE=$1
 POINT_TO_RELEASE=$2
 INSTALLER=$3
-SAM_VERSION=85
-SAM_ARCH=$(uname -m)
 
 BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
 ROOTFS=${DIR}/rootfs
@@ -70,16 +68,14 @@ mount -v --bind /dev ${ROOTFS}/dev
 chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
-SAM=sam-${SAM_VERSION}-${SAM_ARCH}.tar.gz
-wget http://apps.syncloud.org/apps/${SAM} --progress=dot:giga -O ${SAM}
-tar xzf ${SAM} -C ${ROOTFS}/opt/app
-
-cp syncloud.sh ${ROOTFS}/root
-chroot ${ROOTFS} /bin/bash -c "/root/syncloud.sh ${RELEASE} ${POINT_TO_RELEASE}"
+cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
+chroot ${ROOTFS} /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+rm ${ROOTFS}/root/installer.sh
 
 umount ${ROOTFS}/dev/pts
 umount ${ROOTFS}/dev
 umount ${ROOTFS}/proc
+rm -rf ${ROOTFS}/tmp/*
 
 cleanup || true
 
