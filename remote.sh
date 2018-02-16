@@ -13,6 +13,7 @@ RELEASE=$2
 POINT_TO_RELEASE=$3
 INSTALLER=$4
 ARCH=$(dpkg --print-architecture)
+BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
 
 attempts=100
 attempt=0
@@ -32,5 +33,7 @@ done
 set -e
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no rootfs.sh root@${DEVICE_HOST}:/
+sshpass -p syncloud scp -o StrictHostKeyChecking=no $BASE_ROOTFS_ZIP root@${DEVICE_HOST}:/
+
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@${DEVICE_HOST} /rootfs.sh $RELEASE $POINT_TO_RELEASE $INSTALLER
 sshpass -p syncloud scp -o StrictHostKeyChecking=no root@${DEVICE_HOST}:/syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz .
