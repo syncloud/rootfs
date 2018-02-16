@@ -69,7 +69,7 @@ chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
-chroot ${ROOTFS} /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+systemd-nspawn -d ${ROOTFS} /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 rm ${ROOTFS}/root/installer.sh
 
 umount ${ROOTFS}/dev/pts
