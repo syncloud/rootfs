@@ -40,6 +40,7 @@ done
 set -e
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no rootfs.sh root@${DEVICE_HOST}:/
+sshpass -p syncloud scp -o StrictHostKeyChecking=no installer_* root@${DEVICE_HOST}:/
 sshpass -p syncloud scp -o StrictHostKeyChecking=no $BASE_ROOTFS_ZIP root@${DEVICE_HOST}:/
 
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@${DEVICE_HOST} /rootfs.sh $RELEASE $POINT_TO_RELEASE $INSTALLER
