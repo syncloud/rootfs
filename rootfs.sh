@@ -64,17 +64,17 @@ rm -rf ${BASE_ROOTFS_ZIP}
 #chroot ${ROOTFS} /root/disable-service-restart.sh
 
 echo "configuring rootfs"
-mount -v --bind /dev ${ROOTFS}/dev
-chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
-chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
+#mount -v --bind /dev ${ROOTFS}/dev
+#chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
+#chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
 systemd-nspawn -D ${ROOTFS} /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 rm ${ROOTFS}/root/installer.sh
 
-umount ${ROOTFS}/dev/pts
-umount ${ROOTFS}/dev
-umount ${ROOTFS}/proc
+#umount ${ROOTFS}/dev/pts
+#umount ${ROOTFS}/dev
+#umount ${ROOTFS}/proc
 rm -rf ${ROOTFS}/tmp/*
 
 cleanup || true
