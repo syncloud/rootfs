@@ -15,6 +15,13 @@ INSTALLER=$4
 ARCH=$(dpkg --print-architecture)
 BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
 
+ls -la
+
+if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
+  echo "${BASE_ROOTFS_ZIP} not found"
+  exit 1
+fi
+
 attempts=100
 attempt=0
 

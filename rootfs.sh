@@ -26,12 +26,6 @@ INSTALLER=$3
 BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
 ROOTFS=${DIR}/rootfs
 
-if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
-  wget http://artifact.syncloud.org/image/${BASE_ROOTFS_ZIP}.tar.gz --progress dot:giga
-else
-  echo "skipping rootfs"
-fi
-
 function cleanup {
     mount | grep $ROOTFS
     mount | grep $ROOTFS | awk '{print "umounting "$1; system("umount "$3)}'
@@ -45,8 +39,11 @@ function cleanup {
     lsof 2>&1 | grep $ROOTFS
 }
 
+ls -la
+
 if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
   echo "${BASE_ROOTFS_ZIP} not found"
+  exit 1
 fi
 
 cleanup || true
