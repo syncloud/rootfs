@@ -6,8 +6,8 @@ if [[ $(. /etc/os-release; echo $VERSION) =~ .*jessie.* ]]; then
     echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
 fi
 
-apt-get -qq update
-xargs apt-get -y install < apt.pkg.list
+apt-get update
+xargs apt-get -t jessie-backports install -y < apt.pkg.list
 
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
