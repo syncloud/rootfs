@@ -18,12 +18,9 @@ pipeline:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
-      - ./rootfs.sh rc stable ${installer}
+      - ./remote.sh rc stable ${installer}
       - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
     privileged: true
-    volumes:
-      - /var/run/dbus:/var/run/dbus
-     
     
 #  test:
 #    image: syncloud/build-deps-${arch}
@@ -39,12 +36,12 @@ pipeline:
 #    when:
 #      status: [ failure, success ] 
       
-#services:
-#  device:
-#    image: syncloud/systemd-${arch}
-#    privileged: true
-#    volumes:
-#      - /var/run/dbus:/var/run/dbus
+services:
+  device:
+    image: syncloud/systemd-${arch}
+    privileged: true
+    volumes:
+      - /var/run/dbus:/var/run/dbus
      
 matrix:
   arch:
