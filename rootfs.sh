@@ -1,5 +1,6 @@
 #!/bin/bash -ex
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR
 
 #Fix debconf frontend warnings
 #export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
