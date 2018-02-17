@@ -69,12 +69,32 @@ echo "configuring rootfs"
 #chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
-nohup systemd-nspawn --network-veth -bD ${ROOTFS} &
+nohup systemd-nspawn --network-veth -bD ${ROOTFS} -p 2222:22 &
 sleep 60
 #systemd-run --wait --pty --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
-machinectl -h
-machinectl --version
-machinectl shell rootfs "/bin/bash -c /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+
+attempts=100
+attempt=0
+
+set +e
+sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost date
+while test $? -gt 0
+do
+  if [ $attempt -gt $attempts ]; then
+    exit 1
+  fi
+  sleep 3
+  echo "Waiting for SSH $attempt"
+  attempt=$((attempt+1))
+  sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost date
+done
+set -e
+
+sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /bin/bash -c /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+
+#machinectl -h
+#machinectl --version
+#machinectl shell rootfs "/bin/bash -c /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 
 rm ${ROOTFS}/root/installer.sh
 
