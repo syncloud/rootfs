@@ -67,7 +67,8 @@ echo "configuring rootfs"
 #chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
-systemd-nspawn -D ${ROOTFS} /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+systemd-nspawn -bD ${ROOTFS} 
+systemd-run --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 rm ${ROOTFS}/root/installer.sh
 
 #umount ${ROOTFS}/dev/pts
