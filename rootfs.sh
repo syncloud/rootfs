@@ -72,7 +72,7 @@ cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
 nohup systemd-nspawn --network-veth -bD ${ROOTFS} &
 sleep 60
 #systemd-run --wait --pty --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
-machinectl shell rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+machinectl shell rootfs "/bin/bash -c /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 
 rm ${ROOTFS}/root/installer.sh
 
