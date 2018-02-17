@@ -43,8 +43,10 @@ function cleanup {
 ls -la
 
 if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
-  echo "${BASE_ROOTFS_ZIP} not found"
-  exit 1
+  echo "${BASE_ROOTFS_ZIP} is not found"
+  wget http://artifact.syncloud.org/image/${BASE_ROOTFS_ZIP} --progress dot:giga
+else
+  echo "rootfs is found"
 fi
 
 cleanup || true

@@ -6,6 +6,7 @@ clone:
     depth: 50
 
 pipeline:
+
   rootfs:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
@@ -13,6 +14,8 @@ pipeline:
       - ./bootstrap/bootstrap.sh
       - ./upload-artifact.sh rootfs-$(dpkg --print-architecture).tar.gz
     privileged: true
+    when:
+      arch: disabled
  
   syncloud-rootfs:
     image: syncloud/build-deps-${arch}
@@ -38,7 +41,7 @@ pipeline:
       
 services:
   device:
-    image: syncloud/systemd-${arch}
+    image: syncloud/build-deps-systemd-${arch}
     privileged: true
     volumes:
       - /var/run/dbus:/var/run/dbus
