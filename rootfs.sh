@@ -68,8 +68,8 @@ echo "configuring rootfs"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
 nohup systemd-nspawn --network-veth -bD ${ROOTFS} &
-sleep 120
-systemd-run --scope --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
+sleep 20
+systemd-run --wait --pty --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 rm ${ROOTFS}/root/installer.sh
 
 #umount ${ROOTFS}/dev/pts
