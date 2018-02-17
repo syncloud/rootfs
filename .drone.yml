@@ -15,7 +15,7 @@ pipeline:
       - ./upload-artifact.sh rootfs-$(dpkg --print-architecture).tar.gz
     privileged: true
     when:
-      - platform: disabled
+     platform: disabled
     
   syncloud-rootfs:
     image: syncloud/build-deps-${arch}
