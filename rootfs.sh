@@ -67,8 +67,8 @@ echo "configuring rootfs"
 #chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
-systemd-nspawn --network-veth -bD ${ROOTFS} &
-sleep 10
+nohup systemd-nspawn --network-veth -bD ${ROOTFS} &
+sleep 120
 systemd-run --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 rm ${ROOTFS}/root/installer.sh
 
