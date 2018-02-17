@@ -17,11 +17,6 @@ BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
 
 ls -la
 
-if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
-  echo "${BASE_ROOTFS_ZIP} not found"
-  exit 1
-fi
-
 attempts=100
 attempt=0
 
@@ -41,7 +36,9 @@ set -e
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no rootfs.sh root@${DEVICE_HOST}:/
 sshpass -p syncloud scp -o StrictHostKeyChecking=no installer_* root@${DEVICE_HOST}:/
-sshpass -p syncloud scp -o StrictHostKeyChecking=no $BASE_ROOTFS_ZIP root@${DEVICE_HOST}:/
+if [ -f ${BASE_ROOTFS_ZIP} ]; then
+  sshpass -p syncloud scp -o StrictHostKeyChecking=no $BASE_ROOTFS_ZIP root@${DEVICE_HOST}:/
+fi
 
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@${DEVICE_HOST} /rootfs.sh $RELEASE $POINT_TO_RELEASE $INSTALLER
 sshpass -p syncloud scp -o StrictHostKeyChecking=no root@${DEVICE_HOST}:/syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz .
