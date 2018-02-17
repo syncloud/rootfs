@@ -15,8 +15,8 @@ pipeline:
       - ./upload-artifact.sh rootfs-$(dpkg --print-architecture).tar.gz
     privileged: true
     when:
-      arch: disabled
- 
+      - platform: disabled
+    
   syncloud-rootfs:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
