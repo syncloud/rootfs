@@ -25,6 +25,7 @@ pipeline:
       - ./rootfs.sh rc stable ${installer}
       - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
     privileged: true
+    network_mode: host
     volumes:
       - /usr/bin/docker:/usr/bin/docker
       - /var/run/docker.sock:/var/run/docker.sock
@@ -43,12 +44,12 @@ pipeline:
 #    when:
 #      status: [ failure, success ] 
       
-services:
-  device:
-    image: syncloud/systemd-${arch}
-    privileged: true
-    volumes:
-      - /var/run/dbus:/var/run/dbus
+#services:
+#  device:
+#    image: syncloud/systemd-${arch}
+#    privileged: true
+#    volumes:
+#      - /var/run/dbus:/var/run/dbus
      
 matrix:
   arch:
