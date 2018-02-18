@@ -56,8 +56,8 @@ mkdir -p ${ROOTFS}
 
 echo "extracting rootfs"
 
-tar xzf ${BASE_ROOTFS_ZIP} -C ${ROOTFS}
-rm -rf ${BASE_ROOTFS_ZIP}
+#tar xzf ${BASE_ROOTFS_ZIP} -C ${ROOTFS}
+#rm -rf ${BASE_ROOTFS_ZIP}
 
 #echo "disable service restart"
 #cp disable-service-restart.sh ${ROOTFS}/root
@@ -70,7 +70,9 @@ echo "configuring rootfs"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
 
-docker images
+docker rmi rootfs || true
+docker import ${BASE_ROOTFS_ZIP} rootfs
+nohup docker run -it -p 2222:22 rootfs /sbin/init &
 
 #nohup systemd-nspawn --network-veth -bD ${ROOTFS} -p 2222:22 &
 #sleep 60
