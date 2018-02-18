@@ -57,5 +57,5 @@ sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm /r
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm -rf /tmp/*
 docker kill rootfs
 docker export rootfs | gzip > syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz
-docer rm rootfs
-docer rmi rootfs
+docker rm rootfs
+docker rmi rootfs
