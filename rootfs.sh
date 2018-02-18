@@ -69,8 +69,11 @@ echo "configuring rootfs"
 #chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
-nohup systemd-nspawn --network-veth -bD ${ROOTFS} -p 2222:22 &
-sleep 60
+
+docker images
+
+#nohup systemd-nspawn --network-veth -bD ${ROOTFS} -p 2222:22 &
+#sleep 60
 #systemd-run --wait --pty --machine=rootfs /bin/bash -c "/root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 
 attempts=100
