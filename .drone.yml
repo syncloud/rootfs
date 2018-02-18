@@ -21,7 +21,6 @@ pipeline:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
-      #- ./remote.sh device rc stable ${installer}
       - ./rootfs.sh rc stable ${installer}
       - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
     privileged: true
@@ -56,5 +55,5 @@ matrix:
     - arm
     - amd64
   installer:
-#    - sam
+    - sam
     - snapd
