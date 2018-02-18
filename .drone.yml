@@ -26,8 +26,9 @@ pipeline:
       - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
     privileged: true
     volumes:
-      - /var/run/dbus:/var/run/dbus
-     
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      
 #  test:
 #    image: syncloud/build-deps-${arch}
 #    commands:
