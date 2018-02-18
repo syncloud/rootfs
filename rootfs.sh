@@ -68,8 +68,6 @@ echo "configuring rootfs"
 #chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 #chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
-cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
-
 docker rmi rootfs || true
 docker import ${BASE_ROOTFS_ZIP} rootfs
 nohup docker run -it -p 2222:22 rootfs /sbin/init &
@@ -94,6 +92,8 @@ do
   sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost date
 done
 set -e
+
+cp installer_$INSTALLER.sh ${ROOTFS}/root/installer.sh
 
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /bin/bash -c /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}"
 
