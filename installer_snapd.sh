@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
-VERSION=171207
+VERSION=180201
 
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
 wget http://apps.syncloud.org/apps/${SNAPD} --progress=dot:giga
@@ -20,9 +20,6 @@ mkdir -p /usr/lib/snapd
 cp snapd/bin/snapd /usr/lib/snapd
 cp snapd/bin/snap-exec /usr/lib/snapd
 cp snapd/bin/snap-confine /usr/lib/snapd
-cp snapd/bin/snap-seccomp /usr/lib/snapd
-cp snapd/bin/snap-repair /usr/lib/snapd
-cp snapd/bin/snap-update-ns /usr/lib/snapd
 cp snapd/bin/snap-discard-ns /usr/lib/snapd
 cp snapd/bin/snap /usr/bin
 cp snapd/bin/snapctl /usr/bin
@@ -35,9 +32,7 @@ cp snapd/conf/snapd.socket /lib/systemd/system/
 
 systemctl enable snapd.service
 systemctl enable snapd.socket
-#systemctl start snapd.service snapd.socket
-
-/lib/systemd/systemd-activate -l /run/snapd.socket -l /run/snapd-snap.socket /usr/lib/snapd/snapd &
+systemctl start snapd.service snapd.socket
 
 snap --version
 snap install platform
