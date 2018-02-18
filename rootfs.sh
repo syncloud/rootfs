@@ -70,7 +70,7 @@ echo "configuring rootfs"
 
 docker rmi rootfs || true
 docker import ${BASE_ROOTFS_ZIP} rootfs
-docker run -i -p 2222:22 rootfs /sbin/init
+docker run -d -p 2222:22 rootfs /sbin/init
 
 #nohup systemd-nspawn --network-veth -bD ${ROOTFS} -p 2222:22 &
 #sleep 60
