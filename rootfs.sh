@@ -69,9 +69,10 @@ echo "configuring rootfs"
 #chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 docker kill rootfs || true
+docker rm rootfs || true
 docker rmi rootfs || true
 docker import ${BASE_ROOTFS_ZIP} rootfs
-docker run -d -p 2222:22 --name rootfs rootfs /sbin/init
+docker run -d --privileged -i -p 2222:22 --name rootfs rootfs /sbin/init
 
 #nohup systemd-nspawn --network-veth -bD ${ROOTFS} -p 2222:22 &
 #sleep 60
