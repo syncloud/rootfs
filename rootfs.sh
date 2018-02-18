@@ -51,7 +51,7 @@ do
 done
 set -e
 
-sshpass -p syncloud scp -o StrictHostKeyChecking=no installer_${INSTALLER}.sh root@localhost:/root/installer.sh
+sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 installer_${INSTALLER}.sh root@localhost:/root/installer.sh
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm /root/installer.sh
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm -rf /tmp/*
