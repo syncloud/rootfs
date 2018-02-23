@@ -27,7 +27,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 SAM=sam-${SAM_VERSION}-${SAM_ARCH}.tar.gz
 wget http://apps.syncloud.org/apps/${SAM} --progress=dot:giga -O ${SAM}
-tar xzf ${SAM} -C ${ROOTFS}/opt/app
+tar xzf ${SAM} -C /opt/app
 
 /opt/app/sam/bin/sam --debug update --release ${RELEASE}
 /opt/app/sam/bin/sam --debug upgrade_all
