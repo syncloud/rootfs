@@ -17,7 +17,7 @@ fi
 RELEASE=$1
 POINT_TO_RELEASE=$2
 
-SAM_VERSION=85
+SAM_VERSION=180326
 SAM_ARCH=$(uname -m)
 
 #Fix debconf frontend warnings
