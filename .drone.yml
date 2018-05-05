@@ -50,8 +50,8 @@ pipeline:
      
 matrix:
   arch:
-    - arm
     - amd64
+    - arm
   installer:
-    - sam
     - snapd
+    - sam

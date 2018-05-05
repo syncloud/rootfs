@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
-VERSION=180503
+VERSION=180505
 CHANNEL=$1
 
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
