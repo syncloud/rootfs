@@ -55,6 +55,7 @@ sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 installer_${INSTALLE
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm /root/installer.sh
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm -rf /tmp/*
+sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost cat /etc/hosts
 docker kill rootfs
 docker export rootfs | gzip > syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz
 docker rm rootfs
