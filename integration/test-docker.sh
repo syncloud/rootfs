@@ -15,12 +15,6 @@ INSTALLER=$6
 attempts=100
 attempt=0
 
-if [ $INSTALLER == "snapd" ]; then
-    INSTALLER_VERSION=170813
-else
-    INSTALLER_VERSION=89
-fi
-
 set +e
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@${DEVICE_HOST} date
 while test $? -gt 0

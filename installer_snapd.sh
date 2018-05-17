@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
-VERSION=180505
+VERSION=180516
 CHANNEL=$1
 POINT_TO_CHANNEL=$2
 
