@@ -57,16 +57,16 @@ sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /root
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm /root/installer.sh
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm -rf /tmp/*
 
-sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 ${DIR}/bootstrap/${ARCH}/etc/hosts root@localhost:/etc/hosts
-sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost cat /etc/hosts
-sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost sync
-sync
 docker kill rootfs
-docker export rootfs | gzip > syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz
+docker export rootfs | gzip > docker-rootfs-${ARCH}-${INSTALLER}.tar.gz
 docker rm rootfs
 docker rmi rootfs
 
 rm -rf rootfs
 mkdir rootfs
-tar xzf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs
+tar xzf docker-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs
+rm -rf docker-rootfs-${ARCH}-${INSTALLER}.tar.gz
+cp ${DIR}/bootstrap/${ARCH}/etc/hosts rootfs/etc/hosts
 cat rootfs/etc/hosts
+tar czf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs .
+rm -rf rootfs
