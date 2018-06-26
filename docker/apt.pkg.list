@@ -90,7 +90,6 @@ sqlite3
 squashfs-tools
 ssh
 sshpass
-systemd
 systemd-container
 unzip
 util-linux

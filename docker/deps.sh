@@ -2,12 +2,8 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-if [[ $(. /etc/os-release; echo $VERSION) =~ .*jessie.* ]]; then
-    echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
-fi
-
 apt-get update
-xargs apt-get -t jessie-backports install -y < apt.pkg.list
+xargs apt-get install -y < apt.pkg.list
 
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
