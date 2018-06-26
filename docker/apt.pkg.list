@@ -11,6 +11,7 @@ debootstrap
 docbook2x
 dosfstools
 dpkg-dev
+expect
 flex
 gettext
 git
@@ -88,6 +89,7 @@ sqlite3
 squashfs-tools
 ssh
 sshpass
+telnet
 unzip
 util-linux
 uuid-dev
