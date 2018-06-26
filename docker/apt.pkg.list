@@ -15,8 +15,6 @@ flex
 gettext
 git
 gnupg2
-golang-1.6
-golang-1.7
 groff
 kpartx
 libapparmor1
