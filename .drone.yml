@@ -20,7 +20,7 @@ pipeline:
     secrets: [ARTIFACT_SSH_KEY]
     commands:
       - ./rootfs.sh rc stable ${installer}
-      - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
+      - ./upload-artifact.sh syncloud-rootfs-${arch}-${installer}.tar.gz
     privileged: true
     network_mode: host
     volumes:
