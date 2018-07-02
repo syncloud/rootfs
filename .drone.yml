@@ -11,8 +11,8 @@ pipeline:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
-      - ./bootstrap/bootstrap.sh
-      - ./upload-artifact.sh rootfs-$(dpkg --print-architecture).tar.gz
+      - ./bootstrap/bootstrap.sh ${arch}
+      - ./upload-artifact.sh rootfs-${arch}.tar.gz
     privileged: true
     
   syncloud-rootfs:

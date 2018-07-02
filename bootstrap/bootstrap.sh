@@ -2,7 +2,13 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-ARCH=$(dpkg --print-architecture)
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 arch"
+    exit 1
+fi
+ARCH=$1
+
+DEBIAN_ARCH=$(dpkg --print-architecture)
 REPO=http://http.debian.net/debian
 KEY=https://ftp-master.debian.org/keys/archive-key-8.asc
 
@@ -35,7 +41,7 @@ cleanup
 rm -rf ${ROOTFS}
 rm -rf rootfs.tar.gz
 
-debootstrap --no-check-gpg --include=ca-certificates,locales --arch=${ARCH} jessie ${ROOTFS} ${REPO}
+debootstrap --no-check-gpg --include=ca-certificates,locales --arch=${DEBIAN_ARCH} jessie ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
 chroot ${ROOTFS} /bin/bash -c "locale-gen en_US en_US.UTF-8"
