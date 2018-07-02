@@ -59,9 +59,7 @@ chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 echo "copy system files to get image working"
-if [ -d ${DIR}/${ARCH} ]; then
-    cp -rf ${DIR}/${ARCH}/* ${ROOTFS}/
-fi
+cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 
 chroot ${ROOTFS} apt-get update
 chroot ${ROOTFS} apt-get -y dist-upgrade
@@ -78,7 +76,7 @@ chroot ${ROOTFS} systemctl disable apt-daily-upgrade.timer
 chroot ${ROOTFS} systemctl disable apt-daily-upgrade.service
 
 echo "copy system files again as some packages might have replaced our files"
-cp -rf ${DIR}/${ARCH}/* ${ROOTFS}/
+cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 mkdir ${ROOTFS}/opt/data
 mkdir ${ROOTFS}/opt/app
 
