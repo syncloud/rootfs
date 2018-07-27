@@ -11,16 +11,16 @@ pipeline:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
-      - ./bootstrap/bootstrap.sh
-      - ./upload-artifact.sh rootfs-$(dpkg --print-architecture).tar.gz
+      - ./bootstrap/bootstrap.sh ${arch}
+      - ./upload-artifact.sh rootfs-${arch}.tar.gz
     privileged: true
     
   syncloud-rootfs:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
-      - ./rootfs.sh rc stable ${installer}
-      - ./upload-artifact.sh syncloud-rootfs-$(dpkg --print-architecture)-${installer}.tar.gz
+      - ./rootfs.sh rc stable ${installer} ${arch}
+      - ./upload-artifact.sh syncloud-rootfs-${arch}-${installer}.tar.gz
     privileged: true
     network_mode: host
     volumes:

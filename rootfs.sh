@@ -7,15 +7,16 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [ "$#" -lt 3 ]; then
-    echo "Usage: $0 release point_to_release installer"
+if [ "$#" -lt 4 ]; then
+    echo "Usage: $0 release point_to_release installer arch"
     exit 1
 fi
 
-ARCH=$(dpkg --print-architecture)
 RELEASE=$1
 POINT_TO_RELEASE=$2
 INSTALLER=$3
+ARCH=$4
+DEBIAN_ARCH=$(dpkg --print-architecture)
 
 BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
 
@@ -66,7 +67,7 @@ rm -rf rootfs
 mkdir rootfs
 tar xzf docker-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs
 rm -rf docker-rootfs-${ARCH}-${INSTALLER}.tar.gz
-cp ${DIR}/bootstrap/${ARCH}/etc/hosts rootfs/etc/hosts
+cp ${DIR}/bootstrap/${DEBIAN_ARCH}/etc/hosts rootfs/etc/hosts
 cat rootfs/etc/hosts
 tar czf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs .
 rm -rf rootfs

@@ -20,6 +20,20 @@ else
 fi
 chmod +x /usr/bin/phantomjs
 
+GECKODRIVER=0.14.0
+FIREFOX=52.0
+mkdir /tools
+if [ $ARCH == "x86_64" ]; then
+  wget https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER}/geckodriver-v${GECKODRIVER}-linux64.tar.gz
+  mkdir /tools/geckodriver
+  tar xf geckodriver-v${GECKODRIVER}-linux64.tar.gz -C /tools/geckodriver
+
+  wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2
+  tar xf firefox-${FIREFOX}.tar.bz2 -C /tools
+
+  curl https://raw.githubusercontent.com/mguillem/JSErrorCollector/master/dist/JSErrorCollector.xpi -o /tools/firefox/JSErrorCollector.xpi
+fi
+
 ${DIR}/install-sam.sh 85 stable
 ${DIR}/install-s3cmd.sh
 

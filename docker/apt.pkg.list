@@ -11,12 +11,11 @@ debootstrap
 docbook2x
 dosfstools
 dpkg-dev
+expect
 flex
 gettext
 git
 gnupg2
-golang-1.6
-golang-1.7
 groff
 kpartx
 libapparmor1
@@ -90,7 +89,7 @@ sqlite3
 squashfs-tools
 ssh
 sshpass
-systemd-container
+telnet
 unzip
 util-linux
 uuid-dev

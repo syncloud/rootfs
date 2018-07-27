@@ -2,7 +2,13 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-ARCH=$(dpkg --print-architecture)
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 arch"
+    exit 1
+fi
+ARCH=$1
+
+DEBIAN_ARCH=$(dpkg --print-architecture)
 REPO=http://http.debian.net/debian
 KEY=https://ftp-master.debian.org/keys/archive-key-8.asc
 
@@ -35,7 +41,7 @@ cleanup
 rm -rf ${ROOTFS}
 rm -rf rootfs.tar.gz
 
-debootstrap --no-check-gpg --include=ca-certificates,locales --arch=${ARCH} jessie ${ROOTFS} ${REPO}
+debootstrap --no-check-gpg --include=ca-certificates,locales --arch=${DEBIAN_ARCH} jessie ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
 chroot ${ROOTFS} /bin/bash -c "locale-gen en_US en_US.UTF-8"
@@ -53,9 +59,7 @@ chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 echo "copy system files to get image working"
-if [ -d ${DIR}/${ARCH} ]; then
-    cp -rf ${DIR}/${ARCH}/* ${ROOTFS}/
-fi
+cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 
 chroot ${ROOTFS} apt-get update
 chroot ${ROOTFS} apt-get -y dist-upgrade
@@ -72,7 +76,7 @@ chroot ${ROOTFS} systemctl disable apt-daily-upgrade.timer
 chroot ${ROOTFS} systemctl disable apt-daily-upgrade.service
 
 echo "copy system files again as some packages might have replaced our files"
-cp -rf ${DIR}/${ARCH}/* ${ROOTFS}/
+cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 mkdir ${ROOTFS}/opt/data
 mkdir ${ROOTFS}/opt/app
 
