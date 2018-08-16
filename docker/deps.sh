@@ -22,17 +22,34 @@ chmod +x /usr/bin/phantomjs
 
 GECKODRIVER=0.14.0
 FIREFOX=52.0
+GO_VERSION=1.6.4
+
 mkdir /tools
-if [ $ARCH == "x86_64" ]; then
-  wget https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER}/geckodriver-v${GECKODRIVER}-linux64.tar.gz
-  mkdir /tools/geckodriver
-  tar xf geckodriver-v${GECKODRIVER}-linux64.tar.gz -C /tools/geckodriver
+cd /tools
 
-  wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2
-  tar xf firefox-${FIREFOX}.tar.bz2 -C /tools
+if [ ${ARCH} == "x86_64" ]; then
+    CPU_ARCH=amd64
 
-  curl https://raw.githubusercontent.com/mguillem/JSErrorCollector/master/dist/JSErrorCollector.xpi -o /tools/firefox/JSErrorCollector.xpi
+    wget https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER}/geckodriver-v${GECKODRIVER}-linux64.tar.gz
+    mkdir /tools/geckodriver
+    tar xf geckodriver-v${GECKODRIVER}-linux64.tar.gz -C /tools/geckodriver
+
+    wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2
+    tar xf firefox-${FIREFOX}.tar.bz2 -C /tools
+
+    curl https://raw.githubusercontent.com/mguillem/JSErrorCollector/master/dist/JSErrorCollector.xpi -o /tools/firefox/JSErrorCollector.xpi
+else
+    CPU_ARCH=armv6l
 fi
+
+wget https://dl.google.com/go/go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
+tar xf go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
+rm go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
+mv go go-${GO_VERSION}
+ln -s go-${GO_VERSION} go
+
+export GOROOT=.
+/tools/go/bin/go version
 
 ${DIR}/install-sam.sh 85 stable
 ${DIR}/install-s3cmd.sh
