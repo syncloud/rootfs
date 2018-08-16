@@ -22,7 +22,7 @@ chmod +x /usr/bin/phantomjs
 
 GECKODRIVER=0.14.0
 FIREFOX=52.0
-GO_VERSION=1.6.4
+GO_VERSION=1.7.6
 
 mkdir /tools
 cd /tools
