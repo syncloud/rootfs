@@ -7,15 +7,14 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [ "$#" -lt 4 ]; then
-    echo "Usage: $0 release point_to_release installer arch"
+if [ "$#" -lt 3 ]; then
+    echo "Usage: $0 release point_to_release arch"
     exit 1
 fi
 
 RELEASE=$1
 POINT_TO_RELEASE=$2
-INSTALLER=$3
-ARCH=$4
+ARCH=$3
 DEBIAN_ARCH=$(dpkg --print-architecture)
 
 BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
@@ -52,22 +51,22 @@ do
 done
 set -e
 
-sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 installer_${INSTALLER}.sh root@localhost:/root/installer.sh
+sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 installer_snapd.sh root@localhost:/root/installer.sh
 
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm /root/installer.sh
 sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm -rf /tmp/*
 
 docker kill rootfs
-docker export rootfs | gzip > docker-rootfs-${ARCH}-${INSTALLER}.tar.gz
+docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
 docker rm rootfs
 docker rmi rootfs
 
 rm -rf rootfs
 mkdir rootfs
-tar xzf docker-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs
-rm -rf docker-rootfs-${ARCH}-${INSTALLER}.tar.gz
+tar xzf docker-rootfs-${ARCH}.tar.gz -C rootfs
+rm -rf docker-rootfs-${ARCH}.tar.gz
 cp ${DIR}/bootstrap/${DEBIAN_ARCH}/etc/hosts rootfs/etc/hosts
 cat rootfs/etc/hosts
-tar czf syncloud-rootfs-${ARCH}-${INSTALLER}.tar.gz -C rootfs .
+tar czf syncloud-rootfs-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs

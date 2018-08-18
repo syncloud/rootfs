@@ -3,9 +3,11 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
-VERSION=180516
+
 CHANNEL=$1
 POINT_TO_CHANNEL=$2
+
+VERSION=$(curl http://apps.syncloud.org/releases/${CHANNEL}/snapd.version)
 
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
 wget http://apps.syncloud.org/apps/${SNAPD} --progress=dot:giga
@@ -37,5 +39,5 @@ systemctl enable snapd.socket
 systemctl start snapd.service snapd.socket
 
 snap --version
-snap install platform --channel=$CHANNEL
-snap switch platform --channel=$POINT_TO_CHANNEL
+snap install platform --channel=${CHANNEL}
+snap switch platform --channel=${POINT_TO_CHANNEL}
