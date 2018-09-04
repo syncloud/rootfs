@@ -63,7 +63,7 @@ cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 
 chroot ${ROOTFS} apt-get update
 chroot ${ROOTFS} apt-get -y dist-upgrade
-chroot ${ROOTFS} apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl dbus avahi-daemon ntp net-tools wireless-tools
+chroot ${ROOTFS} apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl dbus avahi-daemon ntp net-tools wireless-tools fancontrol
 chroot ${ROOTFS} ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
 chroot ${ROOTFS} /bin/bash -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
