@@ -78,6 +78,7 @@ chroot ${ROOTFS} systemctl disable apt-daily-upgrade.service
 echo "copy system files again as some packages might have replaced our files"
 cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 
+ls -la ${ROOTFS}/usr/sbin/fancontrol 
 for f in ${DIR}/patches/*.patch
 do
   patch -d ${ROOTFS} -p0 < $f
