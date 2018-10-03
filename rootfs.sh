@@ -53,7 +53,7 @@ set -e
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 installer_snapd.sh root@localhost:/root/installer.sh
 
-DOCKER_RUN=sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost 
+DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost"
 $DOCKER_RUN /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
 $DOCKER_RUN rm /root/installer.sh
 $DOCKER_RUN rm -rf /tmp/*
