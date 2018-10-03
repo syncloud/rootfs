@@ -53,9 +53,12 @@ set -e
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 installer_snapd.sh root@localhost:/root/installer.sh
 
-sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
-sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm /root/installer.sh
-sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost rm -rf /tmp/*
+DOCKER_RUN=sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost 
+$DOCKER_RUN /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
+$DOCKER_RUN rm /root/installer.sh
+$DOCKER_RUN rm -rf /tmp/*
+$DOCKER_RUN journalctl --rotate
+$DOCKER_RUN journalctl --vacuum-time=1s
 
 docker kill rootfs
 docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
