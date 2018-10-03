@@ -7,7 +7,7 @@ clone:
 
 pipeline:
 
-  rootfs:
+  bootstrap:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
@@ -15,7 +15,7 @@ pipeline:
       - ./upload-artifact.sh rootfs-${arch}.tar.gz
     privileged: true
     
-  syncloud-rootfs:
+  rootfs:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:

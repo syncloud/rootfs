@@ -57,8 +57,6 @@ DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@loc
 $DOCKER_RUN /root/installer.sh ${RELEASE} ${POINT_TO_RELEASE}
 $DOCKER_RUN rm /root/installer.sh
 $DOCKER_RUN rm -rf /tmp/*
-$DOCKER_RUN journalctl --rotate
-$DOCKER_RUN journalctl --vacuum-time=1s
 
 docker kill rootfs
 docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
