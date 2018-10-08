@@ -1,7 +1,7 @@
 # rootfs
 Syncloud rootfs
 
-# Run Syncloud on any Linix distro
+# Run Syncloud on Debian Jessie (and probably any other) Linix distro
 
 ````
 wget https://raw.githubusercontent.com/syncloud/rootfs/master/installer_snapd.sh
