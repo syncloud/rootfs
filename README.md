@@ -6,7 +6,7 @@ Syncloud rootfs
 ````
 wget https://raw.githubusercontent.com/syncloud/rootfs/master/installer_snapd.sh
 chmod +x installer_snapd.sh
-sudo ./installer_snapd.sh stable stable amd64
+sudo ./installer_snapd.sh stable stable
 ````
 
 This shoild install Syncloud Platform

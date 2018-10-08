@@ -19,7 +19,7 @@ pipeline:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
     commands:
-      - ./rootfs.sh rc stable ${arch}
+      - ./rootfs.sh rc stable
       - ./upload-artifact.sh syncloud-rootfs-${arch}.tar.gz
     privileged: true
     network_mode: host
