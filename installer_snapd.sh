@@ -4,8 +4,13 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
 
-CHANNEL=$1
-POINT_TO_CHANNEL=$2
+if [ "$#" -lt 2 ]; then
+    CHANNEL=stable
+    POINT_TO_CHANNEL=stable
+else
+    CHANNEL=$1
+    POINT_TO_CHANNEL=$2
+fi
 
 VERSION=$(curl http://apps.syncloud.org/releases/${CHANNEL}/snapd.version)
 
