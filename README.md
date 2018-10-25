@@ -15,9 +15,9 @@ apt-get remove apache2
 Installation:
 
 ````
-wget https://raw.githubusercontent.com/syncloud/rootfs/master/installer_snapd.sh
-chmod +x installer_snapd.sh
-sudo ./installer_snapd.sh stable stable
+wget https://raw.githubusercontent.com/syncloud/rootfs/master/install.sh
+chmod +x install.sh
+sudo ./install.sh stable stable
 ````
 
 This should install Syncloud Platform
