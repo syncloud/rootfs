@@ -64,28 +64,15 @@ cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 chroot ${ROOTFS} apt-get update
 chroot ${ROOTFS} apt-get -y dist-upgrade
 chroot ${ROOTFS} apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl dbus avahi-daemon ntp net-tools wireless-tools fancontrol
-chroot ${ROOTFS} ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
-chroot ${ROOTFS} /bin/bash -c "cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys"
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
-sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
-cat ${ROOTFS}/etc/ssh/sshd_config
-
-chroot ${ROOTFS} systemctl disable apt-daily.timer
-chroot ${ROOTFS} systemctl disable apt-daily.service
-chroot ${ROOTFS} systemctl disable apt-daily-upgrade.timer
-chroot ${ROOTFS} systemctl disable apt-daily-upgrade.service
 
 echo "copy system files again as some packages might have replaced our files"
 cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 
-ls -la ${ROOTFS}/usr/sbin/fancontrol 
 for f in ${DIR}/patches/*.patch
 do
   patch -d ${ROOTFS} -p1 < $f
 done
-
-mkdir ${ROOTFS}/opt/data
-mkdir ${ROOTFS}/opt/app
 
 echo "enable restart"
 cp ${DIR}/enable-service-restart.sh ${ROOTFS}/root

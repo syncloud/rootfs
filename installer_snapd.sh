@@ -15,6 +15,16 @@ fi
 VERSION=$(curl http://apps.syncloud.org/releases/${CHANNEL}/snapd.version)
 
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
+systemctl disable apt-daily.timer
+systemctl disable apt-daily.service
+systemctl disable apt-daily-upgrade.timer
+systemctl disable apt-daily-upgrade.service
+
+ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
+cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys
+sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+systemctl restart ssh
+
 wget http://apps.syncloud.org/apps/${SNAPD} --progress=dot:giga
 
 tar xzvf ${SNAPD}
