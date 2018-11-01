@@ -12,6 +12,9 @@ else
     POINT_TO_CHANNEL=$2
 fi
 
+apt-get update
+apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl dbus avahi-daemon ntp net-tools wireless-tools fancontrol
+
 VERSION=$(curl http://apps.syncloud.org/releases/${CHANNEL}/snapd.version)
 
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
