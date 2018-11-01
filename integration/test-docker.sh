@@ -30,9 +30,9 @@ do
 done
 set -e
 
-sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no install.sh $USER@${DEVICE_HOST}:./install.sh
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no ../install.sh $USER@${DEVICE_HOST}:/tmp/install.sh
 
-sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USER@${DEVICE_HOST} sudo ./install.sh
+sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USER@${DEVICE_HOST} sudo /tmp/install.sh
 
 pip2 install -r ${DIR}/dev_requirements.txt
 pip2 install -U pytest
