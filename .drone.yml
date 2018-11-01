@@ -26,7 +26,15 @@ pipeline:
     volumes:
       - /usr/bin/docker:/usr/bin/docker
       - /var/run/docker.sock:/var/run/docker.sock
-      
+
+  test-stretch:
+    image: syncloud/build-deps-${arch}
+    commands:
+      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master stretch debian debian
+    privileged: true
+    when:
+      platform: linux/amd64
+     
 #  test:
 #    image: syncloud/build-deps-${arch}
 #    commands:
@@ -41,12 +49,14 @@ pipeline:
 #    when:
 #      status: [ failure, success ] 
       
-#services:
-#  device:
-#    image: syncloud/systemd-${arch}
-#    privileged: true
-#    volumes:
-#      - /var/run/dbus:/var/run/dbus
+services:
+  stretch:
+    image: minimum2scp/systemd-stretch
+    privileged: true
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+    when:
+      platform: linux/amd64
      
 matrix:
   arch:
