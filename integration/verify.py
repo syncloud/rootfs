@@ -31,7 +31,6 @@ def module_setup(request, device_host):
 def module_teardown(device_host):
     os.mkdir(LOG_DIR)
 
-    copy_logs(device_host, 'sam', '/var/log/sam.log')
     copy_logs(device_host, 'platform')
     for app in APPS:
         copy_logs(device_host, app)
@@ -73,8 +72,6 @@ def test_start(module_setup):
 def test_activate_device(auth, device_host):
     email, password, domain, release = auth
 
-    run_ssh(device_host, '/opt/app/sam/bin/sam --debug upgrade platform', password=DEFAULT_DEVICE_PASSWORD)
-    # wait_for_platform_web(device_host)
     response = requests.post('http://{0}:81/rest/activate'.format(device_host),
                              data={'main_domain': 'syncloud.info', 'redirect_email': email,
                                    'redirect_password': password,
@@ -122,7 +119,7 @@ def wait_for_app(device_host, syncloud_session, predicate):
 
 
 def test_login(syncloud_session, device_host):
-    syncloud_session.post('http://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD})
+    syncloud_session.post('https://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD})
 
 
 @pytest.mark.parametrize("app", APPS)
@@ -143,7 +140,7 @@ def test_app_upgrade(syncloud_session, app, device_host):
 
 @pytest.mark.parametrize("app", APPS)
 def test_app_remove(syncloud_session, app, device_host):
-    response = syncloud_session.get('http://{0}/rest/remove?app_id={1}'.format(device_host, app),
+    response = syncloud_session.get('https://{0}/rest/remove?app_id={1}'.format(device_host, app),
                                     allow_redirects=False)
     assert response.status_code == 200
     wait_for_sam(device_host, syncloud_session)

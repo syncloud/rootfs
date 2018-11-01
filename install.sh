@@ -11,6 +11,7 @@ else
     CHANNEL=$1
     POINT_TO_CHANNEL=$2
 fi
+echo "root:syncloud" | chpasswd
 
 apt-get update
 apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl ntp net-tools wireless-tools
