@@ -60,7 +60,7 @@ def device_domain(auth):
 @pytest.fixture(scope='function')
 def syncloud_session(device_host):
     session = requests.session()
-    session.post('http://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD})
+    session.post('https://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD}, verify=False)
 
     return session
 
@@ -90,7 +90,7 @@ def wait_for_sam(device_host, syncloud_session):
     sam_running = True
     while sam_running == True:
         try:
-            response = syncloud_session.get('http://{0}/rest/settings/sam_status'.format(device_host))
+            response = syncloud_session.get('https://{0}/rest/settings/sam_status'.format(device_host), verify=False)
             if response.status_code == 200:
                 json = convertible.from_json(response.text)
                 sam_running = json.is_running
@@ -119,12 +119,12 @@ def wait_for_app(device_host, syncloud_session, predicate):
 
 
 def test_login(syncloud_session, device_host):
-    syncloud_session.post('https://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD})
+    syncloud_session.post('https://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD}, verify=False)
 
 
 @pytest.mark.parametrize("app", APPS)
 def test_app_install(syncloud_session, app, device_host):
-    response = syncloud_session.get('http://{0}/rest/install?app_id={1}'.format(device_host, app), allow_redirects=False)
+    response = syncloud_session.get('https://{0}/rest/install?app_id={1}'.format(device_host, app), allow_redirects=False, verify=False)
 
     assert response.status_code == 200
     wait_for_sam(device_host, syncloud_session)
@@ -133,15 +133,15 @@ def test_app_install(syncloud_session, app, device_host):
 
 @pytest.mark.parametrize("app", APPS)
 def test_app_upgrade(syncloud_session, app, device_host):
-    response = syncloud_session.get('http://{0}/rest/upgrade?app_id={1}'.format(device_host, app),
-                                    allow_redirects=False)
+    response = syncloud_session.get('https://{0}/rest/upgrade?app_id={1}'.format(device_host, app),
+                                    allow_redirects=False, verify=False)
     assert response.status_code == 200
 
 
 @pytest.mark.parametrize("app", APPS)
 def test_app_remove(syncloud_session, app, device_host):
     response = syncloud_session.get('https://{0}/rest/remove?app_id={1}'.format(device_host, app),
-                                    allow_redirects=False)
+                                    allow_redirects=False, verify=False)
     assert response.status_code == 200
     wait_for_sam(device_host, syncloud_session)
     wait_for_app(device_host, syncloud_session, lambda response_text: app not in response_text)
