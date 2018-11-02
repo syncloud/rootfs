@@ -27,6 +27,12 @@ pipeline:
       - /usr/bin/docker:/usr/bin/docker
       - /var/run/docker.sock:/var/run/docker.sock
 
+  test-syncloud:
+    image: syncloud/build-deps-${arch}
+    commands:
+      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master syncloud root syncloud
+    privileged: true
+      
   test-stretch:
     image: syncloud/build-deps-${arch}
     commands:
@@ -34,12 +40,6 @@ pipeline:
     privileged: true
     when:
       platform: linux/amd64
-     
-#  test:
-#    image: syncloud/build-deps-${arch}
-#    commands:
-#      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master device ${installer}
-#    privileged: true
      
 #  ci-artifact:
 #    image: syncloud/build-deps-${arch}
@@ -50,6 +50,12 @@ pipeline:
 #      status: [ failure, success ] 
       
 services:
+  syncloud:
+    image: syncloud/systemd-${arch}
+    privileged: true
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+      
   stretch:
     image: minimum2scp/systemd-stretch
     privileged: true
