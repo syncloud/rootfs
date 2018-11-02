@@ -103,7 +103,7 @@ def wait_for_sam(device_host, syncloud_session):
 
 def wait_for_app(device_host, syncloud_session, predicate):
     found = False
-    attempts = 100
+    attempts = 10
     attempt = 0
     while not found and attempt < attempts:
         try:
