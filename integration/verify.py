@@ -131,11 +131,11 @@ def test_app_install(syncloud_session, app, device_host):
     wait_for_app(device_host, syncloud_session, lambda response_text: app in response_text)
 
 
-@pytest.mark.parametrize("app", APPS)
-def test_app_upgrade(syncloud_session, app, device_host):
-    response = syncloud_session.get('https://{0}/rest/upgrade?app_id={1}'.format(device_host, app),
+#@pytest.mark.parametrize("app", APPS)
+#def test_app_upgrade(syncloud_session, app, device_host):
+#    response = syncloud_session.get('https://{0}/rest/upgrade?app_id={1}'.format(device_host, app),
                                     allow_redirects=False, verify=False)
-    assert response.status_code == 200
+#    assert response.status_code == 200
 
 
 @pytest.mark.parametrize("app", APPS)
