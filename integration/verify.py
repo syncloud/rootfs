@@ -134,7 +134,7 @@ def test_app_install(syncloud_session, app, device_host):
 #@pytest.mark.parametrize("app", APPS)
 #def test_app_upgrade(syncloud_session, app, device_host):
 #    response = syncloud_session.get('https://{0}/rest/upgrade?app_id={1}'.format(device_host, app),
-                                    allow_redirects=False, verify=False)
+#                                    allow_redirects=False, verify=False)
 #    assert response.status_code == 200
 
 
