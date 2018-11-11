@@ -34,6 +34,14 @@ pipeline:
     commands:
       - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master syncloud root syncloud
     privileged: true
+
+  test-syncloud-ci-artifact:
+    image: syncloud/build-deps-${arch}
+    secrets: [ARTIFACT_SSH_KEY]
+    commands:
+      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)
+    when:
+      status: [ failure, success ] 
       
   test-stretch:
     image: syncloud/build-deps-${arch}
@@ -42,6 +50,14 @@ pipeline:
     privileged: true
     when:
       platform: linux/amd64
+
+  test-stretch-ci-artifact:
+    image: syncloud/build-deps-${arch}
+    secrets: [ARTIFACT_SSH_KEY]
+    commands:
+      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-stretch-$(dpkg --print-architecture)
+    when:
+      status: [ failure, success ] 
 
   upload-artifact:
     image: syncloud/build-deps-${arch}
