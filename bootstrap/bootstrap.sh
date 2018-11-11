@@ -91,4 +91,4 @@ rm -rf ${ROOTFS}/var/cache/apt/archives/*.deb
 cat ${ROOTFS}/etc/hosts
 
 echo "zipping bootstrap"
-tar czf rootfs-${ARCH}.tar.gz -C ${ROOTFS} .
+tar czf bootstrap-${ARCH}.tar.gz -C ${ROOTFS} .
