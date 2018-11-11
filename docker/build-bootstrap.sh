@@ -10,8 +10,7 @@ fi
 ARCH=$1
 
 set +x
-docker login 
-#-u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 set -x
 
 cat bootstrap-$(dpkg --print-architecture).tar.gz | docker import - syncloud/bootstrap-${ARCH}

@@ -11,8 +11,8 @@ fi
 ARCH=$1
 docker build -f Dockerfile.systemd.${ARCH} -t syncloud/systemd-${ARCH} .
 
-#set +x
-#docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-#set -x
+set +x
+docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+set -x
 
 docker push syncloud/systemd-${ARCH}

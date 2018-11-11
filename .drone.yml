@@ -9,7 +9,7 @@ pipeline:
 
   bootstrap:
     image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
+    secrets: [ARTIFACT_SSH_KEY, DOCKER_USERNAME, DOCKER_PASSWORD]
     commands:
       - ./bootstrap/bootstrap.sh ${arch}
       - ./upload-artifact.sh bootstrap-${arch}.tar.gz
@@ -21,7 +21,7 @@ pipeline:
 
   rootfs:
     image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
+    secrets: [ARTIFACT_SSH_KEY, DOCKER_USERNAME, DOCKER_PASSWORD]
     commands:
       - ./rootfs.sh rc stable ${arch}
       - ./upload-artifact.sh rootfs-${arch}.tar.gz
