@@ -13,5 +13,5 @@ set +x
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 set -x
 
-cat bootstrap-$(dpkg --print-architecture).tar.gz | docker import - syncloud/bootstrap-${ARCH}
+cat bootstrap-${ARCH}.tar.gz | docker import - syncloud/bootstrap-${ARCH}
 docker push syncloud/bootstrap-${ARCH}
