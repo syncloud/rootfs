@@ -12,7 +12,8 @@ pipeline:
     secrets: [ARTIFACT_SSH_KEY]
     commands:
       - ./bootstrap/bootstrap.sh ${arch}
-      - ./upload-artifact.sh rootfs-${arch}.tar.gz
+      - ./upload-artifact.sh bootstrap-${arch}.tar.gz
+      - ./docker/build-bootstrap.sh ${arch}
     privileged: true
     
   rootfs:
@@ -20,7 +21,8 @@ pipeline:
     secrets: [ARTIFACT_SSH_KEY]
     commands:
       - ./rootfs.sh rc stable ${arch}
-      - ./upload-artifact.sh syncloud-rootfs-${arch}.tar.gz
+      - ./upload-artifact.sh rootfs-${arch}.tar.gz
+      - ./docker/build-rootfs.sh ${arch}
     privileged: true
     network_mode: host
     volumes:

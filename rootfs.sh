@@ -17,15 +17,15 @@ POINT_TO_RELEASE=$2
 ARCH=$3
 DEBIAN_ARCH=$(dpkg --print-architecture)
 
-BASE_ROOTFS_ZIP=rootfs-${ARCH}.tar.gz
+BOOTSTRAP_ROOTFS_ZIP=bootstrap-${ARCH}.tar.gz
 
 ls -la
 
-if [ ! -f ${BASE_ROOTFS_ZIP} ]; then
-  echo "${BASE_ROOTFS_ZIP} is not found"
+if [ ! -f ${BOOTSTRAP_ROOTFS_ZIP} ]; then
+  echo "${BOOTSTRAP_ROOTFS_ZIP} is not found"
   wget http://artifact.syncloud.org/image/${BASE_ROOTFS_ZIP} --progress dot:giga
 else
-  echo "rootfs is found"
+  echo "bootstrap rootfs is found"
 fi
 
 docker kill rootfs || true
@@ -69,5 +69,5 @@ tar xzf docker-rootfs-${ARCH}.tar.gz -C rootfs
 rm -rf docker-rootfs-${ARCH}.tar.gz
 cp ${DIR}/bootstrap/${DEBIAN_ARCH}/etc/hosts rootfs/etc/hosts
 cat rootfs/etc/hosts
-tar czf syncloud-rootfs-${ARCH}.tar.gz -C rootfs .
+tar czf rootfs-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs

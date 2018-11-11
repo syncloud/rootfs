@@ -1,7 +1,6 @@
 #!/bin/bash -xe
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd ${DIR}
 
 if [ -z "$1" ]; then
     echo "usage: $0 arch"
@@ -9,7 +8,10 @@ if [ -z "$1" ]; then
 fi
 
 ARCH=$1
-apt-get install debootstrap
-${DIR}/../bootstrap/bootstrap.sh
+
+set +x
+docker login --username=$DOCKER_USERNAME --password=$DOCKER_PASSWORD
+set -x
+
 cat bootstrap-$(dpkg --print-architecture).tar.gz | docker import - syncloud/bootstrap-${ARCH}
 docker push syncloud/bootstrap-${ARCH}
