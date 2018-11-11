@@ -23,6 +23,7 @@ pipeline:
       - ./rootfs.sh rc stable ${arch}
       - ./upload-artifact.sh rootfs-${arch}.tar.gz
       - ./docker/build-rootfs.sh ${arch}
+      - ./docker/build-systemd.sh ${arch}
     privileged: true
     network_mode: host
     volumes:

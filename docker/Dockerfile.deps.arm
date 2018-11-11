@@ -1,4 +1,4 @@
-FROM syncloud/rootfs-arm
+FROM syncloud/bootstrap-arm
 ADD deps.sh /
 ADD apt.pkg.list /
 ADD python.dev.requirements.txt /
