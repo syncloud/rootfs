@@ -15,7 +15,10 @@ pipeline:
       - ./upload-artifact.sh bootstrap-${arch}.tar.gz
       - ./docker/build-bootstrap.sh ${arch}
     privileged: true
-    
+    volumes:
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+
   rootfs:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
