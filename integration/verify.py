@@ -38,9 +38,8 @@ def module_teardown(device_host):
     run_ssh(device_host, 'journalctl', password=DEVICE_PASSWORD, throw=False)
 
 
-def copy_logs(device_host, app, device_logs=None):
-    if not device_logs:
-        device_logs = '/opt/data/{0}/log/*'.format(app)
+def copy_logs(device_host, app):
+    device_logs = '/var/snap/{0}/common/log/*'.format(app)
     log_dir = join(LOG_DIR, '{0}_log'.format(app))
     os.mkdir(log_dir)
     run_scp('root@{0}:{1} {2}'.format(device_host, device_logs, log_dir), password=LOGS_SSH_PASSWORD, throw=False)
