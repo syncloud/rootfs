@@ -31,7 +31,7 @@ fi
 docker kill rootfs || true
 docker rm rootfs || true
 docker rmi rootfs || true
-docker import ${BASE_ROOTFS_ZIP} rootfs
+docker import ${BOOTSTRAP_ROOTFS_ZIP} rootfs
 docker run -d --privileged -i -p 2222:22 --name rootfs rootfs /sbin/init
 
 attempts=100
