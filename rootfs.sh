@@ -34,7 +34,7 @@ docker rmi rootfs || true
 docker import ${BOOTSTRAP_ROOTFS_ZIP} rootfs
 docker run -d --privileged -i -p 2222:22 --name rootfs rootfs /sbin/init
 
-./integration/wait-ssh.sh localhost root syncloud
+./integration/wait-ssh.sh localhost root syncloud 2222
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 install.sh root@localhost:/root/install.sh
 DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost"
