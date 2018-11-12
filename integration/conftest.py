@@ -5,7 +5,6 @@ def pytest_addoption(parser):
     parser.addoption("--email", action="store")
     parser.addoption("--password", action="store")
     parser.addoption("--domain", action="store")
-    parser.addoption("--release", action="store")
     parser.addoption("--device-host", action="store")
 
 
@@ -14,8 +13,7 @@ def auth(request):
     config = request.config
     return config.getoption("--email"), \
            config.getoption("--password"), \
-           config.getoption("--domain"), \
-           config.getoption("--release")
+           config.getoption("--domain")
 
 @pytest.fixture(scope="session")
 def device_host(request):

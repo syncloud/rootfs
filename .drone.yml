@@ -32,7 +32,7 @@ pipeline:
   test-syncloud:
     image: syncloud/build-deps-${arch}
     commands:
-      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master syncloud root syncloud
+      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity syncloud root syncloud
     privileged: true
 
   test-syncloud-ci-artifact:
@@ -46,7 +46,7 @@ pipeline:
   test-stretch:
     image: syncloud/build-deps-${arch}
     commands:
-      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master stretch debian debian
+      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity stretch debian debian
     privileged: true
     when:
       platform: linux/amd64

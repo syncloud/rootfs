@@ -9,7 +9,7 @@ import convertible
 import pytest
 import requests
 
-from integration.util.ssh import run_scp, run_ssh
+from syncloudlib.integration.ssh import run_scp, run_ssh
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -52,7 +52,7 @@ def user_domain(device_domain):
 
 @pytest.fixture(scope='module')
 def device_domain(auth):
-    email, password, domain, release = auth
+    email, password, domain = auth
     return '{0}.{1}'.format(domain, SYNCLOUD_INFO)
 
 
@@ -69,7 +69,7 @@ def test_start(module_setup):
 
 
 def test_activate_device(auth, device_host):
-    email, password, domain, release = auth
+    email, password, domain = auth
 
     response = requests.post('http://{0}:81/rest/activate'.format(device_host),
                              data={'main_domain': 'syncloud.info', 'redirect_email': email,
