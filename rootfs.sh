@@ -34,27 +34,11 @@ docker rmi rootfs || true
 docker import ${BOOTSTRAP_ROOTFS_ZIP} rootfs
 docker run -d --privileged -i -p 2222:22 --name rootfs rootfs /sbin/init
 
-attempts=100
-attempt=0
-DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost"
-
-set +e
-$DOCKER_RUN date
-while test $? -gt 0
-do
-  if [ $attempt -gt $attempts ]; then
-    exit 1
-  fi
-  sleep 3
-  echo "Waiting for SSH $attempt"
-  attempt=$((attempt+1))
-  $DOCKER_RUN date
-done
-set -e
+./integration/wait-ssh.sh localhost root syncloud
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 install.sh root@localhost:/root/install.sh
+sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost /root/install.sh ${RELEASE} ${POINT_TO_RELEASE}
 
-$DOCKER_RUN /root/install.sh ${RELEASE} ${POINT_TO_RELEASE}
 $DOCKER_RUN rm /root/install.sh
 $DOCKER_RUN rm -rf /tmp/*
 
