@@ -49,7 +49,7 @@ pipeline:
     commands:
       - ./integration/wait-ssh.sh stretch debian debian 22
       - sshpass -p debian scp -o StrictHostKeyChecking=no -P 22 install.sh debian@stretch:/tmp/install.sh
-      - sshpass -p debian ssh -o StrictHostKeyChecking=no -p 22 root@stretch /tmp/install.sh rc stable
+      - sshpass -p debian ssh -o StrictHostKeyChecking=no -p 22 debian@stretch /tmp/install.sh rc stable
       - ./integration/test-docker.sh stretch
     privileged: true
     when:
