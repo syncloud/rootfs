@@ -33,7 +33,7 @@ pipeline:
     image: syncloud/build-deps-${arch}
     commands:
       - ./integration/wait-ssh.sh syncloud root syncloud 22
-      - ./integration/test-docker.sh teamcity@syncloud.it password syncloud
+      - ./integration/test-docker.sh syncloud
     privileged: true
 
   test-syncloud-ci-artifact:
@@ -47,10 +47,10 @@ pipeline:
   test-stretch:
     image: syncloud/build-deps-${arch}
     commands:
-      - ./integration/wait-ssh.sh syncloud root syncloud 22
-      - sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 22 install.sh root@localhost:/root/install.sh
-      - sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 22 root@localhost /root/install.sh rc stable
-      - ./integration/test-docker.sh teamcity@syncloud.it password stretch
+      - ./integration/wait-ssh.sh stretch debian debian 22
+      - sshpass -p debian scp -o StrictHostKeyChecking=no -P 22 install.sh debian@stretch:/tmp/install.sh
+      - sshpass -p debian ssh -o StrictHostKeyChecking=no -p 22 root@stretch /tmp/install.sh rc stable
+      - ./integration/test-docker.sh stretch
     privileged: true
     when:
       platform: linux/amd64
