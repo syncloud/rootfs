@@ -21,39 +21,29 @@ DEVICE_PASSWORD = 'password'
 DEFAULT_DEVICE_PASSWORD = 'syncloud'
 LOGS_SSH_PASSWORD = DEFAULT_DEVICE_PASSWORD
 APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat']
-
+REDIRECT_USER = "teamcity@syncloud.it"
+REDIRECT_PASSWORD = "password"
 
 @pytest.fixture(scope="session")
-def module_setup(request, device_host):
-    request.addfinalizer(lambda: module_teardown(device_host))
+def module_setup(request, device_host, device_port):
+    request.addfinalizer(lambda: module_teardown(device_host, device_port))
 
 
-def module_teardown(device_host):
+def module_teardown(device_host, device_port):
     os.mkdir(LOG_DIR)
 
-    copy_logs(device_host, 'platform')
+    copy_logs(device_host, 'platform', device_port)
     for app in APPS:
-        copy_logs(device_host, app)
+        copy_logs(device_host, app, device_port)
 
-    run_ssh(device_host, 'journalctl', password=DEVICE_PASSWORD, throw=False)
+    run_ssh(device_host, 'journalctl', password=DEVICE_PASSWORD, throw=False, port=device_port)
 
 
-def copy_logs(device_host, app):
+def copy_logs(device_host, app, device_port):
     device_logs = '/var/snap/{0}/common/log/*'.format(app)
     log_dir = join(LOG_DIR, '{0}_log'.format(app))
     os.mkdir(log_dir)
-    run_scp('root@{0}:{1} {2}'.format(device_host, device_logs, log_dir), password=LOGS_SSH_PASSWORD, throw=False)
-
-
-@pytest.fixture(scope='module')
-def user_domain(device_domain):
-    return 'device.{0}'.format(device_domain)
-
-
-@pytest.fixture(scope='module')
-def device_domain(auth):
-    email, password, domain = auth
-    return '{0}.{1}'.format(domain, SYNCLOUD_INFO)
+    run_scp('root@{0}:{1} {2}'.format(device_host, device_logs, log_dir), password=LOGS_SSH_PASSWORD, throw=False, port=device_port)
 
 
 @pytest.fixture(scope='function')
@@ -68,21 +58,18 @@ def test_start(module_setup):
     shutil.rmtree(LOG_DIR, ignore_errors=True)
 
 
-def test_activate_device(auth, device_host):
-    email, password, domain = auth
+def test_activate_device(domain, device_host):
 
     response = requests.post('http://{0}:81/rest/activate'.format(device_host),
-                             data={'main_domain': 'syncloud.info', 'redirect_email': email,
-                                   'redirect_password': password,
-                                   'user_domain': domain, 'device_username': DEVICE_USER,
+                             data={'main_domain': 'syncloud.info',
+                                   'redirect_email': REDIRECT_USER,
+                                   'redirect_password': REDIRECT_PASSWORD,
+                                   'user_domain': domain,
+                                   'device_username': DEVICE_USER,
                                    'device_password': DEVICE_PASSWORD})
     assert response.status_code == 200
     global LOGS_SSH_PASSWORD
     LOGS_SSH_PASSWORD = DEVICE_PASSWORD
-
-
-# def wait_for_platform_web(device_host):
-#     print(check_output('while ! nc -w 1 -z {0} 80; do sleep 1; done'.format(device_host), shell=True))
 
 
 def wait_for_sam(device_host, syncloud_session):

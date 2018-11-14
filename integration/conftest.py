@@ -2,21 +2,22 @@ import pytest
 
 
 def pytest_addoption(parser):
-    parser.addoption("--email", action="store")
-    parser.addoption("--password", action="store")
     parser.addoption("--domain", action="store")
     parser.addoption("--device-host", action="store")
+    parser.addoption("--device-port", action="store")
 
 
 @pytest.fixture(scope="session")
-def auth(request):
-    config = request.config
-    return config.getoption("--email"), \
-           config.getoption("--password"), \
-           config.getoption("--domain")
+def domain(request):
+    return request.config.getoption("--domain")
+
 
 @pytest.fixture(scope="session")
 def device_host(request):
-    config = request.config
-    return config.getoption("--device-host")
+    return request.config.getoption("--device-host")
+
+
+pytest.fixture(scope="session")
+def device_port(request):
+    return request.config.getoption("--device-port")
 

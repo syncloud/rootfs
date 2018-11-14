@@ -42,8 +42,12 @@ $DOCKER_RUN /root/install.sh ${RELEASE} ${POINT_TO_RELEASE}
 $DOCKER_RUN rm /root/install.sh
 $DOCKER_RUN rm -rf /tmp/*
 
-docker kill rootfs
 docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
+
+#test
+./integration/test-docker.sh localhost 2222
+
+docker kill rootfs
 docker rm rootfs
 docker rmi rootfs
 
