@@ -10,7 +10,7 @@ fi
 
 DEVICE_HOST=$1
 DEVICE_PORT=$2
-DOMAIN=$DEVICE_HOST-${ARCH}-${DRONE_BRANCH}
+DOMAIN=${ARCH}-${DRONE_BRANCH}
 
 pip2 install -r ${DIR}/dev_requirements.txt
 pip2 install -U pytest
