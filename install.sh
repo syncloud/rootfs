@@ -12,8 +12,6 @@ else
     POINT_TO_CHANNEL=$2
 fi
 
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
 echo "root:syncloud" | chpasswd
 
 apt-get update
