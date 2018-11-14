@@ -37,7 +37,7 @@ device_host=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }
 
 ./integration/wait-ssh.sh $device_host root syncloud 22
 
-sshpass -p syncloud scp -o StrictHostKeyChecking=no nstall.sh root@$device_host:/root/install.sh
+sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@$device_host:/root/install.sh
 DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_host"
 $DOCKER_RUN /root/install.sh ${RELEASE} ${POINT_TO_RELEASE}
 $DOCKER_RUN rm /root/install.sh
