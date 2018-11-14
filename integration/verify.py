@@ -67,6 +67,9 @@ def test_activate_device(domain, device_host):
                                    'user_domain': domain,
                                    'device_username': DEVICE_USER,
                                    'device_password': DEVICE_PASSWORD})
+ 
+    print("activate: " + response.text)
+    
     assert response.status_code == 200
     global LOGS_SSH_PASSWORD
     LOGS_SSH_PASSWORD = DEVICE_PASSWORD
