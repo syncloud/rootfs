@@ -17,7 +17,7 @@ def device_host(request):
     return request.config.getoption("--device-host")
 
 
-pytest.fixture(scope="session")
+@pytest.fixture(scope="session")
 def device_port(request):
     return request.config.getoption("--device-port")
 
