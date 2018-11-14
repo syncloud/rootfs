@@ -45,7 +45,8 @@ $DOCKER_RUN rm -rf /tmp/*
 docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
 
 #test
-./integration/test-docker.sh localhost 2222
+device_host=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' rootfs)
+./integration/test-docker.sh $device_host 22
 
 docker kill rootfs
 docker rm rootfs
