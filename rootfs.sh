@@ -32,12 +32,13 @@ docker kill rootfs || true
 docker rm rootfs || true
 docker rmi rootfs || true
 docker import ${BOOTSTRAP_ROOTFS_ZIP} rootfs
-docker run -d --privileged -i -p 2222:22 --name rootfs rootfs /sbin/init
+docker run -d --privileged -i --name rootfs rootfs /sbin/init
+device_host=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' rootfs)
 
-./integration/wait-ssh.sh localhost root syncloud 2222
+./integration/wait-ssh.sh $device_host root syncloud 22
 
-sshpass -p syncloud scp -o StrictHostKeyChecking=no -P 2222 install.sh root@localhost:/root/install.sh
-DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no -p 2222 root@localhost"
+sshpass -p syncloud scp -o StrictHostKeyChecking=no nstall.sh root@$device_host:/root/install.sh
+DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_host"
 $DOCKER_RUN /root/install.sh ${RELEASE} ${POINT_TO_RELEASE}
 $DOCKER_RUN rm /root/install.sh
 $DOCKER_RUN rm -rf /tmp/*
@@ -45,7 +46,6 @@ $DOCKER_RUN rm -rf /tmp/*
 docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
 
 #test
-device_host=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' rootfs)
 ./integration/test-docker.sh $device_host 22
 
 docker kill rootfs
