@@ -76,6 +76,7 @@ netcat
 nettle-dev
 p7zip
 parted
+php5-cli
 pigz
 pkg-config
 pxz
