@@ -20,11 +20,11 @@ cd /tools
 if [[ ${ARCH} == "x86_64" ]]; then
     CPU_ARCH=amd64
 
-    wget https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER}/geckodriver-v${GECKODRIVER}-linux64.tar.gz
+    wget https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER}/geckodriver-v${GECKODRIVER}-linux64.tar.gz --progress dot:giga
     mkdir /tools/geckodriver
     tar xf geckodriver-v${GECKODRIVER}-linux64.tar.gz -C /tools/geckodriver
 
-    wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2
+    wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2 --progress dot:giga
     tar xf firefox-${FIREFOX}.tar.bz2 -C /tools
 
     curl https://raw.githubusercontent.com/mguillem/JSErrorCollector/master/dist/JSErrorCollector.xpi -o /tools/firefox/JSErrorCollector.xpi
@@ -41,7 +41,7 @@ sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
 
 chmod +x /usr/bin/phantomjs
 
-wget https://dl.google.com/go/go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
+wget https://dl.google.com/go/go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz --progress dot:giga
 tar xf go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
 rm go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
 mv go go-${GO_VERSION}
