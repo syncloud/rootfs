@@ -13,6 +13,6 @@ DEVICE_PORT=$2
 DOMAIN=${ARCH}-${DRONE_BRANCH}
 
 pip2 install -r ${DIR}/dev_requirements.txt
-pip2 install -U pytest
+pip2 install -U pytest==3.5.0
 
 py.test -sx verify.py --domain=$DOMAIN --device-host=$DEVICE_HOST --device-port=$DEVICE_PORT
