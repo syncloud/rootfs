@@ -51,6 +51,10 @@ cp snapd/bin/snap /usr/bin
 cp snapd/bin/snapctl /usr/bin
 cp snapd/bin/mksquashfs /usr/bin
 cp snapd/bin/unsquashfs /usr/bin
+
+#systemd needs an initial set of libs
+cp snapd/lib/* /lib/$HOSTTYPE-$OSTYPE
+
 mkdir -p /usr/lib/snapd/lib
 cp snapd/lib/* /usr/lib/snapd/lib
 
