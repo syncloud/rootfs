@@ -22,7 +22,7 @@ pipeline:
   rootfs:
     image: syncloud/build-deps-${arch}
     commands:
-      - ./rootfs.sh stable stable ${arch}
+      - ./rootfs.sh rc stable ${arch}
     privileged: true
     network_mode: host
     volumes:
@@ -37,25 +37,6 @@ pipeline:
     when:
       status: [ failure, success ] 
       
-  test-stretch:
-    image: syncloud/build-deps-${arch}
-    commands:
-      - ./integration/wait-ssh.sh stretch debian debian 22
-      - sshpass -p debian scp -o StrictHostKeyChecking=no -P 22 install.sh debian@stretch:/tmp/install.sh
-      - sshpass -p debian ssh -o StrictHostKeyChecking=no -p 22 debian@stretch sudo /tmp/install.sh rc stable
-      - ./integration/test-docker.sh stretch 22
-    privileged: true
-    when:
-      platform: linux/amd64
-
-  test-stretch-ci-artifact:
-    image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
-    commands:
-      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-stretch-$(dpkg --print-architecture)
-    when:
-      status: [ failure, success ] 
-
   upload-artifact:
     image: syncloud/build-deps-${arch}
     secrets: [ARTIFACT_SSH_KEY]
@@ -89,14 +70,6 @@ services:
     privileged: true
     volumes:
       - /var/run/dbus:/var/run/dbus
-      
-  stretch:
-    image: minimum2scp/systemd-stretch
-    privileged: true
-    volumes:
-      - /var/run/dbus:/var/run/dbus
-    when:
-      platform: linux/amd64
      
 matrix:
   arch:
