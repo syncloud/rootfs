@@ -9,7 +9,7 @@ wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
 pip install -r python.dev.requirements.txt
 
-GECKODRIVER=0.14.0
+GECKODRIVER=0.24.0
 FIREFOX=65.0
 GO_VERSION=1.7.6
 ARCH=$(uname -m)
