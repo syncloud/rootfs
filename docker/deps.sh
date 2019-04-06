@@ -10,7 +10,7 @@ python get-pip.py
 pip install -r python.dev.requirements.txt
 
 GECKODRIVER=0.14.0
-FIREFOX=52.0
+FIREFOX=65.0
 GO_VERSION=1.7.6
 ARCH=$(uname -m)
 
