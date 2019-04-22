@@ -36,7 +36,7 @@ def copy_logs(device, app, log_dir):
     device.scp_from_device(device_logs, app_log_dir)
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def syncloud_session(device):
     return device.login()
 
