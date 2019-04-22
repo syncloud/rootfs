@@ -64,6 +64,9 @@ cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 chroot ${ROOTFS} apt-get update
 chroot ${ROOTFS} apt-get -y dist-upgrade
 chroot ${ROOTFS} apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl dbus avahi-daemon ntp net-tools wireless-tools fancontrol
+if [[ ${DEBIAN_ARCH} == "amd64" ]]; then
+    chroot ${ROOTFS} apt-get -y install linux-image-amd64 grub2
+fi
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
 sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
 
