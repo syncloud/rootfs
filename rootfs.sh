@@ -7,7 +7,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [ "$#" -lt 3 ]; then
+if [[ "$#" -lt 3 ]]; then
     echo "Usage: $0 release point_to_release arch"
     exit 1
 fi
@@ -16,12 +16,13 @@ RELEASE=$1
 POINT_TO_RELEASE=$2
 ARCH=$3
 DEBIAN_ARCH=$(dpkg --print-architecture)
+DOMAIN=${ARCH}-${DRONE_BRANCH}
 
 BOOTSTRAP_ROOTFS_ZIP=bootstrap-${ARCH}.tar.gz
 
 ls -la
 
-if [ ! -f ${BOOTSTRAP_ROOTFS_ZIP} ]; then
+if [[ ! -f ${BOOTSTRAP_ROOTFS_ZIP} ]]; then
   echo "${BOOTSTRAP_ROOTFS_ZIP} is not found"
   wget http://artifact.syncloud.org/image/${BASE_ROOTFS_ZIP} --progress dot:giga
 else
@@ -46,7 +47,8 @@ $DOCKER_RUN rm -rf /tmp/*
 docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
 
 #test
-./integration/test-docker.sh $device_host 22
+pip2 install -r ${DIR}/dev_requirements.txt
+py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_host} --device-port=22
 
 docker kill rootfs
 docker rm rootfs

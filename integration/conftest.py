@@ -1,23 +1,9 @@
-import pytest
+from os.path import dirname, join
+from syncloudlib.integration.conftest import *
 
-
-def pytest_addoption(parser):
-    parser.addoption("--domain", action="store")
-    parser.addoption("--device-host", action="store")
-    parser.addoption("--device-port", action="store")
+DIR = dirname(__file__)
 
 
 @pytest.fixture(scope="session")
-def domain(request):
-    return request.config.getoption("--domain")
-
-
-@pytest.fixture(scope="session")
-def device_host(request):
-    return request.config.getoption("--device-host")
-
-
-@pytest.fixture(scope="session")
-def device_port(request):
-    return request.config.getoption("--device-port")
-
+def log_dir():
+    return join(DIR, 'log')

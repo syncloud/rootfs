@@ -10,15 +10,15 @@ attempt=0
 DOCKER_RUN="sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -p $PORT $USER@${DEVICE_HOST}"
 
 set +e
-$DOCKER_RUN date
+${DOCKER_RUN} date
 while test $? -gt 0
 do
-  if [ $attempt -gt $attempts ]; then
+  if [[ ${attempt} -gt ${attempts} ]]; then
     exit 1
   fi
   sleep 3
   echo "Waiting for SSH $attempt"
   attempt=$((attempt+1))
-  $DOCKER_RUN date
+  ${DOCKER_RUN} date
 done
 set -e
