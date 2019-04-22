@@ -42,7 +42,7 @@ docker export rootfs | gzip > docker-rootfs-${ARCH}.tar.gz
 #test
 pip2 install -r ${DIR}/dev_requirements.txt
 cd integration
-py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_host} --device-port=22
+py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_host}
 cd ${DIR}
 docker kill rootfs
 docker rm rootfs
