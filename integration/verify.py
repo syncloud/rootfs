@@ -62,7 +62,7 @@ def wait_for_app(device, predicate):
         time.sleep(5)
 
 
-@pytest.mark.parametrize("app", APPS)
+@pytest.mark.parametrize("app", APPS, scope="session")
 def test_app_install(device, app):
     syncloud_session = device.login()
     response = syncloud_session.get('https://{0}/rest/install?app_id={1}'.format(device.device_host, app),
@@ -73,7 +73,7 @@ def test_app_install(device, app):
     wait_for_app(device, lambda response_text: app in response_text)
 
 
-@pytest.mark.parametrize("app", APPS)
+@pytest.mark.parametrize("app", APPS, scope="session")
 def test_app_remove(device, app):
     syncloud_session = device.login()
     response = syncloud_session.get('https://{0}/rest/remove?app_id={1}'.format(device.device_host, app),
