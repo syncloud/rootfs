@@ -22,7 +22,7 @@ pipeline:
   rootfs:
     image: syncloud/build-deps-${arch}
     commands:
-      - ./rootfs.sh rc stable ${arch}
+      - ./rootfs.sh stable stable ${arch}
     privileged: true
     network_mode: host
     volumes:
