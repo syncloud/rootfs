@@ -1,77 +1,195 @@
-platform: linux/${arch}
+---
+kind: pipeline
+name: arm
 
-clone:
-  git:
-    image: syncloud/drone-git-${arch}
-    depth: 50
+platform:
+  os: linux
+  arch: arm
 
-pipeline:
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-arm
+  commands:
+  - ./bootstrap/bootstrap.sh arm
+  - ./upload-artifact.sh bootstrap-arm.tar.gz
+  - ./docker/build-bootstrap.sh arm
+  environment:
+    ARTIFACT_SSH_KEY:
+      from_secret: ARTIFACT_SSH_KEY
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
 
-  bootstrap:
-    image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY, DOCKER_USERNAME, DOCKER_PASSWORD]
-    commands:
-      - ./bootstrap/bootstrap.sh ${arch}
-      - ./upload-artifact.sh bootstrap-${arch}.tar.gz
-      - ./docker/build-bootstrap.sh ${arch}
-    privileged: true
-    volumes:
-      - /usr/bin/docker:/usr/bin/docker
-      - /var/run/docker.sock:/var/run/docker.sock
+- name: rootfs
+  image: syncloud/build-deps-arm
+  commands:
+  - ./rootfs.sh stable stable arm
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
 
-  rootfs:
-    image: syncloud/build-deps-${arch}
-    commands:
-      - ./rootfs.sh stable stable ${arch}
-    privileged: true
-    network_mode: host
-    volumes:
-      - /usr/bin/docker:/usr/bin/docker
-      - /var/run/docker.sock:/var/run/docker.sock
+- name: rootfs-ci-artifact
+  image: syncloud/build-deps-arm
+  commands:
+  - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)
+  environment:
+    ARTIFACT_SSH_KEY:
+      from_secret: ARTIFACT_SSH_KEY
+  when:
+    status:
+    - failure
+    - success
 
-  rootfs-ci-artifact:
-    image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
-    commands:
-      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)
-    when:
-      status: [ failure, success ] 
-      
-  upload-artifact:
-    image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
-    commands:
-      - ./upload-artifact.sh rootfs-${arch}.tar.gz
-    privileged: true
+- name: upload-artifact
+  image: syncloud/build-deps-arm
+  commands:
+  - ./upload-artifact.sh rootfs-arm.tar.gz
+  environment:
+    ARTIFACT_SSH_KEY:
+      from_secret: ARTIFACT_SSH_KEY
+  privileged: true
 
-  upload-docker:
-    image: syncloud/build-deps-${arch}
-    secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
-    commands:
-      - ./docker/build-rootfs.sh ${arch}
-      - ./docker/build-systemd.sh ${arch}
-    privileged: true
-    network_mode: host
-    volumes:
-      - /usr/bin/docker:/usr/bin/docker
-      - /var/run/docker.sock:/var/run/docker.sock
+- name: upload-docker
+  image: syncloud/build-deps-arm
+  commands:
+  - ./docker/build-rootfs.sh arm
+  - ./docker/build-systemd.sh arm
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
 
-#  ci-artifact:
-#    image: syncloud/build-deps-${arch}
-#    secrets: [ARTIFACT_SSH_KEY]
-#    commands:
-#      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-$(dpkg --print-architecture)
-#    when:
-#      status: [ failure, success ] 
-      
 services:
-  syncloud:
-    image: syncloud/systemd-${arch}
-    privileged: true
-    volumes:
-      - /var/run/dbus:/var/run/dbus
-     
-matrix:
-  arch:
-    - amd64
-    - arm
+- name: syncloud
+  image: syncloud/systemd-arm
+  privileged: true
+  volumes:
+  - name: dbus
+    path: /var/run/dbus
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./bootstrap/bootstrap.sh amd64
+  - ./upload-artifact.sh bootstrap-amd64.tar.gz
+  - ./docker/build-bootstrap.sh amd64
+  environment:
+    ARTIFACT_SSH_KEY:
+      from_secret: ARTIFACT_SSH_KEY
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: rootfs
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./rootfs.sh stable stable amd64
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: rootfs-ci-artifact
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)
+  environment:
+    ARTIFACT_SSH_KEY:
+      from_secret: ARTIFACT_SSH_KEY
+  when:
+    status:
+    - failure
+    - success
+
+- name: upload-artifact
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./upload-artifact.sh rootfs-amd64.tar.gz
+  environment:
+    ARTIFACT_SSH_KEY:
+      from_secret: ARTIFACT_SSH_KEY
+  privileged: true
+
+- name: upload-docker
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./docker/build-rootfs.sh amd64
+  - ./docker/build-systemd.sh amd64
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+services:
+- name: syncloud
+  image: syncloud/systemd-amd64
+  privileged: true
+  volumes:
+  - name: dbus
+    path: /var/run/dbus
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+...
