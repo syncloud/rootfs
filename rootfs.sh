@@ -26,9 +26,9 @@ docker kill rootfs || true
 docker rm rootfs || true
 docker rmi rootfs || true
 docker import ${BOOTSTRAP_ROOTFS_ZIP} rootfs
-docker run -d --privileged -i --name rootfs rootfs /sbin/init
-device_host=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' rootfs)
-
+docker run -d --privileged -i --name rootfs --network=drone rootfs /sbin/init
+#device_host=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' rootfs)
+device_host=rootfs
 ./integration/wait-ssh.sh ${device_host} root syncloud 22
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_host}:/root/install.sh
