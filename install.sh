@@ -25,10 +25,6 @@ systemctl disable apt-daily.service
 systemctl disable apt-daily-upgrade.timer
 systemctl disable apt-daily-upgrade.service
 
-rm -f /root/.ssh/id_rsa
-rm -f /root/.ssh/id_rsa.pub
-ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
-cat /root/.ssh/id_rsa.pub > /root/.ssh/authorized_keys
 sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
 systemctl restart ssh
 
