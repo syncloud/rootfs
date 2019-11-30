@@ -11,15 +11,6 @@ steps:
   image: syncloud/build-deps-arm
   commands:
   - ./bootstrap/bootstrap.sh arm
-  - ./upload-artifact.sh bootstrap-arm.tar.gz
-  - ./docker/build-bootstrap.sh arm
-  environment:
-    ARTIFACT_SSH_KEY:
-      from_secret: ARTIFACT_SSH_KEY
-    DOCKER_PASSWORD:
-      from_secret: DOCKER_PASSWORD
-    DOCKER_USERNAME:
-      from_secret: DOCKER_USERNAME
   privileged: true
   volumes:
   - name: docker
@@ -38,32 +29,12 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: rootfs-ci-artifact
-  image: syncloud/build-deps-arm
-  commands:
-  - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)
-  environment:
-    ARTIFACT_SSH_KEY:
-      from_secret: ARTIFACT_SSH_KEY
-  when:
-    status:
-    - failure
-    - success
-
-- name: upload-artifact
-  image: syncloud/build-deps-arm
-  commands:
-  - ./upload-artifact.sh rootfs-arm.tar.gz
-  environment:
-    ARTIFACT_SSH_KEY:
-      from_secret: ARTIFACT_SSH_KEY
-  privileged: true
-
 - name: upload-docker
   image: syncloud/build-deps-arm
   commands:
   - ./docker/build-rootfs.sh arm
   - ./docker/build-systemd.sh arm
+  - ./docker/build-bootstrap.sh arm
   environment:
     DOCKER_PASSWORD:
       from_secret: DOCKER_PASSWORD
@@ -75,6 +46,27 @@ steps:
     path: /usr/bin/docker
   - name: docker.sock
     path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    password:
+      from_secret: artifact_password
+    source:
+    - "integration/log/*"
+    - bootstrap-arm.tar.gz
+    - rootfs-arm.tar.gz
+    strip_components: 2
+    target: "/home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-arm"
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
 
 services:
 - name: syncloud
@@ -108,15 +100,6 @@ steps:
   image: syncloud/build-deps-amd64
   commands:
   - ./bootstrap/bootstrap.sh amd64
-  - ./upload-artifact.sh bootstrap-amd64.tar.gz
-  - ./docker/build-bootstrap.sh amd64
-  environment:
-    ARTIFACT_SSH_KEY:
-      from_secret: ARTIFACT_SSH_KEY
-    DOCKER_PASSWORD:
-      from_secret: DOCKER_PASSWORD
-    DOCKER_USERNAME:
-      from_secret: DOCKER_USERNAME
   privileged: true
   volumes:
   - name: docker
@@ -135,32 +118,12 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: rootfs-ci-artifact
-  image: syncloud/build-deps-amd64
-  commands:
-  - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)
-  environment:
-    ARTIFACT_SSH_KEY:
-      from_secret: ARTIFACT_SSH_KEY
-  when:
-    status:
-    - failure
-    - success
-
-- name: upload-artifact
-  image: syncloud/build-deps-amd64
-  commands:
-  - ./upload-artifact.sh rootfs-amd64.tar.gz
-  environment:
-    ARTIFACT_SSH_KEY:
-      from_secret: ARTIFACT_SSH_KEY
-  privileged: true
-
 - name: upload-docker
   image: syncloud/build-deps-amd64
   commands:
   - ./docker/build-rootfs.sh amd64
   - ./docker/build-systemd.sh amd64
+  - ./docker/build-bootstrap.sh amd64
   environment:
     DOCKER_PASSWORD:
       from_secret: DOCKER_PASSWORD
@@ -172,6 +135,27 @@ steps:
     path: /usr/bin/docker
   - name: docker.sock
     path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    password:
+      from_secret: artifact_password
+    source:
+    - "integration/log/*"
+    - bootstrap-amd64.tar.gz
+    - rootfs-amd64.tar.gz
+    strip_components: 2
+    target: "/home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-amd64"
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
 
 services:
 - name: syncloud

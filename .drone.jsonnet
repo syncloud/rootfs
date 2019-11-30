@@ -1,3 +1,5 @@
+local name = "rootfs";
+
 local build(arch) = {
     kind: "pipeline",
     name: arch,
@@ -10,21 +12,8 @@ local build(arch) = {
         {
             name: "bootstrap",
             image: "syncloud/build-deps-" + arch,
-            environment: {
-                ARTIFACT_SSH_KEY: {
-                    from_secret: "ARTIFACT_SSH_KEY"
-                },
-                DOCKER_USERNAME: {
-                    from_secret: "DOCKER_USERNAME"
-                },
-                DOCKER_PASSWORD: {
-                    from_secret: "DOCKER_PASSWORD"
-                }
-            },
             commands: [
-                "./bootstrap/bootstrap.sh " + arch,
-                "./upload-artifact.sh bootstrap-" + arch + ".tar.gz",
-                "./docker/build-bootstrap.sh " + arch
+                "./bootstrap/bootstrap.sh " + arch
             ],
             privileged: true,
             volumes: [
@@ -58,34 +47,6 @@ local build(arch) = {
             ]
         },
         {
-            name: "rootfs-ci-artifact",
-            image: "syncloud/build-deps-" + arch,
-            environment: {
-                ARTIFACT_SSH_KEY: {
-                    from_secret: "ARTIFACT_SSH_KEY"
-                },
-            },
-            commands: [
-                "./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-syncloud-$(dpkg --print-architecture)"
-            ],
-            when: {
-              status: [ "failure", "success" ]
-            }
-        },
-        {
-            name: "upload-artifact",
-            image: "syncloud/build-deps-" + arch,
-            environment: {
-                ARTIFACT_SSH_KEY: {
-                    from_secret: "ARTIFACT_SSH_KEY"
-                },
-            },
-            commands: [
-                "./upload-artifact.sh rootfs-" + arch + ".tar.gz"
-            ],
-            privileged: true
-        },
-        {
             name: "upload-docker",
             image: "syncloud/build-deps-" + arch,
             environment: {
@@ -98,7 +59,8 @@ local build(arch) = {
             },
             commands: [
                 "./docker/build-rootfs.sh " + arch,
-                "./docker/build-systemd.sh " + arch
+                "./docker/build-systemd.sh " + arch,
+                "./docker/build-bootstrap.sh " + arch
             ],
             privileged: true,
             network_mode: "host",
@@ -112,6 +74,31 @@ local build(arch) = {
                     path: "/var/run/docker.sock"
                 }
             ]
+        },
+       {
+            name: "artifact",
+            image: "appleboy/drone-scp",
+            settings: {
+                host: {
+                    from_secret: "artifact_host"
+                },
+                username: "artifact",
+                password: {
+                    from_secret: "artifact_password"
+                },
+                timeout: "2m",
+                command_timeout: "2m",
+                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + arch,
+                source: [
+                    "integration/log/*",
+                    "bootstrap-" + arch + ".tar.gz",
+                    "rootfs-" + arch + ".tar.gz"
+                ],
+		             strip_components: 2
+            },
+            when: {
+              status: [ "failure", "success" ]
+            }
         }
     ],
     services: [{
