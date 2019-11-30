@@ -7,14 +7,12 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [[ "$#" -lt 3 ]]; then
-    echo "Usage: $0 release point_to_release arch"
+if [[ "$#" -lt 1 ]]; then
+    echo "Usage: $0 arch"
     exit 1
 fi
 
-RELEASE=$1
-POINT_TO_RELEASE=$2
-ARCH=$3
+ARCH=$1
 DEBIAN_ARCH=$(dpkg --print-architecture)
 DOMAIN=${ARCH}-${DRONE_BRANCH}
 
@@ -33,7 +31,7 @@ device_host=rootfs
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_host}:/root/install.sh
 DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_host"
-${DOCKER_RUN} /root/install.sh ${RELEASE} ${POINT_TO_RELEASE}
+${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 

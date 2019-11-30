@@ -31,7 +31,7 @@ local build(arch) = {
             name: "rootfs",
             image: "syncloud/build-deps-" + arch,
             commands: [
-                "./rootfs.sh stable stable " + arch
+                "./rootfs.sh " + arch
             ],
             privileged: true,
             network_mode: "host",

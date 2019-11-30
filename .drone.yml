@@ -21,7 +21,7 @@ steps:
 - name: rootfs
   image: syncloud/build-deps-arm
   commands:
-  - ./rootfs.sh stable stable arm
+  - ./rootfs.sh arm
   privileged: true
   volumes:
   - name: docker
@@ -110,7 +110,7 @@ steps:
 - name: rootfs
   image: syncloud/build-deps-amd64
   commands:
-  - ./rootfs.sh stable stable amd64
+  - ./rootfs.sh amd64
   privileged: true
   volumes:
   - name: docker

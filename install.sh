@@ -4,20 +4,12 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
 
-if [ "$#" -lt 2 ]; then
-    CHANNEL=stable
-    POINT_TO_CHANNEL=stable
-else
-    CHANNEL=$1
-    POINT_TO_CHANNEL=$2
-fi
-
 echo "root:syncloud" | chpasswd
 
 apt-get update
 apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl ntp net-tools wireless-tools
 
-VERSION=$(curl http://apps.syncloud.org/releases/${CHANNEL}/snapd.version)
+VERSION=$(curl http://apps.syncloud.org/releases/stable/snapd.version)
 
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
 systemctl disable apt-daily.timer
@@ -59,5 +51,4 @@ systemctl enable snapd.socket
 systemctl start snapd.service snapd.socket
 
 snap --version
-snap install platform --channel=${CHANNEL}
-snap switch platform --channel=${POINT_TO_CHANNEL}
+snap install platform
