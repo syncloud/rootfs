@@ -70,9 +70,7 @@ def test_app_install(device, app):
                                     allow_redirects=False, verify=False)
 
     assert response.status_code == 200
-    wait_for_response(syncloud_session, 'https://{0}/rest/job/status'.format(device.device_host),
-                      lambda r:  json.loads(r.text)['data'] == 'JobStatusIdle')
-   
+    wait_for_installer(syncloud_session, device.device_host)
     wait_for_app(device, lambda response_text: app in response_text)
 
 
