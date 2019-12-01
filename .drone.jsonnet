@@ -15,17 +15,7 @@ local build(arch) = {
             commands: [
                 "./bootstrap/bootstrap.sh " + arch
             ],
-            privileged: true,
-            volumes: [
-                {
-                    name: "docker",
-                    path: "/usr/bin/docker"
-                },
-                {
-                    name: "docker.sock",
-                    path: "/var/run/docker.sock"
-                }
-            ]
+            privileged: true
         },
         {
             name: "rootfs",

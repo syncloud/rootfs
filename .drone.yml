@@ -12,11 +12,6 @@ steps:
   commands:
   - ./bootstrap/bootstrap.sh arm
   privileged: true
-  volumes:
-  - name: docker
-    path: /usr/bin/docker
-  - name: docker.sock
-    path: /var/run/docker.sock
 
 - name: rootfs
   image: syncloud/build-deps-arm
@@ -101,11 +96,6 @@ steps:
   commands:
   - ./bootstrap/bootstrap.sh amd64
   privileged: true
-  volumes:
-  - name: docker
-    path: /usr/bin/docker
-  - name: docker.sock
-    path: /var/run/docker.sock
 
 - name: rootfs
   image: syncloud/build-deps-amd64
