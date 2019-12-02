@@ -83,8 +83,7 @@ local build(arch) = {
                     "integration/log/*",
                     "bootstrap-" + arch + ".tar.gz",
                     "rootfs-" + arch + ".tar.gz"
-                ],
-		             strip_components: 2
+                ]
             },
             when: {
               status: [ "failure", "success" ]

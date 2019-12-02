@@ -17,6 +17,7 @@ steps:
   image: syncloud/build-deps-arm
   commands:
   - ./rootfs.sh arm
+  network_mode: host
   privileged: true
   volumes:
   - name: docker
@@ -30,6 +31,7 @@ steps:
   - ./docker/build-rootfs.sh arm
   - ./docker/build-systemd.sh arm
   - ./docker/build-bootstrap.sh arm
+  network_mode: host
   environment:
     DOCKER_PASSWORD:
       from_secret: DOCKER_PASSWORD
@@ -51,11 +53,10 @@ steps:
     password:
       from_secret: artifact_password
     source:
-    - "integration/log/*"
+    - integration/log/*
     - bootstrap-arm.tar.gz
     - rootfs-arm.tar.gz
-    strip_components: 2
-    target: "/home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-arm"
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-arm
     timeout: 2m
     username: artifact
   when:
@@ -101,6 +102,7 @@ steps:
   image: syncloud/build-deps-amd64
   commands:
   - ./rootfs.sh amd64
+  network_mode: host
   privileged: true
   volumes:
   - name: docker
@@ -114,6 +116,7 @@ steps:
   - ./docker/build-rootfs.sh amd64
   - ./docker/build-systemd.sh amd64
   - ./docker/build-bootstrap.sh amd64
+  network_mode: host
   environment:
     DOCKER_PASSWORD:
       from_secret: DOCKER_PASSWORD
@@ -135,11 +138,10 @@ steps:
     password:
       from_secret: artifact_password
     source:
-    - "integration/log/*"
+    - integration/log/*
     - bootstrap-amd64.tar.gz
     - rootfs-amd64.tar.gz
-    strip_components: 2
-    target: "/home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-amd64"
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-amd64
     timeout: 2m
     username: artifact
   when:
