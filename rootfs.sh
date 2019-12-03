@@ -25,11 +25,11 @@ docker rm ${device} || true
 docker rmi ${device} || true
 docker import ${BOOTSTRAP_ROOTFS_ZIP} ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
+device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' rootfsvm)
+./integration/wait-ssh.sh ${device_ip} root syncloud 22
 
-./integration/wait-ssh.sh ${device} root syncloud 22
-
-sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device}:/root/install.sh
-DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device"
+sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
+DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
 ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
@@ -39,7 +39,7 @@ docker export ${device} | gzip > docker-rootfs-${ARCH}.tar.gz
 #test
 pip2 install -r ${DIR}/dev_requirements.txt
 cd integration
-py.test -sx verify.py --domain=${DOMAIN} --device-host=${device}
+py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_ip}
 cd ${DIR}
 docker kill ${device}
 docker rm ${device}
