@@ -1,7 +1,7 @@
 # rootfs
 Syncloud rootfs
 
-# Run Syncloud on Debian Jessie (and probably any other) Linix distro
+# Run Syncloud on Debian Jessie (and probably any other) Linux distro
 
 Make sure you have nothing listening on port 80 and 81, like apache.
 
