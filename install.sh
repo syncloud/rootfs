@@ -2,23 +2,19 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-ARCH=$(dpkg --print-architecture)
-
-echo "root:syncloud" | chpasswd
-
 apt-get update
 apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl ntp net-tools wireless-tools
+echo "root:syncloud" | chpasswd
+sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+systemctl restart ssh
 
+ARCH=$(dpkg --print-architecture)
 VERSION=$(curl http://apps.syncloud.org/releases/stable/snapd.version)
-
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
 systemctl disable apt-daily.timer
 systemctl disable apt-daily.service
 systemctl disable apt-daily-upgrade.timer
 systemctl disable apt-daily-upgrade.service
-
-sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
-systemctl restart ssh
 
 wget http://apps.syncloud.org/apps/${SNAPD} --progress=dot:giga
 
