@@ -13,5 +13,6 @@ set +x
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 set -x
 
-cat rootfs-$ARCH.tar.gz | docker import - syncloud/rootfs-${ARCH}
-docker push syncloud/rootfs-${ARCH}
+cat rootfs-$ARCH.tar.gz | docker import - syncloud/rootfs
+docker build -f Dockerfile.platform -t syncloud/platform-${ARCH} .
+docker push syncloud/platform-${ARCH}

@@ -2,12 +2,6 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 arch"
-    exit 1
-fi
-ARCH=$1
-
 DEBIAN_ARCH=$(dpkg --print-architecture)
 REPO=http://http.debian.net/debian
 KEY=https://ftp-master.debian.org/keys/archive-key-8.asc
@@ -94,4 +88,4 @@ rm -rf ${ROOTFS}/var/cache/apt/archives/*.deb
 cat ${ROOTFS}/etc/hosts
 
 echo "zipping bootstrap"
-tar czf bootstrap-${ARCH}.tar.gz -C ${ROOTFS} .
+tar czf bootstrap.tar.gz -C ${ROOTFS} .

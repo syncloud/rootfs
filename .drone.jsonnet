@@ -13,7 +13,7 @@ local build(arch) = {
             name: "bootstrap",
             image: "syncloud/build-deps-" + arch,
             commands: [
-                "./bootstrap/bootstrap.sh " + arch
+                "./bootstrap/bootstrap.sh"
             ],
             privileged: true
         },
@@ -48,9 +48,7 @@ local build(arch) = {
                 }
             },
             commands: [
-                "./docker/build-rootfs.sh " + arch,
-                "./docker/build-systemd.sh " + arch,
-                "./docker/build-bootstrap.sh " + arch
+                "./docker/build-rootfs.sh " + arch
             ],
             privileged: true,
             network_mode: "host",
@@ -81,7 +79,6 @@ local build(arch) = {
                 target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + arch,
                 source: [
                     "integration/log/*",
-                    "bootstrap-" + arch + ".tar.gz",
                     "rootfs-" + arch + ".tar.gz"
                 ]
             },

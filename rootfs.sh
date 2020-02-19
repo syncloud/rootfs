@@ -16,7 +16,7 @@ ARCH=$1
 DEBIAN_ARCH=$(dpkg --print-architecture)
 DOMAIN=${ARCH}-${DRONE_BRANCH}
 
-BOOTSTRAP_ROOTFS_ZIP=bootstrap-${ARCH}.tar.gz
+BOOTSTRAP_ROOTFS_ZIP=bootstrap.tar.gz
 
 ls -la
 device=rootfsvm
