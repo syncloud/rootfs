@@ -1,0 +1,6 @@
+FROM syncloud/bootstrap
+ADD deps.sh /
+ADD apt.pkg.list /
+ADD python.dev.requirements.txt /
+ADD install-s3cmd.sh /
+RUN /deps.sh

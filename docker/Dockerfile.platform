@@ -1,0 +1,3 @@
+FROM syncloud/rootfs
+RUN rm /lib/systemd/system/getty@.service
+CMD ["/sbin/init"]
