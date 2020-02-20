@@ -7,23 +7,22 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [[ "$#" -lt 1 ]]; then
-    echo "Usage: $0 arch"
+if [[ "$#" -lt 2 ]]; then
+    echo "Usage: $0 distro arch"
     exit 1
 fi
 
-ARCH=$1
+DISTRO=$1
+ARCH=$2
 DEBIAN_ARCH=$(dpkg --print-architecture)
 DOMAIN=${ARCH}-${DRONE_BRANCH}
-
-BOOTSTRAP_ROOTFS_ZIP=bootstrap.tar.gz
 
 ls -la
 device=rootfsvm
 docker kill ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
-docker import ${BOOTSTRAP_ROOTFS_ZIP} ${device}
+docker import bootstrap.tar.gz ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' rootfsvm)
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
@@ -34,7 +33,7 @@ ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 
-docker export ${device} | gzip > docker-rootfs-${ARCH}.tar.gz
+docker export ${device} | gzip > docker-rootfs.tar.gz
 
 #test
 pip2 install -r ${DIR}/dev_requirements.txt
@@ -47,9 +46,9 @@ docker rmi ${device}
 
 rm -rf rootfs
 mkdir rootfs
-tar xzf docker-rootfs-${ARCH}.tar.gz -C rootfs
-rm -rf docker-rootfs-${ARCH}.tar.gz
+tar xzf docker-rootfs.tar.gz -C rootfs
+rm -rf docker-rootfs.tar.gz
 cp ${DIR}/bootstrap/${DEBIAN_ARCH}/etc/hosts rootfs/etc/hosts
 cat rootfs/etc/hosts
-tar czf rootfs-${ARCH}.tar.gz -C rootfs .
+tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs

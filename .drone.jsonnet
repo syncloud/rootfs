@@ -1,8 +1,8 @@
 local name = "rootfs";
 
-local build(arch) = {
+local build(arch, distro) = {
     kind: "pipeline",
-    name: arch,
+    name: distro + "-" + arch,
 
     platform: {
         os: "linux",
@@ -13,7 +13,7 @@ local build(arch) = {
             name: "bootstrap",
             image: "syncloud/build-deps-" + arch,
             commands: [
-                "./bootstrap/bootstrap.sh"
+                "./bootstrap/bootstrap-" + distro + ".sh"
             ],
             privileged: true
         },
@@ -21,7 +21,7 @@ local build(arch) = {
             name: "rootfs",
             image: "syncloud/build-deps-" + arch,
             commands: [
-                "./rootfs.sh " + arch
+                "./rootfs.sh " + distro + " " + arch
             ],
             privileged: true,
             network_mode: "host",
@@ -48,7 +48,7 @@ local build(arch) = {
                 }
             },
             commands: [
-                "./docker/build-rootfs.sh " + arch
+                "./docker/build-rootfs.sh " + distro + " " + arch
             ],
             privileged: true,
             network_mode: "host",
@@ -79,7 +79,7 @@ local build(arch) = {
                 target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + arch,
                 source: [
                     "integration/log/*",
-                    "rootfs-" + arch + ".tar.gz"
+                    "rootfs-" + distro + "-" + arch + ".tar.gz"
                 ]
             },
             when: {
@@ -110,6 +110,8 @@ local build(arch) = {
 };
 
 [
-   build("arm"),
-   build("amd64")
+ //  build("arm", "jessie"),
+   build("arm", "stretch"),
+//   build("amd64", "jessie"),
+   build("amd64", "stretch")
 ]
