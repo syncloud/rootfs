@@ -61,14 +61,6 @@ steps:
     - failure
     - success
 
-services:
-- name: syncloud
-  image: syncloud/systemd-arm
-  privileged: true
-  volumes:
-  - name: dbus
-    path: /var/run/dbus
-
 volumes:
 - name: dbus
   host:
@@ -142,14 +134,6 @@ steps:
     status:
     - failure
     - success
-
-services:
-- name: syncloud
-  image: syncloud/systemd-amd64
-  privileged: true
-  volumes:
-  - name: dbus
-    path: /var/run/dbus
 
 volumes:
 - name: dbus

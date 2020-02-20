@@ -87,17 +87,6 @@ local build(arch) = {
             }
         }
     ],
-    services: [{
-        name: "syncloud",
-        image: "syncloud/systemd-" + arch,
-        privileged: true,
-        volumes: [
-            {
-                name: "dbus",
-                path: "/var/run/dbus"
-            }
-        ]
-    }],
     volumes: [
         {
             name: "dbus",
