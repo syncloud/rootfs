@@ -26,7 +26,7 @@ docker run -d --privileged -i --name ${device} --hostname ${device} --network=dr
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
 
-sshpass -p syncloud scp -o StrictHostKeyChecking=no .sh root@${device_ip}:/root/test-on-device.sh
+sshpass -p syncloud scp -o StrictHostKeyChecking=no test-on-device.sh root@${device_ip}:/test-on-device.sh
 DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
 
 ${DOCKER_RUN} /test-on-device.sh
