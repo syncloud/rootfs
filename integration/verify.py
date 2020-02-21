@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 DIR = dirname(__file__)
 APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes']
-
+TMP_DIR = '/tmp/syncloud'
 
 @pytest.fixture(scope="session")
 def module_setup(request, device, log_dir):
@@ -22,12 +22,11 @@ def module_setup(request, device, log_dir):
 
 def module_teardown(device, log_dir):
     os.mkdir(log_dir)
-
+    device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
+    device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
     copy_logs(device, 'platform', log_dir)
     for app in APPS:
         copy_logs(device, app, log_dir)
-
-    device.run_ssh('journalctl')
 
 
 def copy_logs(device, app, log_dir):
