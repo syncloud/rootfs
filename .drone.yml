@@ -65,7 +65,7 @@ steps:
     source:
     - integration/log/*
     - rootfs-jessie-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-arm
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm
     timeout: 2m
     username: artifact
   when:
@@ -151,7 +151,7 @@ steps:
     source:
     - integration/log/*
     - rootfs-stretch-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-arm
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-stretch-arm
     timeout: 2m
     username: artifact
   when:
@@ -237,7 +237,7 @@ steps:
     source:
     - integration/log/*
     - rootfs-jessie-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-amd64
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-amd64
     timeout: 2m
     username: artifact
   when:
@@ -323,7 +323,7 @@ steps:
     source:
     - integration/log/*
     - rootfs-stretch-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-amd64
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-stretch-amd64
     timeout: 2m
     username: artifact
   when:

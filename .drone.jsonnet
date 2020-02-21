@@ -95,7 +95,7 @@ local build(arch, distro) = {
                 },
                 timeout: "2m",
                 command_timeout: "2m",
-                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + arch,
+                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + distro + "-" + arch,
                 source: [
                     "integration/log/*",
                     "rootfs-" + distro + "-" + arch + ".tar.gz"
