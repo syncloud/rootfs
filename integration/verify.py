@@ -38,6 +38,7 @@ def copy_logs(device, app, log_dir):
 
 def test_start(module_setup, log_dir):
     shutil.rmtree(log_dir, ignore_errors=True)
+    device.run_ssh('mkdir {0}'.format(TMP_DIR))
 
 
 def test_activate_device(device):
