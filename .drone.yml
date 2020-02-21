@@ -13,10 +13,22 @@ steps:
   - ./bootstrap/bootstrap-jessie.sh
   privileged: true
 
-- name: rootfs
+- name: build
   image: syncloud/build-deps-arm
   commands:
-  - ./rootfs.sh jessie arm
+  - ./build.sh jessie arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh jessie arm
   network_mode: host
   privileged: true
   volumes:
@@ -87,10 +99,22 @@ steps:
   - ./bootstrap/bootstrap-stretch.sh
   privileged: true
 
-- name: rootfs
+- name: build
   image: syncloud/build-deps-arm
   commands:
-  - ./rootfs.sh stretch arm
+  - ./build.sh stretch arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh stretch arm
   network_mode: host
   privileged: true
   volumes:
@@ -161,10 +185,22 @@ steps:
   - ./bootstrap/bootstrap-jessie.sh
   privileged: true
 
-- name: rootfs
+- name: build
   image: syncloud/build-deps-amd64
   commands:
-  - ./rootfs.sh jessie amd64
+  - ./build.sh jessie amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./test.sh jessie amd64
   network_mode: host
   privileged: true
   volumes:
@@ -235,10 +271,22 @@ steps:
   - ./bootstrap/bootstrap-stretch.sh
   privileged: true
 
-- name: rootfs
+- name: build
   image: syncloud/build-deps-amd64
   commands:
-  - ./rootfs.sh stretch amd64
+  - ./build.sh stretch amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./test.sh stretch amd64
   network_mode: host
   privileged: true
   volumes:

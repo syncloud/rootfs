@@ -18,10 +18,29 @@ local build(arch, distro) = {
             privileged: true
         },
         {
-            name: "rootfs",
+            name: "build",
             image: "syncloud/build-deps-" + arch,
             commands: [
-                "./rootfs.sh " + distro + " " + arch
+                "./build.sh " + distro + " " + arch
+            ],
+            privileged: true,
+            network_mode: "host",
+            volumes: [
+                {
+                    name: "docker",
+                    path: "/usr/bin/docker"
+                },
+                {
+                    name: "docker.sock",
+                    path: "/var/run/docker.sock"
+                }
+            ]
+        },
+        {
+            name: "test",
+            image: "syncloud/build-deps-" + arch,
+            commands: [
+                "./test.sh " + distro + " " + arch
             ],
             privileged: true,
             network_mode: "host",

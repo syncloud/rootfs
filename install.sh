@@ -47,5 +47,4 @@ systemctl enable snapd.socket
 systemctl start snapd.service snapd.socket
 
 snap --version
-strings /lib/systemd/libsystemd-shared-*.so | grep LZ4F_createDecompressionContext || true
 snap install platform
