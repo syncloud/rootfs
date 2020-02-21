@@ -86,92 +86,6 @@ volumes:
 
 ---
 kind: pipeline
-name: stretch-arm
-
-platform:
-  os: linux
-  arch: arm
-
-steps:
-- name: bootstrap
-  image: syncloud/build-deps-arm
-  commands:
-  - ./bootstrap/bootstrap-stretch.sh
-  privileged: true
-
-- name: build
-  image: syncloud/build-deps-arm
-  commands:
-  - ./build.sh stretch arm
-  network_mode: host
-  privileged: true
-  volumes:
-  - name: docker
-    path: /usr/bin/docker
-  - name: docker.sock
-    path: /var/run/docker.sock
-
-- name: test
-  image: syncloud/build-deps-arm
-  commands:
-  - ./test.sh stretch arm
-  network_mode: host
-  privileged: true
-  volumes:
-  - name: docker
-    path: /usr/bin/docker
-  - name: docker.sock
-    path: /var/run/docker.sock
-
-- name: upload-docker
-  image: syncloud/build-deps-arm
-  commands:
-  - ./docker/build-rootfs.sh stretch arm
-  network_mode: host
-  environment:
-    DOCKER_PASSWORD:
-      from_secret: DOCKER_PASSWORD
-    DOCKER_USERNAME:
-      from_secret: DOCKER_USERNAME
-  privileged: true
-  volumes:
-  - name: docker
-    path: /usr/bin/docker
-  - name: docker.sock
-    path: /var/run/docker.sock
-
-- name: artifact
-  image: appleboy/drone-scp
-  settings:
-    command_timeout: 2m
-    host:
-      from_secret: artifact_host
-    key:
-      from_secret: artifact_key
-    source:
-    - integration/log/*
-    - rootfs-stretch-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-stretch-arm
-    timeout: 2m
-    username: artifact
-  when:
-    status:
-    - failure
-    - success
-
-volumes:
-- name: dbus
-  host:
-    path: /var/run/dbus
-- name: docker
-  host:
-    path: /usr/bin/docker
-- name: docker.sock
-  host:
-    path: /var/run/docker.sock
-
----
-kind: pipeline
 name: jessie-amd64
 
 platform:
@@ -258,6 +172,92 @@ volumes:
 
 ---
 kind: pipeline
+name: stretch-arm
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-arm
+  commands:
+  - ./bootstrap/bootstrap-stretch.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-arm
+  commands:
+  - ./build.sh stretch arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh stretch arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: upload-docker
+  image: syncloud/build-deps-arm
+  commands:
+  - ./docker/build-rootfs.sh stretch arm
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - rootfs-stretch-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-stretch-arm
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
 name: stretch-amd64
 
 platform:
@@ -324,6 +324,350 @@ steps:
     - integration/log/*
     - rootfs-stretch-amd64.tar.gz
     target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-stretch-amd64
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: buster-arm
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-arm
+  commands:
+  - ./bootstrap/bootstrap-buster.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-arm
+  commands:
+  - ./build.sh buster arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh buster arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: upload-docker
+  image: syncloud/build-deps-arm
+  commands:
+  - ./docker/build-rootfs.sh buster arm
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - rootfs-buster-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: buster-amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./bootstrap/bootstrap-buster.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./build.sh buster amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./test.sh buster amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: upload-docker
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./docker/build-rootfs.sh buster amd64
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - rootfs-buster-amd64.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-amd64
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: 19.10-arm
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-arm
+  commands:
+  - ./bootstrap/bootstrap-19.10.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-arm
+  commands:
+  - ./build.sh 19.10 arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh 19.10 arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: upload-docker
+  image: syncloud/build-deps-arm
+  commands:
+  - ./docker/build-rootfs.sh 19.10 arm
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - rootfs-19.10-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-19.10-arm
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: 19.10-amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./bootstrap/bootstrap-19.10.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./build.sh 19.10 amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./test.sh 19.10 amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: upload-docker
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./docker/build-rootfs.sh 19.10 amd64
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - rootfs-19.10-amd64.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-19.10-amd64
     timeout: 2m
     username: artifact
   when:

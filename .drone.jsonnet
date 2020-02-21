@@ -130,7 +130,11 @@ local build(arch, distro) = {
 
 [
    build("arm", "jessie"),
-   build("arm", "stretch"),
    build("amd64", "jessie"),
-   build("amd64", "stretch")
+   build("arm", "stretch"),
+   build("amd64", "stretch"),
+   build("arm", "buster"),
+   build("amd64", "buster"),
+   build("arm", "19.10"),
+   build("amd64", "19.10")
 ]
