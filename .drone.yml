@@ -37,10 +37,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-arm
   commands:
-  - ./docker/build-rootfs.sh jessie arm
+  - ./docker/push.sh jessie arm
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -123,10 +123,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-amd64
   commands:
-  - ./docker/build-rootfs.sh jessie amd64
+  - ./docker/push.sh jessie amd64
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -209,10 +209,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-arm
   commands:
-  - ./docker/build-rootfs.sh stretch arm
+  - ./docker/push.sh stretch arm
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -295,10 +295,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-amd64
   commands:
-  - ./docker/build-rootfs.sh stretch amd64
+  - ./docker/push.sh stretch amd64
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -381,10 +381,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-arm
   commands:
-  - ./docker/build-rootfs.sh buster arm
+  - ./docker/push.sh buster arm
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -467,10 +467,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-amd64
   commands:
-  - ./docker/build-rootfs.sh buster amd64
+  - ./docker/push.sh buster amd64
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -553,10 +553,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-arm
   commands:
-  - ./docker/build-rootfs.sh 19.10 arm
+  - ./docker/push.sh 19.10 arm
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -639,10 +639,10 @@ steps:
   - name: docker.sock
     path: /var/run/docker.sock
 
-- name: upload-docker
+- name: docker
   image: syncloud/build-deps-amd64
   commands:
-  - ./docker/build-rootfs.sh 19.10 amd64
+  - ./docker/push.sh 19.10 amd64
   network_mode: host
   environment:
     DOCKER_PASSWORD:

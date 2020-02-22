@@ -56,7 +56,7 @@ local build(arch, distro) = {
             ]
         },
         {
-            name: "upload-docker",
+            name: "docker",
             image: "syncloud/build-deps-" + arch,
             environment: {
                 DOCKER_USERNAME: {
@@ -67,7 +67,7 @@ local build(arch, distro) = {
                 }
             },
             commands: [
-                "./docker/build-rootfs.sh " + distro + " " + arch
+                "./docker/push.sh " + distro + " " + arch
             ],
             privileged: true,
             network_mode: "host",
