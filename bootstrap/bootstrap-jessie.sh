@@ -79,7 +79,5 @@ cleanup
 echo "cleaning apt cache"
 rm -rf ${ROOTFS}/var/cache/apt/archives/*.deb
 
-cat ${ROOTFS}/etc/hosts
-
 echo "zipping bootstrap"
 tar czf bootstrap.tar.gz -C ${ROOTFS} .
