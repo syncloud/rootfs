@@ -15,18 +15,17 @@ DIR = dirname(__file__)
 APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes']
 TMP_DIR = '/tmp/syncloud'
 
+
 @pytest.fixture(scope="session")
 def module_setup(request, device, log_dir):
-    request.addfinalizer(lambda: module_teardown(device, log_dir))
-
-
-def module_teardown(device, log_dir):
-    os.mkdir(log_dir)
-    device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
-    device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
-    copy_logs(device, 'platform', log_dir)
-    for app in APPS:
-        copy_logs(device, app, log_dir)
+    def module_teardown():
+        os.mkdir(log_dir)
+        device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
+        device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
+        copy_logs(device, 'platform', log_dir)
+        for app in APPS:
+            copy_logs(device, app, log_dir)
+    request.addfinalizer(module_teardown)
 
 
 def copy_logs(device, app, log_dir):
@@ -36,7 +35,7 @@ def copy_logs(device, app, log_dir):
     device.scp_from_device(device_logs, app_log_dir)
 
 
-def test_start(module_setup, log_dir):
+def test_start(module_setup, log_dir, device):
     shutil.rmtree(log_dir, ignore_errors=True)
     device.run_ssh('mkdir {0}'.format(TMP_DIR))
 
