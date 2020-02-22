@@ -54,10 +54,11 @@ chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 echo "copy system files to get image working"
-cp -rf ${DIR}/files/common/* ${ROOTFS}/
-cp -rf ${DIR}/files/arch/${ARCH}/* ${ROOTFS}/
-cp -rf ${DIR}/files/distro/${DISTRO}/* ${ROOTFS}/
-
+cp -rf ${DIR}/files/common/* ${ROOTFS}
+cp -rf ${DIR}/files/arch/${ARCH}/* ${ROOTFS}
+if [[ -d ${DIR}/files/distro/${DISTRO ]]; then
+  cp -rf ${DIR}/files/distro/${DISTRO}/* ${ROOTFS}
+fi
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
 sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
 
