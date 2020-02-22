@@ -135,6 +135,6 @@ local build(arch, distro) = {
    build("amd64", "stretch"),
    build("arm", "buster"),
    build("amd64", "buster"),
-   build("arm", "19.10"),
-   build("amd64", "19.10")
+   build("arm", "eoan"),
+   build("amd64", "eoan")
 ]

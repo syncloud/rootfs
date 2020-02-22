@@ -2,9 +2,10 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-DEBIAN_ARCH=$(dpkg --print-architecture)
+ARCH=$(dpkg --print-architecture)
 REPO=http://http.debian.net/debian
 KEY=https://ftp-master.debian.org/keys/archive-key-8.asc
+DISTRO=jessie
 
 echo "Open file limit: $(ulimit -n)"
 
@@ -35,7 +36,7 @@ cleanup
 rm -rf ${ROOTFS}
 rm -rf rootfs.tar.gz
 
-debootstrap --no-check-gpg --include=ca-certificates,locales --arch=${DEBIAN_ARCH} jessie ${ROOTFS} ${REPO}
+debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server,wget,less,parted,unzip,bzip2,curl,dbus,avahi-daemon,ntp,net-tools,wireless-tools,fancontrol --arch=${ARCH} ${DISTRO} ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
 chroot ${ROOTFS} /bin/bash -c "locale-gen en_US en_US.UTF-8"
@@ -53,19 +54,12 @@ chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
 chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 echo "copy system files to get image working"
-cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
+cp -rf ${DIR}/files/common/* ${ROOTFS}/
+cp -rf ${DIR}/files/arch/${ARCH}/* ${ROOTFS}/
+cp -rf ${DIR}/files/distro/${DISTRO}/* ${ROOTFS}/
 
-chroot ${ROOTFS} apt-get update
-chroot ${ROOTFS} apt-get -y dist-upgrade
-chroot ${ROOTFS} apt-get -y install sudo openssh-server wget less parted lsb-release unzip bzip2 curl dbus avahi-daemon ntp net-tools wireless-tools fancontrol
-if [[ ${DEBIAN_ARCH} == "amd64" ]]; then
-    chroot ${ROOTFS} apt-get -y install -t jessie-backports linux-image-amd64
-fi
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
 sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
-
-echo "copy system files again as some packages might have replaced our files"
-cp -rf ${DIR}/${DEBIAN_ARCH}/* ${ROOTFS}/
 
 for f in ${DIR}/patches/*.patch
 do

@@ -516,7 +516,7 @@ volumes:
 
 ---
 kind: pipeline
-name: 19.10-arm
+name: eoan-arm
 
 platform:
   os: linux
@@ -526,13 +526,13 @@ steps:
 - name: bootstrap
   image: syncloud/build-deps-arm
   commands:
-  - ./bootstrap/bootstrap-19.10.sh
+  - ./bootstrap/bootstrap-eoan.sh
   privileged: true
 
 - name: build
   image: syncloud/build-deps-arm
   commands:
-  - ./build.sh 19.10 arm
+  - ./build.sh eoan arm
   network_mode: host
   privileged: true
   volumes:
@@ -544,7 +544,7 @@ steps:
 - name: test
   image: syncloud/build-deps-arm
   commands:
-  - ./test.sh 19.10 arm
+  - ./test.sh eoan arm
   network_mode: host
   privileged: true
   volumes:
@@ -556,7 +556,7 @@ steps:
 - name: docker
   image: syncloud/build-deps-arm
   commands:
-  - ./docker/push.sh 19.10 arm
+  - ./docker/push.sh eoan arm
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -580,8 +580,8 @@ steps:
       from_secret: artifact_key
     source:
     - integration/log/*
-    - rootfs-19.10-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-19.10-arm
+    - rootfs-eoan-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-eoan-arm
     timeout: 2m
     username: artifact
   when:
@@ -602,7 +602,7 @@ volumes:
 
 ---
 kind: pipeline
-name: 19.10-amd64
+name: eoan-amd64
 
 platform:
   os: linux
@@ -612,13 +612,13 @@ steps:
 - name: bootstrap
   image: syncloud/build-deps-amd64
   commands:
-  - ./bootstrap/bootstrap-19.10.sh
+  - ./bootstrap/bootstrap-eoan.sh
   privileged: true
 
 - name: build
   image: syncloud/build-deps-amd64
   commands:
-  - ./build.sh 19.10 amd64
+  - ./build.sh eoan amd64
   network_mode: host
   privileged: true
   volumes:
@@ -630,7 +630,7 @@ steps:
 - name: test
   image: syncloud/build-deps-amd64
   commands:
-  - ./test.sh 19.10 amd64
+  - ./test.sh eoan amd64
   network_mode: host
   privileged: true
   volumes:
@@ -642,7 +642,7 @@ steps:
 - name: docker
   image: syncloud/build-deps-amd64
   commands:
-  - ./docker/push.sh 19.10 amd64
+  - ./docker/push.sh eoan amd64
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -666,8 +666,8 @@ steps:
       from_secret: artifact_key
     source:
     - integration/log/*
-    - rootfs-19.10-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-19.10-amd64
+    - rootfs-eoan-amd64.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-eoan-amd64
     timeout: 2m
     username: artifact
   when:
