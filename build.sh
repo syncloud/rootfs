@@ -44,7 +44,6 @@ rm -rf rootfs
 mkdir rootfs
 tar xzf docker-rootfs.tar.gz -C rootfs
 rm -rf docker-rootfs.tar.gz
-cp ${DIR}/bootstrap/${DEBIAN_ARCH}/etc/hosts rootfs/etc/hosts
-cat rootfs/etc/hosts
+
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs
