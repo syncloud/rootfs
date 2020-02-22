@@ -2,7 +2,11 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 ARCH=$(dpkg --print-architecture)
-REPO=http://ports.ubuntu.com
+if [[ ${ARCH} == "amd64" ]]; then
+  REPO=http://archive.ubuntu.com/ubuntu
+else
+  REPO=http://ports.ubuntu.com
+fi
 DISTRO=eoan
 
 #Fix debconf frontend warnings
@@ -31,7 +35,7 @@ cleanup
 rm -rf ${ROOTFS}
 wget http://archive.ubuntu.com/ubuntu/pool/main/d/debootstrap/debootstrap_1.0.117ubuntu1_all.deb
 dpkg --install debootstrap_1.0.117ubuntu1_all.deb
-debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server,wget,less,parted,unzip,bzip2,curl,dbus,avahi-daemon,ntp,net-tools,wireless-tools,fancontrol --arch=${ARCH} ${DISTRO} ${ROOTFS} ${REPO}
+debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server,wget,less,parted,unzip,bzip2,curl,dbus,avahi-daemon,net-tools,wireless-tools --arch=${ARCH} ${DISTRO} ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
 chroot ${ROOTFS} /bin/bash -c "locale-gen en_US en_US.UTF-8"
