@@ -56,6 +56,28 @@ local build(arch, distro) = {
             ]
         },
         {
+            name: "cleanup",
+            image: "syncloud/build-deps-" + arch,
+            commands: [
+                "./cleanup.sh"
+            ],
+            privileged: true,
+            network_mode: "host",
+            volumes: [
+                {
+                    name: "docker",
+                    path: "/usr/bin/docker"
+                },
+                {
+                    name: "docker.sock",
+                    path: "/var/run/docker.sock"
+                }
+            ],
+            when: {
+              status: [ "failure", "success" ]
+            }
+        },
+        {
             name: "docker",
             image: "syncloud/build-deps-" + arch,
             environment: {
@@ -131,10 +153,6 @@ local build(arch, distro) = {
 [
    build("arm", "jessie"),
    build("amd64", "jessie"),
-   //build("arm", "stretch"),
-   //build("amd64", "stretch"),
    build("arm", "buster"),
-   build("amd64", "buster"),
-   build("arm", "eoan"),
-   build("amd64", "eoan")
+   build("amd64", "buster")
 ]
