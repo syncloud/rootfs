@@ -131,8 +131,8 @@ local build(arch, distro) = {
 [
    build("arm", "jessie"),
    build("amd64", "jessie"),
-   build("arm", "stretch"),
-   build("amd64", "stretch"),
+   //build("arm", "stretch"),
+   //build("amd64", "stretch"),
    build("arm", "buster"),
    build("amd64", "buster"),
    build("arm", "eoan"),
