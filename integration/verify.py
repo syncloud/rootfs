@@ -21,6 +21,7 @@ def module_setup(request, device, log_dir):
     def module_teardown():
         os.mkdir(log_dir)
         device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
+        device.run_ssh('cp /etc/hosts {0}/hosts.log'.format(TMP_DIR), throw=False)
         device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
         copy_logs(device, 'platform', log_dir)
         for app in APPS:

@@ -40,18 +40,11 @@ debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
 chroot ${ROOTFS} /bin/bash -c "locale-gen en_US en_US.UTF-8"
-
-echo "disable service restart"
-cp ${DIR}/disable-service-restart.sh ${ROOTFS}/root
-chroot ${ROOTFS} /root/disable-service-restart.sh
-
 chroot ${ROOTFS} wget ${KEY} -O archive.key
 chroot ${ROOTFS} apt-key add archive.key
 
 mount -v --bind /dev ${ROOTFS}/dev
 chroot ${ROOTFS} /bin/bash -c "echo \"root:syncloud\" | chpasswd"
-chroot ${ROOTFS} /bin/bash -c "mount -t devpts devpts /dev/pts"
-chroot ${ROOTFS} /bin/bash -c "mount -t proc proc /proc"
 
 echo "copy system files to get image working"
 cp -rf ${DIR}/files/common/* ${ROOTFS}
@@ -67,13 +60,7 @@ do
   patch -d ${ROOTFS} -p1 < $f
 done
 
-echo "enable restart"
-cp ${DIR}/enable-service-restart.sh ${ROOTFS}/root
-chroot ${ROOTFS} /root/enable-service-restart.sh
-
-umount ${ROOTFS}/dev/pts
 umount ${ROOTFS}/dev
-umount ${ROOTFS}/proc
 
 cleanup
 
