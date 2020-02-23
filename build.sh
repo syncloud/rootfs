@@ -24,7 +24,7 @@ docker rm ${device} || true
 docker rmi ${device} || true
 docker import bootstrap.tar.gz ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
-device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' rootfsvm)
+device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
