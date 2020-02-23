@@ -18,7 +18,7 @@ DEBIAN_ARCH=$(dpkg --print-architecture)
 DOMAIN=${ARCH}-${DRONE_BRANCH}
 
 ls -la
-device=rootfsvm
+device=rootfs
 docker kill ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
