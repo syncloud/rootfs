@@ -31,7 +31,7 @@ function cleanup {
 cleanup
 
 rm -rf ${ROOTFS}
-
+apt install -y debootstrap
 debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server,wget,less,parted,unzip,bzip2,curl,dbus,avahi-daemon,ntp,net-tools,wireless-tools,fancontrol,gnupg --arch=${ARCH} ${DISTRO} ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen

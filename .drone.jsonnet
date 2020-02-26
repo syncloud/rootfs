@@ -89,7 +89,7 @@ local build(arch, distro) = {
                 }
             },
             commands: [
-                "./docker/push.sh " + distro + " " + arch
+                "./docker/push-platform.sh " + distro + " " + arch
             ],
             privileged: true,
             network_mode: "host",

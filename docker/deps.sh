@@ -11,7 +11,6 @@ pip install -r python.dev.requirements.txt
 
 GECKODRIVER=0.24.0
 FIREFOX=65.0
-GO_VERSION=1.7.6
 ARCH=$(uname -m)
 
 mkdir /tools
@@ -27,7 +26,6 @@ if [[ ${ARCH} == "x86_64" ]]; then
     wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2 --progress dot:giga
     tar xf firefox-${FIREFOX}.tar.bz2 -C /tools
 
-    curl https://raw.githubusercontent.com/mguillem/JSErrorCollector/master/dist/JSErrorCollector.xpi -o /tools/firefox/JSErrorCollector.xpi
     wget --progress dot:giga http://artifact.syncloud.org/3rdparty/phantomjs-2.1.1-linux-x86_64.tar.bz2
     tar xjf phantomjs-2.1.1-linux-x86_64.tar.bz2
     cp ./phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin
@@ -37,18 +35,7 @@ else
     cp phantomjs-2.1.1-armhf /usr/bin/phantomjs
 fi
 
-sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
-
 chmod +x /usr/bin/phantomjs
-
-wget https://dl.google.com/go/go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz --progress dot:giga
-tar xf go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
-rm go${GO_VERSION}.linux-${CPU_ARCH}.tar.gz
-mv go go-${GO_VERSION}
-ln -s go-${GO_VERSION} go
-
-export GOROOT=.
-/tools/go/bin/go version
 
 ${DIR}/install-s3cmd.sh
 

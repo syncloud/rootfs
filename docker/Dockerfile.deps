@@ -1,4 +1,4 @@
-FROM syncloud/bootstrap
+FROM bootstrap
 ADD deps.sh /
 ADD apt.pkg.list /
 ADD python.dev.requirements.txt /
