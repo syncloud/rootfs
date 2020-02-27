@@ -10,8 +10,14 @@ fi
 
 DISTRO=$1
 ARCH=$2
+if [[ ${DISTRO} == "jessie" ]]; then
+    IMAGE="syncloud/build-deps-${ARCH}"
+else
+    IMAGE="syncloud/build-deps-${DISTRO}-${ARCH}"
+fi
+
 ../bootstrap/bootstrap-${DISTRO}.sh
 docker rmi bootstrap || true
 cat bootstrap.tar.gz | docker import - bootstrap
-docker build --no-cache -f Dockerfile.deps -t syncloud/build-deps-${DISTRO}-${ARCH} .
-docker push syncloud/build-deps-${DISTRO}-${ARCH}
+docker build --no-cache -f Dockerfile.deps -t ${IMAGE} .
+docker push ${IMAGE}

@@ -11,11 +11,17 @@ fi
 DISTRO=$1
 ARCH=$2
 
+if [[ ${DISTRO} == "jessie" ]]; then
+    IMAGE="syncloud/platform-${ARCH}"
+else
+    IMAGE="syncloud/platform-${DISTRO}-${ARCH}"
+fi
+
 set +x
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 set -x
 
 docker rmi rootfs || true
 cat ../rootfs-${DISTRO}-${ARCH}.tar.gz | docker import - rootfs
-docker build -f Dockerfile.platform -t syncloud/platform-${DISTRO}-${ARCH} .
-docker push syncloud/platform-${DISTRO}-${ARCH}
+docker build -f Dockerfile.platform -t ${IMAGE} .
+docker push ${IMAGE}
