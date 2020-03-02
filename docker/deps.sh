@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 apt-get update
-xargs apt-get install -y < apt.pkg.list
+xargs apt-get install -y < deps.apt.list
 
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py

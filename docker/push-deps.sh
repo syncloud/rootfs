@@ -19,5 +19,7 @@ fi
 ../bootstrap/bootstrap-${DISTRO}.sh
 docker rmi bootstrap || true
 cat bootstrap.tar.gz | docker import - bootstrap
+cp deps.apt.list.${DISTRO} deps.apt.list
 docker build --no-cache -f Dockerfile.deps -t ${IMAGE} .
 docker push ${IMAGE}
+
