@@ -12,7 +12,7 @@ pip install -r python.dev.requirements.txt
 GECKODRIVER=0.24.0
 FIREFOX=65.0
 ARCH=$(uname -m)
-
+ARTIFACTS_URL="https://github.com/syncloud/3rdparty/releases/download"
 mkdir /tools
 cd /tools
 
@@ -26,12 +26,12 @@ if [[ ${ARCH} == "x86_64" ]]; then
     wget https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX}/linux-x86_64/en-US/firefox-${FIREFOX}.tar.bz2 --progress dot:giga
     tar xf firefox-${FIREFOX}.tar.bz2 -C /tools
 
-    wget --progress dot:giga http://artifact.syncloud.org/3rdparty/phantomjs-2.1.1-linux-x86_64.tar.bz2
+    wget --progress dot:giga ${ARTIFACTS_URL}/1/phantomjs-2.1.1-linux-x86_64.tar.bz2
     tar xjf phantomjs-2.1.1-linux-x86_64.tar.bz2
     cp ./phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin
 else
     CPU_ARCH=armv6l
-    wget --progress dot:giga http://artifact.syncloud.org/3rdparty/phantomjs-2.1.1-armhf
+    wget --progress dot:giga ${ARTIFACTS_URL}/1/phantomjs-2.1.1-armhf
     cp phantomjs-2.1.1-armhf /usr/bin/phantomjs
 fi
 
