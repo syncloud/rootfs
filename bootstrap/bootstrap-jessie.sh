@@ -26,7 +26,6 @@ function cleanup {
 
     echo "killing chroot services"
     lsof 2>&1 | grep $ROOTFS | awk '{print $1 $2}' | sort | uniq
-    #lsof 2>&1 | grep $ROOTFS | awk '{print $2}' | sort | uniq | xargs kill -9 || true
     echo "chroot services after kill"
     lsof 2>&1 | grep $ROOTFS || true
 }
