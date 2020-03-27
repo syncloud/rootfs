@@ -29,6 +29,7 @@ device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.dron
 
 sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
 DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
+${DOCKER_RUN} cat /etc/hosts
 ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
