@@ -42,11 +42,10 @@ mount -v --bind /dev ${ROOTFS}/dev
 chroot ${ROOTFS} /bin/bash -c "echo \"root:syncloud\" | chpasswd"
 
 echo "copy system files to get image working"
-cp -rf ${DIR}/files/common/* ${ROOTFS}
-cp -rf ${DIR}/files/arch/${ARCH}/* ${ROOTFS}
-if [[ -d ${DIR}/files/distro/${DISTRO} ]]; then
-  cp -rf ${DIR}/files/distro/${DISTRO}/* ${ROOTFS}
-fi
+cp -rf ${DIR}/files/common ${ROOTFS}
+cp -rf ${DIR}/files/arch/${ARCH} ${ROOTFS}
+cp -rf ${DIR}/files/distro/${DISTRO} ${ROOTFS}
+cat ${ROOTFS}/etc/hosts
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
 sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config
 
