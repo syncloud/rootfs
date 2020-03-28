@@ -44,8 +44,10 @@ docker rmi ${device}
 rm -rf rootfs
 mkdir rootfs
 tar xzf docker-rootfs.tar.gz -C rootfs
-cat rootfs/etc/hosts
 
+#docker wipes out hosts file
+cat rootfs/etc/hosts
+cp bootstrap/files/common/etc/hosts rootfs/etc
 rm -rf docker-rootfs.tar.gz
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
