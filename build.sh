@@ -33,7 +33,7 @@ ${DOCKER_RUN} cat /etc/hosts
 ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
-
+${DOCKER_RUN} cat /etc/hosts
 docker export ${device} | gzip > docker-rootfs.tar.gz
 
 cd ${DIR}
