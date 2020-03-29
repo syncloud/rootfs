@@ -10,7 +10,7 @@ python get-pip.py
 pip install -r python.dev.requirements.txt
 
 GECKODRIVER=0.26.0
-FIREFOX=75.0
+FIREFOX=74.0
 ARCH=$(uname -m)
 ARTIFACTS_URL="https://github.com/syncloud/3rdparty/releases/download"
 mkdir /tools
