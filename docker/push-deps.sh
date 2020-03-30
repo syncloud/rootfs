@@ -17,6 +17,8 @@ else
 fi
 
 ../bootstrap/bootstrap-${DISTRO}.sh
+docker kill bootstrap || true
+docker rm bootstrap|| true
 docker rmi bootstrap || true
 cat bootstrap.tar.gz | docker import - bootstrap
 cp deps.apt.list.${DISTRO} deps.apt.list

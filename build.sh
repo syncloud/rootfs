@@ -34,7 +34,9 @@ ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 ${DOCKER_RUN} cat /etc/hosts
-docker export ${device} | gzip > docker-rootfs.tar.gz
+${DOCKER_RUN} grep nameserver /etc/resolv.conf
+${DOCKER_RUN} grep dev /etc/fstab
+docker export --output="docker-rootfs.tar" ${device}
 
 cd ${DIR}
 docker kill ${device}
@@ -43,7 +45,7 @@ docker rmi ${device}
 
 rm -rf rootfs
 mkdir rootfs
-tar xzf docker-rootfs.tar.gz -C rootfs
+tar xf docker-rootfs.tar -C rootfs
 
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
@@ -52,7 +54,7 @@ grep dev rootfs/etc/fstab
 cat rootfs/etc/hosts
 cp bootstrap/files/common/etc/hosts rootfs/etc
 
-rm -rf docker-rootfs.tar.gz
+rm -rf docker-rootfs.tar
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs
