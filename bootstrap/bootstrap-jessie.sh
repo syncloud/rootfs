@@ -49,7 +49,8 @@ echo "copy system files to get image working"
 cp -rf ${DIR}/files/common ${ROOTFS}
 cp -rf ${DIR}/files/arch/${ARCH} ${ROOTFS}
 cp -rf ${DIR}/files/distro/${DISTRO} ${ROOTFS}
-cat ${ROOTFS}/etc/hosts
+grep localhost ${ROOTFS}/etc/hosts
+grep dev ${ROOTFS}/etc/fstab
 
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
 sed -i "s/^.*PermitRootLogin.*/PermitRootLogin yes/g" ${ROOTFS}/etc/ssh/sshd_config

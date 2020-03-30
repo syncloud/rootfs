@@ -22,7 +22,7 @@ device=rootfs
 docker kill ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
-docker import bootstrap.tar.gz ${device}
+docker image import bootstrap.tar.gz ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
@@ -33,10 +33,10 @@ ${DOCKER_RUN} cat /etc/hosts
 ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
-${DOCKER_RUN} cat /etc/hosts
+${DOCKER_RUN} grep localhost /etc/hosts
 ${DOCKER_RUN} grep nameserver /etc/resolv.conf
 ${DOCKER_RUN} grep dev /etc/fstab
-docker export --output="docker-rootfs.tar" ${device}
+docker container export --output="docker-rootfs.tar" ${device}
 
 cd ${DIR}
 docker kill ${device}
