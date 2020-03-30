@@ -45,9 +45,13 @@ rm -rf rootfs
 mkdir rootfs
 tar xzf docker-rootfs.tar.gz -C rootfs
 
+grep nameserver rootfs/etc/resolv.conf
+grep dev rootfs/etc/fstab
+
 #docker wipes out hosts file
 cat rootfs/etc/hosts
 cp bootstrap/files/common/etc/hosts rootfs/etc
+
 rm -rf docker-rootfs.tar.gz
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
