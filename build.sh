@@ -46,6 +46,9 @@ docker rmi ${device}
 rm -rf rootfs
 mkdir rootfs
 tar xf docker-rootfs.tar -C rootfs
+rsync -avh --stats bootstrap/files/common/ rootfs
+rsync -avh --stats bootstrap/files/arch/${ARCH}/ rootfs
+rsync -avh --stats bootstrap/files/distro/${DISTRO}/ rootfs
 
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
