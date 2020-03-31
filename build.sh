@@ -35,6 +35,7 @@ ${DOCKER_RUN} rm /root/install.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 ${DOCKER_RUN} grep localhost /etc/hosts
 ${DOCKER_RUN} grep nameserver /etc/resolv.conf
+${DOCKER_RUN} grep dev /etc/fstab
 docker container export --output="docker-rootfs.tar" ${device}
 
 cd ${DIR}
@@ -46,10 +47,6 @@ rm -rf rootfs
 mkdir rootfs
 tar xf docker-rootfs.tar -C rootfs
 
-cp -rf bootstrap/files/common rootfs
-cp -rf bootstrap/files/arch/${ARCH} rootfs
-cp -rf bootstrap/files/distro/${DISTRO} rootfs
-
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
 
@@ -57,3 +54,4 @@ rm -rf docker-rootfs.tar
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs
+
