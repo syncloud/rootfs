@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: jessie-arm
+name: buster-arm
 
 platform:
   os: linux
@@ -10,13 +10,13 @@ steps:
 - name: bootstrap
   image: syncloud/build-deps-arm
   commands:
-  - ./bootstrap/bootstrap-jessie.sh
+  - ./bootstrap/bootstrap-buster.sh
   privileged: true
 
 - name: build
   image: syncloud/build-deps-arm
   commands:
-  - ./build.sh jessie arm
+  - ./build.sh buster arm
   network_mode: host
   privileged: true
   volumes:
@@ -28,7 +28,7 @@ steps:
 - name: test
   image: syncloud/build-deps-arm
   commands:
-  - ./test.sh jessie arm
+  - ./test.sh buster arm
   network_mode: host
   privileged: true
   volumes:
@@ -56,7 +56,7 @@ steps:
 - name: docker
   image: syncloud/build-deps-arm
   commands:
-  - ./docker/push-platform.sh jessie arm
+  - ./docker/push-platform.sh buster arm
   network_mode: host
   environment:
     DOCKER_PASSWORD:
@@ -80,8 +80,8 @@ steps:
       from_secret: artifact_key
     source:
     - integration/log/*
-    - rootfs-jessie-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm
+    - rootfs-buster-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm
     timeout: 2m
     username: artifact
   when:
