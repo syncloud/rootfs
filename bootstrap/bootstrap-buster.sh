@@ -42,9 +42,9 @@ mount -v --bind /dev ${ROOTFS}/dev
 chroot ${ROOTFS} /bin/bash -c "echo \"root:syncloud\" | chpasswd"
 
 echo "copy system files to get image working"
-rsync -avh --stats ${DIR}/files/common ${ROOTFS}
-rsync -avh --stats ${DIR}/files/arch/${ARCH} ${ROOTFS}
-rsync -avh --stats ${DIR}/files/distro/${DISTRO} ${ROOTFS}
+rsync -avh --stats ${DIR}/files/common/ ${ROOTFS}
+rsync -avh --stats ${DIR}/files/arch/${ARCH}/ ${ROOTFS}
+rsync -avh --stats ${DIR}/files/distro/${DISTRO}/ ${ROOTFS}
 grep localhost ${ROOTFS}/etc/hosts
 grep dev ${ROOTFS}/etc/fstab
 
