@@ -51,8 +51,10 @@ rm -rf rootfs
 mkdir rootfs
 tar xf docker-rootfs.tar -C rootfs
 mkdir log
-ls -la rootfs/var/log log/files.log
+ls -la rootfs/var/log > log/files.log
 cp rootfs/var/log/messages log/messages.log
+cp rootfs/var/log/auth.log log
+cp rootfs/var/log/syslog log/syslog.log
 
 rsync -avh --stats bootstrap/files/common/ rootfs
 rsync -avh --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
