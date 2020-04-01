@@ -25,20 +25,24 @@ docker rmi ${device} || true
 docker image import bootstrap.tar.gz ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
+cd ${DIR}
+set +e
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
-
-sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
-DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
-${DOCKER_RUN} cat /etc/hosts
-${DOCKER_RUN} /root/install.sh
-${DOCKER_RUN} rm /root/install.sh
-${DOCKER_RUN} rm -rf /tmp/*
-${DOCKER_RUN} grep localhost /etc/hosts
-${DOCKER_RUN} grep nameserver /etc/resolv.conf
-${DOCKER_RUN} grep dev /etc/fstab
+code = $?
+set -e
+if [[ $code -eq 0 ]]; then
+    sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
+    DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
+    ${DOCKER_RUN} cat /etc/hosts
+    ${DOCKER_RUN} /root/install.sh
+    ${DOCKER_RUN} rm /root/install.sh
+    ${DOCKER_RUN} rm -rf /tmp/*
+    ${DOCKER_RUN} grep localhost /etc/hosts
+    ${DOCKER_RUN} grep nameserver /etc/resolv.conf
+    ${DOCKER_RUN} grep dev /etc/fstab
+fi
 docker container export --output="docker-rootfs.tar" ${device}
 
-cd ${DIR}
 docker kill ${device}
 docker rm ${device}
 docker rmi ${device}
@@ -46,6 +50,10 @@ docker rmi ${device}
 rm -rf rootfs
 mkdir rootfs
 tar xf docker-rootfs.tar -C rootfs
+mkdir log
+ls -la rootfs/var/log log/files.log
+cp rootfs/var/log/messages log/messages.log
+
 rsync -avh --stats bootstrap/files/common/ rootfs
 rsync -avh --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
 rsync -avh --stats bootstrap/files/distro/${DISTRO}/ rootfs
@@ -57,4 +65,4 @@ rm -rf docker-rootfs.tar
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs
-
+exit $code

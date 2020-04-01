@@ -120,6 +120,7 @@ local build(arch, distro) = {
                 target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + distro + "-" + arch,
                 source: [
                     "integration/log/*",
+                    "log/*",
                     "rootfs-" + distro + "-" + arch + ".tar.gz"
                 ]
             },

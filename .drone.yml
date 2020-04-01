@@ -80,6 +80,7 @@ steps:
       from_secret: artifact_key
     source:
     - integration/log/*
+    - log/*
     - rootfs-buster-arm.tar.gz
     target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm
     timeout: 2m
