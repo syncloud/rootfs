@@ -28,7 +28,7 @@ device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.dron
 cd ${DIR}
 set +e
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
-code = $?
+code=$?
 set -e
 if [[ $code -eq 0 ]]; then
     sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
