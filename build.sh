@@ -52,10 +52,10 @@ mkdir rootfs
 tar xf docker-rootfs.tar -C rootfs
 mkdir log
 ls -la rootfs/var/log > log/files.log
-cp rootfs/var/log/messages log/messages.log | ture
-cp rootfs/var/log/auth.log log | ture
-cp rootfs/var/log/syslog log/syslog.log | ture
-cp rootfs/var/log/dmesg log/dmesg.log | ture
+cp rootfs/var/log/messages log/messages.log | true
+cp rootfs/var/log/auth.log log | true
+cp rootfs/var/log/syslog log/syslog.log | true
+cp rootfs/var/log/dmesg log/dmesg.log | true
 chmod -R a+r log
 rsync -avh --stats bootstrap/files/common/ rootfs
 rsync -avh --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
