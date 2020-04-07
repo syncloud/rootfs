@@ -9,7 +9,7 @@
 
 # Define the interface to which a delegated prefix will be assigned
 # This must not be the same interface on which the prefix is learned!
-IA_PD_IFACE="enp2s0"
+IA_PD_IFACE="eth1"
 
 # Provide a space separated list of services that need to be restarted or reloaded after a prefix change
 # Services must be controllable via systemd's systemctl, the default action is restart
