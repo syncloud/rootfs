@@ -61,6 +61,7 @@ rsync -avh --stats bootstrap/files/common/ rootfs
 rsync -avh --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
 rsync -avh --stats bootstrap/files/distro/${DISTRO}/ rootfs
 
+grep localhost rootfs/etc/hosts
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
 
