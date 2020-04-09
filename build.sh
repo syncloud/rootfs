@@ -67,7 +67,7 @@ rsync -avh --stats bootstrap/files/distro/${DISTRO}/ rootfs
 sync
 
 grep localhost rootfs/etc/hosts
-ls -la localhost rootfs/etc/hosts
+ls -la rootfs/etc/hosts
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
 
