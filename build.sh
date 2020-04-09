@@ -60,9 +60,9 @@ cp rootfs/var/log/syslog log/syslog.log | true
 cp rootfs/var/log/dmesg log/dmesg.log | true
 chmod -R a+r log
 
-rsync -avh --stats bootstrap/files/common/ rootfs
-rsync -avh --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
-rsync -avh --stats bootstrap/files/distro/${DISTRO}/ rootfs
+rsync -avhp --ignore-times --stats bootstrap/files/common/ rootfs
+rsync -avhp --ignore-times --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
+rsync -avhp --ignore-times --stats bootstrap/files/distro/${DISTRO}/ rootfs
 
 sync
 
@@ -70,6 +70,7 @@ grep localhost rootfs/etc/hosts
 ls -la rootfs/etc/hosts
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
+grep eth ${ROOTFS}/etc/network/interfaces
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs
