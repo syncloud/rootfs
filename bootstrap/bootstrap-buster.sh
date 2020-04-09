@@ -47,7 +47,7 @@ rsync -avhp --ignore-times --stats ${DIR}/files/arch/${ARCH}/ ${ROOTFS}
 rsync -avhp --ignore-times --stats ${DIR}/files/distro/${DISTRO}/ ${ROOTFS}
 grep localhost ${ROOTFS}/etc/hosts
 grep dev ${ROOTFS}/etc/fstab
-ls -la /etc/network
+ls -la ${ROOTFS}/etc/network
 grep eth ${ROOTFS}/etc/network/interfaces
 
 sed -i -e'/AVAHI_DAEMON_DETECT_LOCAL/s/1/0/' ${ROOTFS}/etc/default/avahi-daemon
