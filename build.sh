@@ -70,7 +70,7 @@ grep localhost rootfs/etc/hosts
 ls -la rootfs/etc/hosts
 grep nameserver rootfs/etc/resolv.conf
 grep dev rootfs/etc/fstab
-grep eth ${ROOTFS}/etc/network/interfaces
+grep eth rootfs/etc/network/interfaces
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
 rm -rf rootfs
