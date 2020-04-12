@@ -6,5 +6,3 @@ iface eth0 inet dhcp
 iface eth0 inet6 auto
         dhcp 1
         request_prefix 1
-
-iface eth1 inet6 manual
