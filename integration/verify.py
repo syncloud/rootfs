@@ -51,7 +51,7 @@ def wait_for_app(device, predicate):
     attempt = 0
     while attempt < attempts:
         try:
-            response = device.login().get('http://{0}/rest/installed_apps'.format(device.device_host))
+            response = device.login().get('https://{0}/rest/installed_apps'.format(device.device_host), verify=False)
             if response.status_code == 200:
                 print('result: {0}'.format(response.text))
                 if predicate(response.text):
