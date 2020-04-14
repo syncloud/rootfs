@@ -47,20 +47,22 @@ def test_activate_device(device):
 
 
 def wait_for_app(device, predicate):
-    found = False
     attempts = 10
     attempt = 0
-    while not found and attempt < attempts:
+    while attempt < attempts:
         try:
             response = device.login().get('http://{0}/rest/installed_apps'.format(device.device_host))
             if response.status_code == 200:
                 print('result: {0}'.format(response.text))
-                found = predicate(response.text)
+                if predicate(response.text):
+                    return
         except Exception, e:
             pass
         print('waiting for app')
         attempt += 1
         time.sleep(5)
+
+    raise Exception("timeout waiting for app event")
 
 
 @pytest.mark.parametrize("app", APPS, scope="session")
