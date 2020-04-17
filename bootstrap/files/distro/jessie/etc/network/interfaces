@@ -1,7 +1,8 @@
 auto lo
 iface lo inet loopback
 
+auto eth0
 iface eth0 inet dhcp
-iface eth0 inet6 dhcp
+iface eth0 inet6 auto
         dhcp 1
         request_prefix 1
