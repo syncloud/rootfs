@@ -75,8 +75,5 @@ grep dev rootfs/etc/fstab
 grep eth rootfs/etc/network/interfaces
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
-rm -rf rootfs
-
-tar tzvf rootfs-${DISTRO}-${ARCH}.tar.gz | grep hosts
 
 exit $code

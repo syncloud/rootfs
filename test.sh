@@ -21,7 +21,8 @@ device=rootfs
 docker kill ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
-docker import rootfs-${DISTRO}-${ARCH}.tar.gz ${device}
+sed '/auto eth0/d' -i rootfs/etc/network/interfaces
+tar c -C rootfs . | docker import - ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
 ./integration/wait-ssh.sh ${device_ip} root syncloud 22
