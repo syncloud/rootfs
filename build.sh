@@ -22,7 +22,9 @@ device=rootfs
 docker kill ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
-docker image import bootstrap.tar.gz ${device}
+sed '/auto eth0/d' -i bootstrap/etc/network/interfaces
+tar cf bootstrap.tar -C bootstrap/build
+docker image import bootstrap.tar ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
 cd ${DIR}
