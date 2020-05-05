@@ -23,6 +23,8 @@ docker kill ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
 sed '/auto-hotplug eth0/d' -i bootstrap/build/etc/network/interfaces 
+sed 's/iface eth0 inet6 auto/iface eth0 inet6 dhcp/g' -i bootstrap/build/etc/network/interfaces 
+cat bootstrap/build/etc/network/interfaces
 tar cf bootstrap.tar -C bootstrap/build .
 docker image import bootstrap.tar ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} --network=drone ${device} /sbin/init
