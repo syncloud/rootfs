@@ -85,7 +85,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-jessie-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm-stable
     timeout: 2m
     username: artifact
   when:
@@ -172,7 +172,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-jessie-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm-rc
     timeout: 2m
     username: artifact
   when:
@@ -278,7 +278,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-buster-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm-stable
     timeout: 2m
     username: artifact
   when:
@@ -365,7 +365,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-buster-arm.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm-rc
     timeout: 2m
     username: artifact
   when:
@@ -471,7 +471,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-jessie-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-amd64
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-amd64-stable
     timeout: 2m
     username: artifact
   when:
@@ -558,7 +558,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-jessie-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-amd64
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-amd64-rc
     timeout: 2m
     username: artifact
   when:
@@ -664,7 +664,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-buster-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-amd64
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-amd64-stable
     timeout: 2m
     username: artifact
   when:
@@ -751,7 +751,7 @@ steps:
     - integration/log/*
     - log/*
     - rootfs-buster-amd64.tar.gz
-    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-amd64
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-amd64-rc
     timeout: 2m
     username: artifact
   when:
