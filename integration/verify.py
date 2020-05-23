@@ -24,8 +24,8 @@ def module_setup(request, device, log_dir):
         device.run_ssh('cp /etc/hosts {0}/hosts.log'.format(TMP_DIR), throw=False)
         device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
         copy_logs(device, 'platform', log_dir)
-        for app in APPS:
-            copy_logs(device, app, log_dir)
+        check_output('chmod -R a+r {0}'.format(log_dir), shell=True)
+
     request.addfinalizer(module_teardown)
 
 
