@@ -6,8 +6,8 @@ from os.path import dirname, join
 
 import pytest
 
+from subprocess import check_output
 from syncloudlib.integration.installer import wait_for_installer
-from syncloudlib.http import wait_for_response
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -56,7 +56,7 @@ def wait_for_app(device, predicate):
                 print('result: {0}'.format(response.text))
                 if predicate(response.text):
                     return
-        except Exception, e:
+        except Exception as e:
             pass
         print('waiting for app')
         attempt += 1
