@@ -12,7 +12,7 @@ from syncloudlib.http import wait_for_response
 logging.basicConfig(level=logging.DEBUG)
 
 DIR = dirname(__file__)
-APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes']
+APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes', 'openvpn', 'wordpress', 'pihole', 'syncthing', 'users']
 TMP_DIR = '/tmp/syncloud'
 
 

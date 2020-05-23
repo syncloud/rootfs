@@ -1,8 +1,8 @@
 local name = "rootfs";
 
-local build(arch, distro) = {
+local build(arch, distro, snapd) = {
     kind: "pipeline",
-    name: distro + "-" + arch,
+    name: distro + "-" + arch + "-" + snapd,
 
     platform: {
         os: "linux",
@@ -21,7 +21,7 @@ local build(arch, distro) = {
             name: "build",
             image: "syncloud/build-deps-" + arch,
             commands: [
-                "./build.sh " + distro + " " + arch
+                "./build.sh " + distro + " " + arch + " " + snapd
             ],
             privileged: true,
             network_mode: "host",
@@ -77,6 +77,7 @@ local build(arch, distro) = {
               status: [ "failure", "success" ]
             }
         },
+	if snapd == "stable" then
         {
             name: "docker",
             image: "syncloud/build-deps-" + arch,
@@ -88,6 +89,9 @@ local build(arch, distro) = {
                     from_secret: "DOCKER_PASSWORD"
                 }
             },
+	    when: {
+	    	branch: ["stable"]
+	    },
             commands: [
                 "./docker/push-platform.sh " + distro + " " + arch
             ],
@@ -103,7 +107,7 @@ local build(arch, distro) = {
                     path: "/var/run/docker.sock"
                 }
             ]
-        },
+        } else {},
        {
             name: "artifact",
             image: "appleboy/drone-scp",
@@ -152,8 +156,8 @@ local build(arch, distro) = {
 };
 
 [
-   //build("arm", "jessie"),
-   //build("amd64", "jessie"),
-   build("arm", "buster"),
-   //build("amd64", "buster"),
+    build(arch, distro, snapd)
+    for arch in ["arm", "amd64"]
+    for distro in ["jessie", "buster"]
+    for snapd in ["stable", "rc"]
 ]

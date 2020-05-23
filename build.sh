@@ -7,13 +7,14 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [[ "$#" -lt 2 ]]; then
-    echo "Usage: $0 distro arch"
+if [[ "$#" -lt 3 ]]; then
+    echo "Usage: $0 distro arch snapd_channel"
     exit 1
 fi
 
 DISTRO=$1
 ARCH=$2
+SNAPD_CHANNEL=$3
 DEBIAN_ARCH=$(dpkg --print-architecture)
 DOMAIN=${ARCH}-${DRONE_BRANCH}
 
@@ -37,7 +38,7 @@ if [[ $code -eq 0 ]]; then
     sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
     DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
     ${DOCKER_RUN} cat /etc/hosts
-    ${DOCKER_RUN} /root/install.sh
+    ${DOCKER_RUN} /root/install.sh ${SNAPD_CHANNEL}
     ${DOCKER_RUN} rm /root/install.sh
     ${DOCKER_RUN} rm -rf /tmp/*
     ${DOCKER_RUN} grep localhost /etc/hosts

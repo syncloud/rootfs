@@ -2,8 +2,13 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+if [[ "$#" -lt 1 ]]; then
+    echo "Usage: $0 channel"
+    exit 1
+fi
+CHANNEL=$1
 ARCH=$(dpkg --print-architecture)
-VERSION=$(curl http://apps.syncloud.org/releases/stable/snapd.version)
+VERSION=$(curl http://apps.syncloud.org/releases/${CHANNEL}/snapd.version)
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
 systemctl disable apt-daily.timer
 systemctl disable apt-daily.service
