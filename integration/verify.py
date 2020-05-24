@@ -19,7 +19,6 @@ TMP_DIR = '/tmp/syncloud'
 @pytest.fixture(scope="session")
 def module_setup(request, device, log_dir):
     def module_teardown():
-        os.mkdir(log_dir)
         device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
         device.run_ssh('cp /etc/hosts {0}/hosts.log'.format(TMP_DIR), throw=False)
         device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
@@ -38,6 +37,7 @@ def copy_logs(device, app, log_dir):
 
 def test_start(module_setup, log_dir, device):
     shutil.rmtree(log_dir, ignore_errors=True)
+    os.mkdir(log_dir)
     device.run_ssh('mkdir {0}'.format(TMP_DIR))
 
 
@@ -65,8 +65,12 @@ def wait_for_app(device, predicate):
     raise Exception("timeout waiting for app event")
 
 
-@pytest.mark.parametrize("app", APPS, scope="session")
-def test_app_install(device, app):
+def test_apps(device, log_dir):
+    for app in APPS:
+        _test_app(device, app, log_dir)
+
+
+def _test_app(device, app, log_dir):
     syncloud_session = device.login()
     response = syncloud_session.get('https://{0}/rest/install?app_id={1}'.format(device.device_host, app),
                                     allow_redirects=False, verify=False)
@@ -74,11 +78,7 @@ def test_app_install(device, app):
     assert response.status_code == 200
     wait_for_installer(syncloud_session, device.device_host)
     wait_for_app(device, lambda response_text: app in response_text)
-
-
-@pytest.mark.parametrize("app", APPS, scope="session")
-def test_app_remove(device, app):
-    syncloud_session = device.login()
+    copy_logs(device, app, log_dir)
     response = syncloud_session.get('https://{0}/rest/remove?app_id={1}'.format(device.device_host, app),
                                     allow_redirects=False, verify=False)
     assert response.status_code == 200
