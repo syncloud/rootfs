@@ -51,18 +51,18 @@ def test_activate_device(device):
 
 
 def wait_for_app(device, app, predicate):
-    attempts = 10
+    attempts = 100
     attempt = 0
     while attempt < attempts:
         try:
             response = device.login().get('https://{0}/rest/installed_apps'.format(device.device_host), verify=False)
             if response.status_code == 200:
-                print('result: {0}'.format(response.text))
+                print('result {0}: {1}'.format(attempt, response.text))
                 if predicate(response.text):
                     return
         except Exception as e:
             pass
-        print('waiting for {0}'.format(app))
+        print('waiting for {0} {1}/{2}'.format(app, attempt, attempts))
         attempt += 1
         time.sleep(5)
 
