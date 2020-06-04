@@ -16,7 +16,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 DIR = dirname(__file__)
-APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes', 'openvpn', 'wordpress', 'pihole', 'syncthing', 'users']
+APPS =  ['openvpn', 'mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes',  'wordpress', 'pihole', 'syncthing', 'users']
 TMP_DIR = '/tmp/syncloud'
 
 
