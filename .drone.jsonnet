@@ -159,5 +159,5 @@ local build(arch, distro, snapd) = {
     build(arch, distro, snapd)
     for arch in ["arm", "amd64"]
     for distro in ["jessie", "buster"]
-    for snapd in ["stable", "rc"]
+    for snapd in ["stable"]
 ]
