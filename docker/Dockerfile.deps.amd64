@@ -1,7 +1,0 @@
-FROM syncloud/rootfs-amd64
-ADD deps.sh /
-ADD apt.pkg.list /
-ADD python.dev.requirements.txt /
-ADD install-sam.sh /
-ADD install-s3cmd.sh /
-RUN /deps.sh

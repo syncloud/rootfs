@@ -3,148 +3,88 @@ import os
 import shutil
 import time
 from os.path import dirname, join
-from subprocess import check_output
 
-import convertible
 import pytest
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-from integration.util.ssh import run_scp, run_ssh
+from subprocess import check_output
+from syncloudlib.integration.installer import wait_for_installer
 
 logging.basicConfig(level=logging.DEBUG)
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 DIR = dirname(__file__)
-LOG_DIR = join(DIR, 'log')
-SYNCLOUD_INFO = 'syncloud.info'
-DEVICE_USER = 'user'
-DEVICE_PASSWORD = 'password'
-DEFAULT_DEVICE_PASSWORD = 'syncloud'
-LOGS_SSH_PASSWORD = DEFAULT_DEVICE_PASSWORD
-APPS = ['owncloud', 'mail', 'nextcloud', 'diaspora', 'files', 'gogs']
+APPS =  ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes',  'wordpress', 'pihole', 'syncthing', 'users', 'openvpn']
+TMP_DIR = '/tmp/syncloud'
 
 
 @pytest.fixture(scope="session")
-def module_setup(request, device_host):
-    request.addfinalizer(lambda: module_teardown(device_host))
+def module_setup(request, device, log_dir):
+    def module_teardown():
+        device.run_ssh('journalctl > {0}/journalctl.log'.format(TMP_DIR), throw=False)
+        device.run_ssh('cp /etc/hosts {0}/hosts.log'.format(TMP_DIR), throw=False)
+        device.scp_from_device('{0}/*'.format(TMP_DIR), log_dir)
+        copy_logs(device, 'platform', log_dir)
+        check_output('chmod -R a+r {0}'.format(log_dir), shell=True)
+
+    request.addfinalizer(module_teardown)
 
 
-def module_teardown(device_host):
-    os.mkdir(LOG_DIR)
-
-    copy_logs(device_host, 'sam', '/var/log/sam.log')
-    copy_logs(device_host, 'platform')
-    for app in APPS:
-        copy_logs(device_host, app)
-
-    run_ssh(device_host, 'journalctl', password=DEVICE_PASSWORD, throw=False)
+def copy_logs(device, app, log_dir):
+    device_logs = '/var/snap/{0}/common/log/*'.format(app)
+    app_log_dir = join(log_dir, '{0}_log'.format(app))
+    os.mkdir(app_log_dir)
+    device.scp_from_device(device_logs, app_log_dir)
 
 
-def copy_logs(device_host, app, device_logs=None):
-    if not device_logs:
-        device_logs = '/opt/data/{0}/log/*'.format(app)
-    log_dir = join(LOG_DIR, '{0}_log'.format(app))
+def test_start(module_setup, log_dir, device):
+    shutil.rmtree(log_dir, ignore_errors=True)
     os.mkdir(log_dir)
-    run_scp('root@{0}:{1} {2}'.format(device_host, device_logs, log_dir), password=LOGS_SSH_PASSWORD, throw=False)
+    device.run_ssh('mkdir {0}'.format(TMP_DIR))
 
 
-@pytest.fixture(scope='module')
-def user_domain(device_domain):
-    return 'device.{0}'.format(device_domain)
+def test_activate_device(device):
+    response = device.activate()
+    assert response.status_code == 200, response.text
 
 
-@pytest.fixture(scope='module')
-def device_domain(auth):
-    email, password, domain, release = auth
-    return '{0}.{1}'.format(domain, SYNCLOUD_INFO)
-
-
-@pytest.fixture(scope='function')
-def syncloud_session(device_host):
-    session = requests.session()
-    session.post('http://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD})
-
-    return session
-
-
-def test_start(module_setup):
-    shutil.rmtree(LOG_DIR, ignore_errors=True)
-
-
-def test_activate_device(auth, device_host):
-    email, password, domain, release = auth
-
-    run_ssh(device_host, '/opt/app/sam/bin/sam --debug upgrade platform', password=DEFAULT_DEVICE_PASSWORD)
-    # wait_for_platform_web(device_host)
-    response = requests.post('http://{0}:81/rest/activate'.format(device_host),
-                             data={'main_domain': 'syncloud.info', 'redirect_email': email,
-                                   'redirect_password': password,
-                                   'user_domain': domain, 'device_username': DEVICE_USER,
-                                   'device_password': DEVICE_PASSWORD})
-    assert response.status_code == 200
-    global LOGS_SSH_PASSWORD
-    LOGS_SSH_PASSWORD = DEVICE_PASSWORD
-
-
-# def wait_for_platform_web(device_host):
-#     print(check_output('while ! nc -w 1 -z {0} 80; do sleep 1; done'.format(device_host), shell=True))
-
-
-def wait_for_sam(device_host, syncloud_session):
-    sam_running = True
-    while sam_running == True:
-        try:
-            response = syncloud_session.get('http://{0}/rest/settings/sam_status'.format(device_host))
-            if response.status_code == 200:
-                json = convertible.from_json(response.text)
-                sam_running = json.is_running
-                print('result: {0}'.format(sam_running))
-        except Exception, e:
-            pass
-        print('waiting for sam to finish its work')
-        time.sleep(5)
-
-
-def wait_for_app(device_host, syncloud_session, predicate):
-    found = False
+def wait_for_app(device, app, predicate):
     attempts = 100
     attempt = 0
-    while not found and attempt < attempts:
+    while attempt < attempts:
         try:
-            response = syncloud_session.get('http://{0}/rest/installed_apps'.format(device_host))
+            response = device.login().get('https://{0}/rest/installed_apps'.format(device.device_host), verify=False)
             if response.status_code == 200:
-                print('result: {0}'.format(response.text))
-                found = predicate(response.text)
-        except Exception, e:
+                print('result {0}: {1}'.format(attempt, response.text))
+                if predicate(response.text):
+                    return
+        except Exception as e:
             pass
-        print('waiting for app')
+        print('waiting for {0} {1}/{2}'.format(app, attempt, attempts))
         attempt += 1
         time.sleep(5)
 
-
-def test_login(syncloud_session, device_host):
-    syncloud_session.post('http://{0}/rest/login'.format(device_host), data={'name': DEVICE_USER, 'password': DEVICE_PASSWORD})
+    raise Exception("timeout waiting for {0} event".format(app))
 
 
-@pytest.mark.parametrize("app", APPS)
-def test_app_install(syncloud_session, app, device_host):
-    response = syncloud_session.get('http://{0}/rest/install?app_id={1}'.format(device_host, app), allow_redirects=False)
+def test_apps(device, log_dir):
+    for app in APPS:
+        _test_app(device, app, log_dir)
+
+
+def _test_app(device, app, log_dir):
+    syncloud_session = device.login()
+    response = syncloud_session.get('https://{0}/rest/install?app_id={1}'.format(device.device_host, app),
+                                    allow_redirects=False, verify=False)
 
     assert response.status_code == 200
-    wait_for_sam(device_host, syncloud_session)
-    wait_for_app(device_host, syncloud_session, lambda response_text: app in response_text)
-
-
-@pytest.mark.parametrize("app", APPS)
-def test_app_upgrade(syncloud_session, app, device_host):
-    response = syncloud_session.get('http://{0}/rest/upgrade?app_id={1}'.format(device_host, app),
-                                    allow_redirects=False)
+    wait_for_installer(syncloud_session, device.device_host)
+    wait_for_app(device, app, lambda response_text: app in response_text)
+    copy_logs(device, app, log_dir)
+    response = syncloud_session.get('https://{0}/rest/remove?app_id={1}'.format(device.device_host, app),
+                                    allow_redirects=False, verify=False)
     assert response.status_code == 200
-
-
-@pytest.mark.parametrize("app", APPS)
-def test_app_remove(syncloud_session, app, device_host):
-    response = syncloud_session.get('http://{0}/rest/remove?app_id={1}'.format(device_host, app),
-                                    allow_redirects=False)
-    assert response.status_code == 200
-    wait_for_sam(device_host, syncloud_session)
-    wait_for_app(device_host, syncloud_session, lambda response_text: app not in response_text)
+    wait_for_installer(syncloud_session, device.device_host)
+    wait_for_app(device, app, lambda response_text: app not in response_text)

@@ -1,57 +1,425 @@
-platform: linux/${arch}
+---
+kind: pipeline
+name: jessie-arm-stable
 
-clone:
-  git:
-    image: syncloud/drone-git-${arch}
-    depth: 50
+platform:
+  os: linux
+  arch: arm
 
-pipeline:
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-arm
+  commands:
+  - ./bootstrap/bootstrap-jessie.sh
+  privileged: true
 
-  rootfs:
-    image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
-    commands:
-      - ./bootstrap/bootstrap.sh ${arch}
-      - ./upload-artifact.sh rootfs-${arch}.tar.gz
-    privileged: true
-    
-  syncloud-rootfs:
-    image: syncloud/build-deps-${arch}
-    secrets: [ARTIFACT_SSH_KEY]
-    commands:
-      - ./rootfs.sh rc stable ${installer} ${arch}
-      - ./upload-artifact.sh syncloud-rootfs-${arch}-${installer}.tar.gz
-    privileged: true
-    network_mode: host
-    volumes:
-      - /usr/bin/docker:/usr/bin/docker
-      - /var/run/docker.sock:/var/run/docker.sock
-      
-#  test:
-#    image: syncloud/build-deps-${arch}
-#    commands:
-#      - ./integration/test-docker.sh teamcity@syncloud.it password teamcity master device ${installer}
-#    privileged: true
-     
-#  ci-artifact:
-#    image: syncloud/build-deps-${arch}
-#    secrets: [ARTIFACT_SSH_KEY]
-#    commands:
-#      - ./upload-artifact.sh integration/log ci/$DRONE_BUILD_NUMBER-$(dpkg --print-architecture)
-#    when:
-#      status: [ failure, success ] 
-      
-#services:
-#  device:
-#    image: syncloud/systemd-${arch}
-#    privileged: true
-#    volumes:
-#      - /var/run/dbus:/var/run/dbus
-     
-matrix:
-  arch:
-    - amd64
-    - arm
-  installer:
-    - snapd
-    - sam
+- name: build
+  image: syncloud/build-deps-arm
+  commands:
+  - ./build.sh jessie arm stable
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh jessie arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: cleanup
+  image: syncloud/build-deps-arm
+  commands:
+  - ./cleanup.sh
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    status:
+    - failure
+    - success
+
+- name: docker
+  image: syncloud/build-deps-arm
+  commands:
+  - ./docker/push-platform.sh jessie arm
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - stable
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - log/*
+    - rootfs-jessie-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-arm-stable
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: buster-arm-stable
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-arm
+  commands:
+  - ./bootstrap/bootstrap-buster.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-arm
+  commands:
+  - ./build.sh buster arm stable
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-arm
+  commands:
+  - ./test.sh buster arm
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: cleanup
+  image: syncloud/build-deps-arm
+  commands:
+  - ./cleanup.sh
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    status:
+    - failure
+    - success
+
+- name: docker
+  image: syncloud/build-deps-arm
+  commands:
+  - ./docker/push-platform.sh buster arm
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - stable
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - log/*
+    - rootfs-buster-arm.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-arm-stable
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: jessie-amd64-stable
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./bootstrap/bootstrap-jessie.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./build.sh jessie amd64 stable
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./test.sh jessie amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: cleanup
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./cleanup.sh
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    status:
+    - failure
+    - success
+
+- name: docker
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./docker/push-platform.sh jessie amd64
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - stable
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - log/*
+    - rootfs-jessie-amd64.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-jessie-amd64-stable
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+---
+kind: pipeline
+name: buster-amd64-stable
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: bootstrap
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./bootstrap/bootstrap-buster.sh
+  privileged: true
+
+- name: build
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./build.sh buster amd64 stable
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: test
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./test.sh buster amd64
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+
+- name: cleanup
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./cleanup.sh
+  network_mode: host
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    status:
+    - failure
+    - success
+
+- name: docker
+  image: syncloud/build-deps-amd64
+  commands:
+  - ./docker/push-platform.sh buster amd64
+  network_mode: host
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_USERNAME:
+      from_secret: DOCKER_USERNAME
+  privileged: true
+  volumes:
+  - name: docker
+    path: /usr/bin/docker
+  - name: docker.sock
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - stable
+
+- name: artifact
+  image: appleboy/drone-scp
+  settings:
+    command_timeout: 2m
+    host:
+      from_secret: artifact_host
+    key:
+      from_secret: artifact_key
+    source:
+    - integration/log/*
+    - log/*
+    - rootfs-buster-amd64.tar.gz
+    target: /home/artifact/repo/rootfs/${DRONE_BUILD_NUMBER}-buster-amd64-stable
+    timeout: 2m
+    username: artifact
+  when:
+    status:
+    - failure
+    - success
+
+volumes:
+- name: dbus
+  host:
+    path: /var/run/dbus
+- name: docker
+  host:
+    path: /usr/bin/docker
+- name: docker.sock
+  host:
+    path: /var/run/docker.sock
+
+...
