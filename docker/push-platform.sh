@@ -11,7 +11,7 @@ fi
 DISTRO=$1
 ARCH=$2
 
-if [[ ${DISTRO} == "jessie" ]]; then
+if [[ ${DISTRO} == "buster" ]]; then
     IMAGE="syncloud/platform-${ARCH}"
 else
     IMAGE="syncloud/platform-${DISTRO}-${ARCH}"
