@@ -1,7 +1,7 @@
 # rootfs
 Syncloud rootfs
 
-# Run Syncloud on Debian Jessie (and probably any other) Linux distro
+# Run Syncloud on any Linux distro
 
 Make sure you have nothing listening on port 80 and 81, like apache.
 
@@ -17,7 +17,7 @@ Installation:
 ````
 wget https://raw.githubusercontent.com/syncloud/rootfs/master/install.sh
 chmod +x install.sh
-sudo ./install.sh stable stable
+sudo ./install.sh stable
 ````
 
 This should install Syncloud Platform

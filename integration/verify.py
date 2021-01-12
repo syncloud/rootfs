@@ -1,23 +1,21 @@
 import logging
 import os
+import pytest
+import requests
 import shutil
 import time
 from os.path import dirname, join
-
-import pytest
-import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 from subprocess import check_output
 from syncloudlib.integration.installer import wait_for_installer
 
 logging.basicConfig(level=logging.DEBUG)
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-
 DIR = dirname(__file__)
-#TODO: openvpn breaks arm docker network
-APPS =  ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes',  'wordpress', 'pihole', 'syncthing', 'users']
+# TODO: openvpn breaks arm docker network
+APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes', 'wordpress', 'pihole', 'syncthing',
+        'users']
 TMP_DIR = '/tmp/syncloud'
 
 
@@ -77,15 +75,19 @@ def test_apps(device, log_dir):
 
 def _test_app(device, app, log_dir):
     syncloud_session = device.login()
-    response = syncloud_session.get('https://{0}/rest/install?app_id={1}'.format(device.device_host, app),
-                                    allow_redirects=False, verify=False)
+    response = syncloud_session.post('https://{0}/rest/install'.format(device.device_host),
+                                     json={'app_id': app},
+                                     allow_redirects=False,
+                                     verify=False)
 
     assert response.status_code == 200
     wait_for_installer(syncloud_session, device.device_host)
     wait_for_app(device, app, lambda response_text: app in response_text)
     copy_logs(device, app, log_dir)
-    response = syncloud_session.get('https://{0}/rest/remove?app_id={1}'.format(device.device_host, app),
-                                    allow_redirects=False, verify=False)
+    response = syncloud_session.post('https://{0}/rest/remove'.format(device.device_host),
+                                     json={'app_id': app},
+                                     allow_redirects=False,
+                                     verify=False)
     assert response.status_code == 200
     wait_for_installer(syncloud_session, device.device_host)
     wait_for_app(device, app, lambda response_text: app not in response_text)
