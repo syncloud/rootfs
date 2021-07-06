@@ -12,6 +12,7 @@ apt-get remove apache2
 
 ````
 
+Also, as we use a modified version of snapd installation will remove any existing snapd.
 Installation:
 
 ````
@@ -23,5 +24,14 @@ sudo ./install.sh stable
 This should install Syncloud Platform
 
 Open https://localhost and activate your device.
+
+# Running a build server
+
+1. Install docker
+2. Install drone
+3. Create drone network:
+```
+docker network create drone
+```
 
 Report issues at https://github.com/syncloud/platform/issues
