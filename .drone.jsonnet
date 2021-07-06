@@ -120,7 +120,7 @@ local build(arch, distro) = {
                 },
                 timeout: "2m",
                 command_timeout: "2m",
-                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + distro + "-" + arch + "-" + snapd,
+                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + distro + "-" + arch,
                 source: [
                     "integration/log/*",
                     "log/*",
