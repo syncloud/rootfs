@@ -35,7 +35,7 @@ cleanup
 rm -rf ${ROOTFS}
 rm -rf rootfs.tar.gz
 apt update
-apt install -y debootstrap
+apt install -y debootstrap rsync
 debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server,wget,less,parted,unzip,bzip2,curl,dbus,avahi-daemon,ntp,net-tools,wireless-tools,fancontrol,gnupg --arch=${ARCH} ${DISTRO} ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
