@@ -107,7 +107,7 @@ local build(arch, distro) = {
                 }
             ]
         },
-       {
+        {
             name: "artifact",
             image: "appleboy/drone-scp",
             settings: {
