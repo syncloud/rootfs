@@ -11,7 +11,7 @@ local build(arch, distro) = {
     steps: [
         {
             name: "bootstrap",
-            image: "python:3.9-buster",
+            image: "buster-slim",
             commands: [
                 "./bootstrap/bootstrap-" + distro + ".sh"
             ],
@@ -19,7 +19,7 @@ local build(arch, distro) = {
         },
         {
             name: "build",
-            image: "python:3.9-buster",
+            image: "buster-slim",
             commands: [
                 "./build.sh " + distro + " " + arch
             ],
@@ -38,7 +38,7 @@ local build(arch, distro) = {
         },
         {
             name: "test",
-            image: "python:3.9-buster",
+            image: "buster-slim",
             commands: [
                 "./test.sh " + distro + " " + arch
             ],
@@ -57,7 +57,7 @@ local build(arch, distro) = {
         },
         {
             name: "cleanup",
-            image: "python:3.9-buster",
+            image: "buster-slim",
             commands: [
                 "./cleanup.sh"
             ],
@@ -79,7 +79,7 @@ local build(arch, distro) = {
         },
         {
             name: "docker",
-            image: "python:3.9-buster",
+            image: "buster-slim",
             environment: {
                 DOCKER_USERNAME: {
                     from_secret: "DOCKER_USERNAME"
@@ -88,9 +88,9 @@ local build(arch, distro) = {
                     from_secret: "DOCKER_PASSWORD"
                 }
             },
-	    when: {
-	    	branch: ["stable"]
-	    },
+            when: {
+                branch: ["stable"]
+            },
             commands: [
                 "./docker/push-platform.sh " + distro + " " + arch
             ],
