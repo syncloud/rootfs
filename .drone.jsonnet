@@ -11,7 +11,7 @@ local build(arch, distro) = {
     steps: [
         {
             name: "bootstrap",
-            image: "buster-slim",
+            image: "debian:buster-slim",
             commands: [
                 "./bootstrap/bootstrap-" + distro + ".sh"
             ],
@@ -19,7 +19,7 @@ local build(arch, distro) = {
         },
         {
             name: "build",
-            image: "buster-slim",
+            image: "debian:buster-slim",
             commands: [
                 "./build.sh " + distro + " " + arch
             ],
@@ -38,7 +38,7 @@ local build(arch, distro) = {
         },
         {
             name: "test",
-            image: "buster-slim",
+            image: "debian:buster-slim",
             commands: [
                 "./test.sh " + distro + " " + arch
             ],
@@ -57,7 +57,7 @@ local build(arch, distro) = {
         },
         {
             name: "cleanup",
-            image: "buster-slim",
+            image: "debian:buster-slim",
             commands: [
                 "./cleanup.sh"
             ],
@@ -79,7 +79,7 @@ local build(arch, distro) = {
         },
         {
             name: "docker",
-            image: "buster-slim",
+            image: "debian:buster-slim",
             environment: {
                 DOCKER_USERNAME: {
                     from_secret: "DOCKER_USERNAME"
