@@ -15,7 +15,6 @@ fi
 DISTRO=$1
 ARCH=$2
 DEBIAN_ARCH=$(dpkg --print-architecture)
-DOMAIN=${ARCH}-${DRONE_BRANCH}
 
 ls -la
 device=rootfs

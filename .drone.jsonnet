@@ -11,7 +11,7 @@ local build(arch, distro) = {
     steps: [
         {
             name: "bootstrap",
-            image: "syncloud/build-deps-" + arch,
+            image: "python:3.9-buster",
             commands: [
                 "./bootstrap/bootstrap-" + distro + ".sh"
             ],
@@ -19,7 +19,7 @@ local build(arch, distro) = {
         },
         {
             name: "build",
-            image: "syncloud/build-deps-" + arch,
+            image: "python:3.9-buster",
             commands: [
                 "./build.sh " + distro + " " + arch
             ],
@@ -38,7 +38,7 @@ local build(arch, distro) = {
         },
         {
             name: "test",
-            image: "syncloud/build-deps-" + arch,
+            image: "python:3.9-buster",
             commands: [
                 "./test.sh " + distro + " " + arch
             ],
@@ -57,7 +57,7 @@ local build(arch, distro) = {
         },
         {
             name: "cleanup",
-            image: "syncloud/build-deps-" + arch,
+            image: "python:3.9-buster",
             commands: [
                 "./cleanup.sh"
             ],
@@ -79,7 +79,7 @@ local build(arch, distro) = {
         },
         {
             name: "docker",
-            image: "syncloud/build-deps-" + arch,
+            image: "python:3.9-buster",
             environment: {
                 DOCKER_USERNAME: {
                     from_secret: "DOCKER_USERNAME"
@@ -157,8 +157,8 @@ local build(arch, distro) = {
 [
     build(arch, distro)
     for arch in [
-       "arm",
-       "amd64",
+#       "arm",
+#       "amd64",
        "arm64"
     ]
     for distro in ["buster"]
