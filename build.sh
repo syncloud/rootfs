@@ -15,7 +15,8 @@ fi
 DISTRO=$1
 ARCH=$2
 DEBIAN_ARCH=$(dpkg --print-architecture)
-
+apt update
+apt install -y libltdl7
 ls -la
 device=rootfs
 docker kill ${device} || true
