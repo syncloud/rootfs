@@ -16,7 +16,7 @@ DISTRO=$1
 ARCH=$2
 DEBIAN_ARCH=$(dpkg --print-architecture)
 apt update
-apt install -y libltdl7 libnss3 rsync
+apt install -y libltdl7 libnss3 rsync sshpass
 ls -la
 device=rootfs
 docker kill ${device} || true
