@@ -68,3 +68,4 @@ cleanup
 
 echo "cleaning apt cache"
 rm -rf ${ROOTFS}/var/cache/apt/archives/*.deb
+tar cf $DIR/bootstrap.tar -C $ROOTFS .

@@ -78,7 +78,37 @@ local build(arch, distro) = {
             }
         },
         {
-            name: "docker",
+            name: "docker bootstrap",
+            image: "debian:buster-slim",
+            environment: {
+                DOCKER_USERNAME: {
+                    from_secret: "DOCKER_USERNAME"
+                },
+                DOCKER_PASSWORD: {
+                    from_secret: "DOCKER_PASSWORD"
+                }
+            },
+            when: {
+                branch: ["stable"]
+            },
+            commands: [
+                "./docker/push-bootstrap.sh " + distro + " " + arch
+            ],
+            privileged: true,
+            network_mode: "host",
+            volumes: [
+                {
+                    name: "docker",
+                    path: "/usr/bin/docker"
+                },
+                {
+                    name: "docker.sock",
+                    path: "/var/run/docker.sock"
+                }
+            ]
+        },
+        {
+            name: "docker platform",
             image: "debian:buster-slim",
             environment: {
                 DOCKER_USERNAME: {
