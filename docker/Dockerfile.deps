@@ -1,6 +1,1 @@
 FROM bootstrap
-ADD deps.sh /
-ADD deps.apt.list /
-ADD python.dev.requirements.txt /
-ADD install-s3cmd.sh /
-RUN /deps.sh
