@@ -8,7 +8,7 @@ KEY=https://ftp-master.debian.org/keys/archive-key-8.asc
 DISTRO=jessie
 
 if [[ $ARCH == "arm64" ]]; then
-  $ARCH="armhf"
+  ARCH="armhf"
 fi
 
 echo "Open file limit: $(ulimit -n)"
