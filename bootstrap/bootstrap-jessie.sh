@@ -7,6 +7,10 @@ REPO=http://http.debian.net/debian
 KEY=https://ftp-master.debian.org/keys/archive-key-8.asc
 DISTRO=jessie
 
+if [[ $ARCH == "arm64" ]]; then
+  $ARCH="armhf"
+fi
+
 echo "Open file limit: $(ulimit -n)"
 
 #Fix debconf frontend warnings

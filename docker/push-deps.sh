@@ -18,9 +18,9 @@ fi
 
 ../bootstrap/bootstrap-${DISTRO}.sh
 docker kill bootstrap || true
-docker rm bootstrap|| true
+docker rm bootstrap || true
 docker rmi bootstrap || true
-cat bootstrap.tar.gz | docker import - bootstrap
+cat ../bootstrap/bootstrap.tar | docker import - bootstrap
 cp deps.apt.list.${DISTRO} deps.apt.list
 docker build --no-cache -f Dockerfile.deps -t ${IMAGE} .
 docker push ${IMAGE}
