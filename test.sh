@@ -17,6 +17,9 @@ ARCH=$2
 DEBIAN_ARCH=$(dpkg --print-architecture)
 DOMAIN=${ARCH}-${DRONE_BRANCH}
 
+apt update
+apt install -y libltdl7 libnss3
+
 device=rootfs
 docker kill ${device} || true
 docker rm ${device} || true
