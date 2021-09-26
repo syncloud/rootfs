@@ -19,7 +19,7 @@ apt update
 apt install -y libltdl7 libnss3 rsync sshpass
 ls -la
 device=rootfs
-docker kill ${device} || true
+docker stop ${device} || true
 docker rm ${device} || true
 docker rmi ${device} || true
 sed '/allow-hotplug eth0/d' -i bootstrap/build/etc/network/interfaces 
