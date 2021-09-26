@@ -38,7 +38,7 @@ local build(arch, distro) = {
         },
         {
             name: "test",
-            image: "debian:buster-slim",
+            image: "python:3.8-slim-buster",
             commands: [
                 "./test.sh " + distro + " " + arch
             ],
