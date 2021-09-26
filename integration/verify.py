@@ -8,6 +8,8 @@ from os.path import dirname, join
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from subprocess import check_output
 from syncloudlib.integration.installer import wait_for_installer
+from syncloudlib.integration.hosts import add_host_alias
+
 
 logging.basicConfig(level=logging.DEBUG)
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -38,7 +40,8 @@ def copy_logs(device, app, log_dir):
     device.scp_from_device(device_logs, app_log_dir)
 
 
-def test_start(module_setup, log_dir, device):
+def test_start(module_setup, log_dir, device, domain, device_host):
+    add_host_alias('app', device_host, domain)
     shutil.rmtree(log_dir, ignore_errors=True)
     os.mkdir(log_dir)
     device.run_ssh('mkdir {0}'.format(TMP_DIR))
