@@ -35,7 +35,7 @@ DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
 
 ${DOCKER_RUN} /test-on-device.sh
 
-pip2 install -r ${DIR}/dev_requirements.txt
+pip install -r ${DIR}/dev_requirements.txt
 cd integration
 py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_ip}
 
