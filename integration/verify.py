@@ -48,7 +48,7 @@ def test_start(module_setup, log_dir, device, domain, device_host):
 
 
 def test_activate_device(device):
-    response = device.activate()
+    response = device.activate_custom()
     assert response.status_code == 200, response.text
 
 
