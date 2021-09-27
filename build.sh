@@ -45,7 +45,7 @@ if [[ $code -eq 0 ]]; then
 fi
 docker container export --output="docker-rootfs.tar" ${device}
 
-docker kill ${device}
+docker stop ${device}
 docker rm ${device}
 docker rmi ${device}
 
