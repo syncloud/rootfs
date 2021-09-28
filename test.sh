@@ -37,7 +37,7 @@ ${DOCKER_RUN} /test-on-device.sh
 
 pip install -r ${DIR}/dev_requirements.txt
 cd integration
-py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_ip}
+py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_ip} --arch=${ARCH}
 
 docker kill ${device}
 docker rm ${device}
