@@ -52,12 +52,12 @@ def test_activate_device(device):
     assert response.status_code == 200, response.text
 
 
-def wait_for_app(device, app, predicate):
+def wait_for_app(device, domain, app, predicate):
     attempts = 100
     attempt = 0
     while attempt < attempts:
         try:
-            response = device.login().get('https://{0}/rest/installed_apps'.format(device.device_host), verify=False)
+            response = device.login().get('https://{0}/rest/installed_apps'.format(domain), verify=False)
             if response.status_code == 200:
                 print('result {0}: {1}'.format(attempt, response.text))
                 if predicate(response.text):
@@ -71,26 +71,26 @@ def wait_for_app(device, app, predicate):
     raise Exception("timeout waiting for {0} event".format(app))
 
 
-def test_apps(device, log_dir):
+def test_apps(device, log_dir, domain):
     for app in APPS:
         _test_app(device, app, log_dir)
 
 
-def _test_app(device, app, log_dir):
+def _test_app(device, app, log_dir, domain):
     syncloud_session = device.login()
-    response = syncloud_session.post('https://{0}/rest/install'.format(device.device_host),
+    response = syncloud_session.post('https://{0}/rest/install'.format(domain),
                                      json={'app_id': app},
                                      allow_redirects=False,
                                      verify=False)
 
     assert response.status_code == 200
-    wait_for_installer(syncloud_session, device.device_host)
+    wait_for_installer(syncloud_session, domain)
     wait_for_app(device, app, lambda response_text: app in response_text)
     copy_logs(device, app, log_dir)
-    response = syncloud_session.post('https://{0}/rest/remove'.format(device.device_host),
+    response = syncloud_session.post('https://{0}/rest/remove'.format(domain),
                                      json={'app_id': app},
                                      allow_redirects=False,
                                      verify=False)
     assert response.status_code == 200
-    wait_for_installer(syncloud_session, device.device_host)
-    wait_for_app(device, app, lambda response_text: app not in response_text)
+    wait_for_installer(syncloud_session, domain)
+    wait_for_app(device, domain, app, lambda response_text: app not in response_text)

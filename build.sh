@@ -46,6 +46,7 @@ fi
 docker container export --output="docker-rootfs.tar" ${device}
 
 docker stop ${device}
+docker stop ${device} || true
 docker rm ${device}
 docker rmi ${device}
 
