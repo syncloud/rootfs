@@ -85,7 +85,7 @@ def _test_app(device, app, log_dir, domain):
 
     assert response.status_code == 200
     wait_for_installer(syncloud_session, domain)
-    wait_for_app(device, app, lambda response_text: app in response_text)
+    wait_for_app(device, domain, app, lambda response_text: app in response_text)
     copy_logs(device, app, log_dir)
     response = syncloud_session.post('https://{0}/rest/remove'.format(domain),
                                      json={'app_id': app},
