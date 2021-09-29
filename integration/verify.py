@@ -16,8 +16,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DIR = dirname(__file__)
 # TODO: openvpn breaks arm docker network
-APPS = ['mail', 'nextcloud', 'diaspora', 'files', 'gogs', 'rocketchat', 'notes', 'wordpress', 'pihole', 'syncthing',
-        'users']
+APPS = ['mail', 'nextcloud', 'diaspora', 'files']
 TMP_DIR = '/tmp/syncloud'
 
 
