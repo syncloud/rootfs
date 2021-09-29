@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 ARCH=$(dpkg --print-architecture)
-VERSION=$(curl http://apps.syncloud.org/releases/master/snapd.version)
+VERSION=$(curl http://apps.syncloud.org/releases/stable/snapd.version)
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
 systemctl disable apt-daily.timer
 systemctl disable apt-daily.service

@@ -78,6 +78,21 @@ local build(arch, distro) = {
             }
         },
         {
+            name: "publish to github",
+            image: "plugins/github-release:latest",
+            settings: {
+                api_key: {
+                    from_secret: "github_token"
+                },
+                files: "rootfs-*.tar.gz",
+                overwrite: true,
+                file_exists: "overwrite"
+            },
+            when: {
+                event: [ "tag" ]
+            }
+        }
+        {
             name: "docker bootstrap",
             image: "debian:buster-slim",
             environment: {
@@ -89,7 +104,7 @@ local build(arch, distro) = {
                 }
             },
             when: {
-                branch: ["stable"]
+                event: [ "tag" ]
             },
             commands: [
                 "./docker/push-bootstrap.sh " + distro + " " + arch
@@ -119,7 +134,7 @@ local build(arch, distro) = {
                 }
             },
             when: {
-                branch: ["stable"]
+                event: [ "tag" ]
             },
             commands: [
                 "./docker/push-platform.sh " + distro + " " + arch
@@ -193,3 +208,4 @@ local build(arch, distro) = {
     ]
     for distro in ["buster"]
 ]
+
