@@ -91,7 +91,7 @@ local build(arch, distro) = {
             when: {
                 event: [ "tag" ]
             }
-        }
+        },
         {
             name: "docker bootstrap",
             image: "debian:buster-slim",
