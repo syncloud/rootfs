@@ -202,8 +202,8 @@ local build(arch, distro) = {
 [
     build(arch, distro)
     for arch in [
-#       "arm",
-#       "amd64",
+       "arm",
+       "amd64",
        "arm64"
     ]
     for distro in ["buster"]
