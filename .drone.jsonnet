@@ -79,7 +79,7 @@ local build(arch, distro) = {
         },
         {
             name: "publish to github",
-            image: "plugins/github-release:latest",
+            image: "plugins/github-release:1.0.0",
             settings: {
                 api_key: {
                     from_secret: "github_token"
