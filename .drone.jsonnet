@@ -154,7 +154,7 @@ local build(arch, distro) = {
         },
         {
             name: "artifact",
-            image: "appleboy/drone-scp",
+            image: "appleboy/drone-scp:1.6.2",
             settings: {
                 host: {
                     from_secret: "artifact_host"
