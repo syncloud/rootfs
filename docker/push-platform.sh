@@ -10,6 +10,8 @@ fi
 
 DISTRO=$1
 ARCH=$2
+apt update
+apt install -y libltdl7 libnss3 
 
 if [[ ${DISTRO} == "buster" ]]; then
     IMAGE="syncloud/platform-${ARCH}"
