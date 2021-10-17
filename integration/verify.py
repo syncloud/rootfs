@@ -16,7 +16,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DIR = dirname(__file__)
 # TODO: openvpn breaks arm docker network
-APPS = ['mail', 'nextcloud', 'diaspora', 'files']
+APPS = ['mail', 'nextcloud', 'files']
 TMP_DIR = '/tmp/syncloud'
 
 
@@ -52,7 +52,7 @@ def test_activate_device(device):
 
 
 def wait_for_app(device, domain, app, predicate):
-    attempts = 100
+    attempts = 200
     attempt = 0
     while attempt < attempts:
         try:
