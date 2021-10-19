@@ -84,7 +84,7 @@ def _test_app(device, app, log_dir, domain):
                                      verify=False)
 
     assert response.status_code == 200
-    wait_for_installer(syncloud_session, domain)
+    wait_for_installer(syncloud_session, domain, attempts=200)
     wait_for_app(device, domain, app, lambda response_text: app in response_text)
     copy_logs(device, app, log_dir)
     response = syncloud_session.post('https://{0}/rest/remove'.format(domain),
@@ -92,5 +92,5 @@ def _test_app(device, app, log_dir, domain):
                                      allow_redirects=False,
                                      verify=False)
     assert response.status_code == 200
-    wait_for_installer(syncloud_session, domain)
+    wait_for_installer(syncloud_session, domain, attempts=200)
     wait_for_app(device, domain, app, lambda response_text: app not in response_text)
