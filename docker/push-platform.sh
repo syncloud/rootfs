@@ -19,15 +19,20 @@ else
     IMAGE="syncloud/platform-${DISTRO}-${ARCH}"
 fi
 
-set +x
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-set -x
+set +ex
+while ! docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; do
+  echo "retry login"
+  sleep 10
+done
+set -ex
 
 docker rmi rootfs || true
 cat ../rootfs-${DISTRO}-${ARCH}.tar.gz | docker import - rootfs
 docker build -f Dockerfile.platform -t ${IMAGE} .
 
+set -ex
 while ! docker push ${IMAGE}; do
   echo "retry push"
   sleep 10
 done
+set +ex

@@ -18,9 +18,12 @@ else
     IMAGE="syncloud/bootstrap-${DISTRO}-${ARCH}"
 fi
 
-set +x
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-set -x
+set +ex
+while ! docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; do
+  echo "retry login"
+  sleep 10
+done
+set -ex
 
 docker kill bootstrap || true
 docker rm bootstrap || true
@@ -28,7 +31,9 @@ docker rmi bootstrap || true
 cat $DIR/../bootstrap/bootstrap.tar | docker import - bootstrap
 docker build --no-cache -f Dockerfile.bootstrap -t ${IMAGE} .
 
+set -ex
 while ! docker push ${IMAGE}; do
   echo "retry push"
   sleep 10
 done
+set +ex
