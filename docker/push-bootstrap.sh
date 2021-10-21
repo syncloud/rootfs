@@ -27,5 +27,8 @@ docker rm bootstrap || true
 docker rmi bootstrap || true
 cat $DIR/../bootstrap/bootstrap.tar | docker import - bootstrap
 docker build --no-cache -f Dockerfile.bootstrap -t ${IMAGE} .
-docker push ${IMAGE}
 
+while ! docker push ${IMAGE}; do
+  echo "retry push"
+  sleep 10
+done

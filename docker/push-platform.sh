@@ -26,4 +26,8 @@ set -x
 docker rmi rootfs || true
 cat ../rootfs-${DISTRO}-${ARCH}.tar.gz | docker import - rootfs
 docker build -f Dockerfile.platform -t ${IMAGE} .
-docker push ${IMAGE}
+
+while ! docker push ${IMAGE}; do
+  echo "retry push"
+  sleep 10
+done
