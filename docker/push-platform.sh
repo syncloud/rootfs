@@ -13,11 +13,11 @@ ARCH=$2
 apt update
 apt install -y libltdl7 libnss3 
 
-if [[ ${DISTRO} == "buster" ]]; then
-    IMAGE="syncloud/platform-${ARCH}"
-else
-    IMAGE="syncloud/platform-${DISTRO}-${ARCH}"
+TAG=latest
+if [ -n "$DRONE_TAG" ]; then
+    TAG=$DRONE_TAG
 fi
+IMAGE="syncloud/platform-${DISTRO}-${ARCH}:$TAG"
 
 set +ex
 while ! docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; do
