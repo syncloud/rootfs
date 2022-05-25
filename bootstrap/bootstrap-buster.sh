@@ -36,6 +36,7 @@ apt install -y debootstrap rsync
 debootstrap --no-check-gpg --include=ca-certificates,locales,sudo,openssh-server,wget,less,parted,unzip,bzip2,curl,dbus,avahi-daemon,ntp,net-tools,wireless-tools,fancontrol,gnupg --arch=${ARCH} ${DISTRO} ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
+echo "LC_ALL=en_US.UTF-8" >> ${ROOTFS}/etc/environment
 chroot ${ROOTFS} /bin/bash -c "locale-gen en_US en_US.UTF-8"
 chroot ${ROOTFS} wget ${KEY} -O archive.key
 chroot ${ROOTFS} apt-key add archive.key
