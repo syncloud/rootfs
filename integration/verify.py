@@ -71,9 +71,8 @@ def wait_for_app(device, domain, app, predicate):
 
 
 def test_apps(device, log_dir, domain, arch):
-    if arch != 'arm64':
-        for app in APPS:
-            _test_app(device, app, log_dir, domain)
+    for app in APPS:
+        _test_app(device, app, log_dir, domain)
 
 
 def _test_app(device, app, log_dir, domain):
