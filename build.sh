@@ -31,8 +31,9 @@ set +e
 code=$?
 set -e
 if [[ $code -eq 0 ]]; then
-    sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
-    DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
+    #sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
+    #DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
+    DOCKER_RUN="docker exec $device"
     ${DOCKER_RUN} cat /etc/hosts
     ${DOCKER_RUN} /root/install.sh
     ${DOCKER_RUN} rm /root/install.sh

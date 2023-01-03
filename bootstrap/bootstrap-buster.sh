@@ -48,6 +48,7 @@ echo "copy system files to get image working"
 rsync -avhp --ignore-times --stats ${DIR}/files/common/ ${ROOTFS}
 rsync -avhp --ignore-times --stats ${DIR}/files/arch/${ARCH}/ ${ROOTFS}
 rsync -avhp --ignore-times --stats ${DIR}/files/distro/${DISTRO}/ ${ROOTFS}
+cp $DIR/../install.sh ${ROOTFS}/root
 grep localhost ${ROOTFS}/etc/hosts
 grep dev ${ROOTFS}/etc/fstab
 ls -la ${ROOTFS}/etc/network
