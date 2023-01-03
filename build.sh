@@ -9,7 +9,6 @@ fi
 
 DISTRO=$1
 ARCH=$2
-DEBIAN_ARCH=$(dpkg --print-architecture)
 apk add rsync sshpass
 
 ls -la
@@ -59,7 +58,7 @@ cp rootfs/var/log/dmesg log/dmesg.log | true
 chmod -R a+r log
 
 rsync -avhp --ignore-times --stats bootstrap/files/common/ rootfs
-rsync -avhp --ignore-times --stats bootstrap/files/arch/${DEBIAN_ARCH}/ rootfs
+rsync -avhp --ignore-times --stats bootstrap/files/arch/${ARCH}/ rootfs
 rsync -avhp --ignore-times --stats bootstrap/files/distro/${DISTRO}/ rootfs
 
 sync
