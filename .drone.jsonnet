@@ -14,7 +14,7 @@ local build(arch, dind) = [{
             name: "bootstrap",
             image: "debian:buster-slim",
             commands: [
-                "./bootstrap/bootstrap-" + distro + ".sh"
+                "./bootstrap/bootstrap-" + distro + ".sh " + arch
             ],
             privileged: true
         },
