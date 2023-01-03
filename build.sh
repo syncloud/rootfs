@@ -1,11 +1,6 @@
-#!/bin/bash -ex
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+#!/bin/sh -ex
+DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
-
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
-fi
 
 if [[ "$#" -lt 2 ]]; then
     echo "Usage: $0 distro arch"
@@ -15,8 +10,8 @@ fi
 DISTRO=$1
 ARCH=$2
 DEBIAN_ARCH=$(dpkg --print-architecture)
-apt update
-apt install -y libltdl7 libnss3 rsync sshpass
+apk add rsync sshpass
+
 ls -la
 device=rootfs
 docker stop ${device} || true
