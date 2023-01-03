@@ -20,10 +20,14 @@ sed '/allow-hotplug eth0/d' -i bootstrap/build/etc/network/interfaces
 cat bootstrap/build/etc/network/interfaces
 docker image import $DIR/bootstrap/bootstrap.tar ${device}
 docker run -d --privileged -i --name ${device} --hostname ${device} ${device} /sbin/init
+
+docker container inspect ${device}
+docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device}
+
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device})
 cd ${DIR}
 set +e
-./integration/wait-ssh.sh ${device_ip} root syncloud 22
+./integration/wait-ssh.sh ${device} root syncloud 22
 code=$?
 set -e
 if [[ $code -eq 0 ]]; then
