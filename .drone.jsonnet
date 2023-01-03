@@ -1,6 +1,7 @@
 local name = "rootfs";
+local distro = "buster";
 
-local build(arch, distro) = {
+local build(arch, dind) = [{
     kind: "pipeline",
     name: distro + "-" + arch,
 
@@ -19,20 +20,16 @@ local build(arch, distro) = {
         },
         {
             name: "build",
-            image: "debian:buster-slim",
+            image: "docker:" + dind,
             commands: [
                 "./build.sh " + distro + " " + arch
             ],
             privileged: true,
             network_mode: "host",
             volumes: [
-                {
-                    name: "docker",
-                    path: "/usr/bin/docker"
-                },
-                {
-                    name: "docker.sock",
-                    path: "/var/run/docker.sock"
+         {
+                    name: "dockersock",
+                    path: "/var/run"
                 }
             ]
         },
@@ -177,35 +174,27 @@ local build(arch, distro) = {
             }
         }
     ],
+services: [
+            {
+                name: "docker",
+                image: "docker:" + dind,
+                privileged: true,
+                volumes: [
+                    {
+                        name: "dockersock",
+                        path: "/var/run"
+                    }
+                ]
+            }
+],
     volumes: [
-        {
-            name: "dbus",
-            host: {
-                path: "/var/run/dbus"
+         {
+                name: "dockersock",
+                temp: {}
             }
-        },
-        {
-            name: "docker",
-            host: {
-                path: "/usr/bin/docker"
-            }
-        },
-        {
-            name: "docker.sock",
-            host: {
-                path: "/var/run/docker.sock"
-            }
-        }
     ]
-};
+}];
 
-[
-    build(arch, distro)
-    for arch in [
-       "arm",
-       "amd64",
-       "arm64"
-    ]
-    for distro in ["buster"]
-]
-
+build("amd64", "20.10.21-dind") +
+build("arm64", "19.03.8-dind") +
+build("arm", "19.03.8-dind")
