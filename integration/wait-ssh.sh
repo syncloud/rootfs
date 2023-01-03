@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 DEVICE_HOST=$1
 USER=$2
