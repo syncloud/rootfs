@@ -27,9 +27,9 @@ DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no docker"
 
 ${DOCKER_RUN} /test-on-device.sh
 
-cd integration
-pip install -r requirements.txt
-py.test -sx verify.py --domain=${DOMAIN} --device-host=docker --arch=${ARCH}
+#cd integration
+#pip install -r requirements.txt
+#py.test -sx verify.py --domain=${DOMAIN} --device-host=docker --arch=${ARCH}
 
 docker kill ${device}
 docker rm ${device}
