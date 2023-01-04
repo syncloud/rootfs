@@ -21,7 +21,7 @@ tar c -C rootfs . | docker import - ${device}
 docker run -d --privileged -i --name ${device} ${device} /sbin/init
 docker container inspect ${device}
 device_ip=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' ${device})
-./integration/wait-ssh.sh ${device} root syncloud 22
+./integration/wait-ssh.sh $device root syncloud 22
 
 #sshpass -p syncloud scp -o StrictHostKeyChecking=no test-on-device.sh root@${device_ip}:/test-on-device.sh
 #DOCKER_RUN="docker exec $device"
