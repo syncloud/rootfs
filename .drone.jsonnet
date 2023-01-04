@@ -24,8 +24,6 @@ local build(arch, dind) = [{
             commands: [
                 "./build.sh " + distro + " " + arch
             ],
-            privileged: true,
-            network_mode: "host",
             volumes: [
          {
                     name: "dockersock",
@@ -35,20 +33,14 @@ local build(arch, dind) = [{
         },
         {
             name: "test",
-            image: "python:3.8-slim-buster",
+            image: "docker:" + dind,
             commands: [
                 "./test.sh " + distro + " " + arch
             ],
-            privileged: true,
-            network_mode: "host",
             volumes: [
                 {
-                    name: "docker",
-                    path: "/usr/bin/docker"
-                },
-                {
-                    name: "docker.sock",
-                    path: "/var/run/docker.sock"
+                    name: "dockersock",
+                    path: "/var/run"
                 }
             ]
         },
@@ -151,7 +143,7 @@ local build(arch, dind) = [{
         },
         {
             name: "artifact",
-            image: "appleboy/drone-scp:1.6.2",
+            image: "appleboy/drone-scp:1.6.4",
             settings: {
                 host: {
                     from_secret: "artifact_host"

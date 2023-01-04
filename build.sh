@@ -19,29 +19,17 @@ device=rootfs
 sed '/allow-hotplug eth0/d' -i bootstrap/build/etc/network/interfaces 
 cat bootstrap/build/etc/network/interfaces
 docker image import $DIR/bootstrap/bootstrap.tar ${device}
-docker run -d --privileged -i --name ${device} --hostname ${device} ${device} /sbin/init
+docker run -d --privileged -i --name ${device} ${device} /sbin/init
 
-docker container inspect ${device}
-docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device}
-
-#device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.bridge.IPAddress }}' ${device})
 cd ${DIR}
-#set +e
-#./integration/wait-ssh.sh ${device_ip} root syncloud 22
-#code=$?
-#set -e
-#if [[ $code -eq 0 ]]; then
-    #sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
-    #DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
-    DOCKER_RUN="docker exec $device"
-    ${DOCKER_RUN} cat /etc/hosts
-    ${DOCKER_RUN} /root/install.sh
-    ${DOCKER_RUN} rm /root/install.sh
-    ${DOCKER_RUN} rm -rf /tmp/*
-    ${DOCKER_RUN} grep localhost /etc/hosts
-    ${DOCKER_RUN} grep nameserver /etc/resolv.conf
-    ${DOCKER_RUN} grep dev /etc/fstab
-#fi
+DOCKER_RUN="docker exec $device"
+${DOCKER_RUN} cat /etc/hosts
+${DOCKER_RUN} /root/install.sh
+${DOCKER_RUN} rm /root/install.sh
+${DOCKER_RUN} rm -rf /tmp/*
+${DOCKER_RUN} grep localhost /etc/hosts
+${DOCKER_RUN} grep nameserver /etc/resolv.conf
+${DOCKER_RUN} grep dev /etc/fstab
 docker container export --output="docker-rootfs.tar" ${device}
 
 docker stop ${device}
@@ -75,5 +63,3 @@ grep dev rootfs/etc/fstab
 grep eth rootfs/etc/network/interfaces
 
 tar czf rootfs-${DISTRO}-${ARCH}.tar.gz -C rootfs .
-
-exit $code
