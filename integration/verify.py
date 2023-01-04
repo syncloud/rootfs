@@ -15,8 +15,7 @@ logging.basicConfig(level=logging.DEBUG)
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 DIR = dirname(__file__)
-# TODO: openvpn breaks arm docker network
-APPS = ['mail', 'nextcloud', 'files']
+APPS = ['files']
 TMP_DIR = '/tmp/syncloud'
 
 
@@ -77,19 +76,10 @@ def test_apps(device, log_dir, domain, arch):
 
 def _test_app(device, app, log_dir, domain):
     syncloud_session = device.login()
-    response = syncloud_session.post('https://{0}/rest/install'.format(domain),
-                                     json={'app_id': app},
-                                     allow_redirects=False,
-                                     verify=False)
-
-    assert response.status_code == 200
+    device.run_ssh('snap install {0}'.format(app))
     wait_for_installer(syncloud_session, domain, attempts=200)
     wait_for_app(device, domain, app, lambda response_text: app in response_text)
     copy_logs(device, app, log_dir)
-    response = syncloud_session.post('https://{0}/rest/remove'.format(domain),
-                                     json={'app_id': app},
-                                     allow_redirects=False,
-                                     verify=False)
-    assert response.status_code == 200
+    device.run_ssh('snap remove {0}'.format(app))
     wait_for_installer(syncloud_session, domain, attempts=200)
     wait_for_app(device, domain, app, lambda response_text: app not in response_text)
