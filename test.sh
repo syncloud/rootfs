@@ -12,7 +12,7 @@ DISTRO=$1
 ARCH=$2
 DOMAIN=${ARCH}
 
-apk add sshpass python3 py3-pip
+apk add sshpass py3-pip
 
 device=rootfs
 
