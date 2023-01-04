@@ -18,19 +18,18 @@ device=rootfs
 
 sed '/allow-hotplug eth0/d' -i rootfs/etc/network/interfaces
 tar c -C rootfs . | docker import - ${device}
-docker run -d --privileged -i --name ${device} ${device} /sbin/init
-docker container inspect ${device}
-device_ip=$(docker container inspect --format '{{ .NetworkSettings.IPAddress }}' ${device})
-./integration/wait-ssh.sh $device root syncloud 22
+docker run -d --privileged -i --name ${device} -p 22:22 ${device} /sbin/init
 
-#sshpass -p syncloud scp -o StrictHostKeyChecking=no test-on-device.sh root@${device_ip}:/test-on-device.sh
-#DOCKER_RUN="docker exec $device"
+./integration/wait-ssh.sh docker root syncloud 22
 
-#${DOCKER_RUN} /test-on-device.sh
+sshpass -p syncloud scp -o StrictHostKeyChecking=no test-on-device.sh root@docker:/test-on-device.sh
+DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no docker"
+
+${DOCKER_RUN} /test-on-device.sh
 
 pip install -r ${DIR}/dev_requirements.txt
 cd integration
-py.test -sx verify.py --domain=${DOMAIN} --device-host=${device_ip} --arch=${ARCH}
+py.test -sx verify.py --domain=${DOMAIN} --device-host=docker --arch=${ARCH}
 
 docker kill ${device}
 docker rm ${device}
