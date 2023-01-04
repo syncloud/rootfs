@@ -13,9 +13,9 @@ apk add rsync sshpass
 
 ls -la
 device=rootfs
-docker stop ${device} || true
-docker rm ${device} || true
-docker rmi ${device} || true
+#docker stop ${device} || true
+#docker rm ${device} || true
+#docker rmi ${device} || true
 sed '/allow-hotplug eth0/d' -i bootstrap/build/etc/network/interfaces 
 cat bootstrap/build/etc/network/interfaces
 docker image import $DIR/bootstrap/bootstrap.tar ${device}
@@ -24,13 +24,13 @@ docker run -d --privileged -i --name ${device} --hostname ${device} ${device} /s
 docker container inspect ${device}
 docker container inspect --format '{{ .NetworkSettings.Networks.drone.IPAddress }}' ${device}
 
-device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.bridge.IPAddress }}' ${device})
+#device_ip=$(docker container inspect --format '{{ .NetworkSettings.Networks.bridge.IPAddress }}' ${device})
 cd ${DIR}
-set +e
-./integration/wait-ssh.sh ${device_ip} root syncloud 22
-code=$?
-set -e
-if [[ $code -eq 0 ]]; then
+#set +e
+#./integration/wait-ssh.sh ${device_ip} root syncloud 22
+#code=$?
+#set -e
+#if [[ $code -eq 0 ]]; then
     #sshpass -p syncloud scp -o StrictHostKeyChecking=no install.sh root@${device_ip}:/root/install.sh
     #DOCKER_RUN="sshpass -p syncloud ssh -o StrictHostKeyChecking=no root@$device_ip"
     DOCKER_RUN="docker exec $device"
@@ -41,7 +41,7 @@ if [[ $code -eq 0 ]]; then
     ${DOCKER_RUN} grep localhost /etc/hosts
     ${DOCKER_RUN} grep nameserver /etc/resolv.conf
     ${DOCKER_RUN} grep dev /etc/fstab
-fi
+#fi
 docker container export --output="docker-rootfs.tar" ${device}
 
 docker stop ${device}
