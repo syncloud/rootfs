@@ -13,13 +13,12 @@ apk add rsync sshpass
 
 ls -la
 device=rootfs
-#docker stop ${device} || true
-#docker rm ${device} || true
-#docker rmi ${device} || true
+
 sed '/allow-hotplug eth0/d' -i bootstrap/build/etc/network/interfaces 
 cat bootstrap/build/etc/network/interfaces
 docker image import $DIR/bootstrap/bootstrap.tar ${device}
-docker run -d --privileged -i --name ${device} ${device} /sbin/init
+docker run -d --privileged -i --name ${device} -p 22:22 ${device} /sbin/init
+./integration/wait-ssh.sh docker root syncloud 22
 
 cd ${DIR}
 DOCKER_RUN="docker exec $device"
