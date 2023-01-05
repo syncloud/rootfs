@@ -77,7 +77,7 @@ local build(arch, dind) = [{
         },
         {
             name: "docker bootstrap",
-            image: "debian:buster-slim",
+            image: "docker:" + dind,
             environment: {
                 DOCKER_USERNAME: {
                     from_secret: "DOCKER_USERNAME"
@@ -101,7 +101,7 @@ local build(arch, dind) = [{
         },
         {
             name: "docker platform",
-            image: "debian:buster-slim",
+            image: "docker:" + dind,
             environment: {
                 DOCKER_USERNAME: {
                     from_secret: "DOCKER_USERNAME"
