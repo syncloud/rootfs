@@ -1,14 +1,7 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
-
-if [[ -z "$2" ]]; then
-    echo "usage: $0 distro arch"
-    exit 1
-fi
-apt update
-apt install -y libltdl7 libnss3 
 
 DISTRO=$1
 ARCH=$2

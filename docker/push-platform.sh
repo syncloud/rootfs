@@ -1,17 +1,10 @@
-#!/bin/bash -xe
+#!/bin/sh -xe
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=$( cd "$( dirname "$0" )" && pwd )
 cd ${DIR}
-
-if [[ -z "$2" ]]; then
-    echo "usage: $0 distro arch"
-    exit 1
-fi
 
 DISTRO=$1
 ARCH=$2
-apt update
-apt install -y libltdl7 libnss3 
 
 TAG=latest
 if [ -n "$DRONE_TAG" ]; then

@@ -50,16 +50,10 @@ local build(arch, dind) = [{
             commands: [
                 "./cleanup.sh"
             ],
-            privileged: true,
-            network_mode: "host",
             volumes: [
                 {
-                    name: "docker",
-                    path: "/usr/bin/docker"
-                },
-                {
-                    name: "docker.sock",
-                    path: "/var/run/docker.sock"
+                    name: "dockersock",
+                    path: "/var/run"
                 }
             ],
             when: {
@@ -98,16 +92,10 @@ local build(arch, dind) = [{
             commands: [
                 "./docker/push-bootstrap.sh " + distro + " " + arch
             ],
-            privileged: true,
-            network_mode: "host",
             volumes: [
-                {
-                    name: "docker",
-                    path: "/usr/bin/docker"
-                },
-                {
-                    name: "docker.sock",
-                    path: "/var/run/docker.sock"
+               {
+                    name: "dockersock",
+                    path: "/var/run"
                 }
             ]
         },
@@ -128,16 +116,10 @@ local build(arch, dind) = [{
             commands: [
                 "./docker/push-platform.sh " + distro + " " + arch
             ],
-            privileged: true,
-            network_mode: "host",
             volumes: [
                 {
-                    name: "docker",
-                    path: "/usr/bin/docker"
-                },
-                {
-                    name: "docker.sock",
-                    path: "/var/run/docker.sock"
+                    name: "dockersock",
+                    path: "/var/run"
                 }
             ]
         },
@@ -166,7 +148,7 @@ local build(arch, dind) = [{
             }
         }
     ],
-services: [
+    services: [
             {
                 name: "docker",
                 image: "docker:" + dind,
@@ -178,7 +160,7 @@ services: [
                     }
                 ]
             }
-],
+    ],
     volumes: [
          {
                 name: "dockersock",
