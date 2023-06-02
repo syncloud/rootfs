@@ -35,25 +35,25 @@ rm -rf ${ROOTFS}
 apt update
 apt install -y debootstrap rsync
 debootstrap --no-check-gpg --include=\
-  ca-certificates,\
-  locales,\
-  sudo,\
-  openssh-server,\
-  wget,\
-  less,\
-  parted,\
-  unzip,\
-  bzip2,\
-  curl,\
-  dbus,\
-  avahi-daemon,\
-  ntp,\
-  net-tools,\
-  wireless-tools,\
-  fancontrol,\
-  gnupg,\
-  rsync \
-  --arch=${DEB_ARCH} ${DISTRO} ${ROOTFS} ${REPO}
+ca-certificates,\
+locales,\
+sudo,\
+openssh-server,\
+wget,\
+less,\
+parted,\
+unzip,\
+bzip2,\
+curl,\
+dbus,\
+avahi-daemon,\
+ntp,\
+net-tools,\
+wireless-tools,\
+fancontrol,\
+gnupg,\
+rsync \
+--arch=${DEB_ARCH} ${DISTRO} ${ROOTFS} ${REPO}
 
 sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' ${ROOTFS}/etc/locale.gen
 echo "LC_ALL=en_US.UTF-8" >> ${ROOTFS}/etc/environment
