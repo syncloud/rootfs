@@ -36,7 +36,6 @@ apt update
 apt install -y debootstrap rsync
 debootstrap --no-check-gpg --include=\
 avahi-daemon,\
-awk,\
 bzip2,\
 ca-certificates,\
 curl,\
