@@ -9,5 +9,5 @@ rm -rf "${SNAPD}"
 rm -rf snapd
 wget http://apps.syncloud.org/apps/"${SNAPD}" --progress=dot:giga
 tar xzvf "${SNAPD}"
-./snapd/upgrade.sh
+./snapd/install.sh
 snap install platform
