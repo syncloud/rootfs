@@ -10,4 +10,7 @@ rm -rf snapd
 wget http://apps.syncloud.org/apps/"${SNAPD}" --progress=dot:giga
 tar xzvf "${SNAPD}"
 ./snapd/install.sh
-snap install platform
+while ! snap install platform; do
+  echo "retry"
+  sleep 10
+done
