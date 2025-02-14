@@ -1,4 +1,4 @@
-# Syncloud rootfs
+# Syncloud root filesystem
 
 # Run Syncloud on any Linux distro
 
@@ -8,7 +8,6 @@ Remove apache2:
 
 ```
 apt-get remove apache2
-
 ```
 
 Also, as we use a modified version of snapd installation will remove any existing snapd.
