@@ -1,5 +1,5 @@
 #!/bin/bash -xe
-
+apt install -y curl
 VERSION=$(curl http://apps.syncloud.org/releases/stable/snapd2.version)
 ARCH=$(dpkg --print-architecture)
 SNAPD=snapd-${VERSION}-${ARCH}.tar.gz
