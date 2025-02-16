@@ -4,10 +4,10 @@
 
 Make sure you have nothing listening on port 80 and 443, like apache.
 
-Remove apache2:
+Remove apache:
 
 ```
-apt-get remove apache2
+apt-get remove apache2-bin
 ```
 
 Also, as we use a modified version of snapd installation will remove any existing snapd.
