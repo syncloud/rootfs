@@ -168,9 +168,9 @@ local build(arch, distro, dind) = [{
     ]
 }];
 
-build("amd64", "buster", "20.10.21-dind") +
-build("arm64", "buster", "19.03.8-dind") +
-build("arm", "buster", "19.03.8-dind") +
 build("amd64", "bookworm", "20.10.21-dind") +
 build("arm64", "bookworm", "19.03.8-dind") +
-build("arm", "bookworm", "19.03.8-dind")
+build("arm", "bookworm", "19.03.8-dind") +
+build("amd64", "buster", "20.10.21-dind") +
+build("arm64", "buster", "19.03.8-dind") +
+build("arm", "buster", "19.03.8-dind")
