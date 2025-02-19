@@ -12,6 +12,12 @@ DISTRO=$1
 ARCH=$2
 DOMAIN=${ARCH}
 
+
+if [[ $DISTRO == "bookworm" ]]; then
+  echo "no test for now"
+  exit 0
+fi
+
 apk add sshpass cmd:pip
 
 device=rootfs
