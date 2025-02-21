@@ -12,6 +12,7 @@ DISTRO=$1
 ARCH=$2
 DOMAIN=${ARCH}
 
+
 apk add sshpass cmd:pip
 
 device=rootfs

@@ -1,7 +1,6 @@
 local name = "rootfs";
-local distro = "buster";
 
-local build(arch, dind) = [{
+local build(arch, distro, dind) = [{
     kind: "pipeline",
     name: distro + "-" + arch,
 
@@ -169,6 +168,9 @@ local build(arch, dind) = [{
     ]
 }];
 
-build("amd64", "20.10.21-dind") +
-build("arm64", "19.03.8-dind") +
-build("arm", "19.03.8-dind")
+build("amd64", "bookworm", "20.10.21-dind") +
+build("arm64", "bookworm", "19.03.8-dind") +
+build("arm", "bookworm", "19.03.8-dind") +
+build("amd64", "buster", "20.10.21-dind") +
+build("arm64", "buster", "19.03.8-dind") +
+build("arm", "buster", "19.03.8-dind")
