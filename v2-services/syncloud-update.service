@@ -1,0 +1,8 @@
+[Unit]
+Description=Syncloud system update check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/syncloud/syncloud-update.sh

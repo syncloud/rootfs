@@ -1,0 +1,11 @@
+[Unit]
+Description=Mark current RAUC slot as good after successful boot
+After=multi-user.target syncloud-platform.service
+Requires=syncloud-platform.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'rauc status mark-good'
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Initialize Syncloud data partition and bind mounts
+DefaultDependencies=no
+After=local-fs.target
+Before=snapd.mounts.target snapd.service syncloud-update.timer
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/syncloud/data-init.sh
+
+[Install]
+WantedBy=local-fs.target

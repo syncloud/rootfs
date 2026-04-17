@@ -25,6 +25,11 @@ DOCKER_RUN="docker exec $device"
 ${DOCKER_RUN} cat /etc/hosts
 ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
+docker cp $DIR/v2-services ${device}:/root/v2-services
+docker cp $DIR/install-v2-services.sh ${device}:/root/install-v2-services.sh
+${DOCKER_RUN} chmod +x /root/install-v2-services.sh
+${DOCKER_RUN} /root/install-v2-services.sh
+${DOCKER_RUN} rm /root/install-v2-services.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 ${DOCKER_RUN} grep localhost /etc/hosts
 ${DOCKER_RUN} grep nameserver /etc/resolv.conf
