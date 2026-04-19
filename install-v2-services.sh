@@ -4,8 +4,10 @@
 # All services are installed MASKED so v1 images are unaffected.
 # image-v2 unmasks them and writes board-specific RAUC config during assembly.
 
-# Install rauc
-DEBIAN_FRONTEND=noninteractive apt-get install -y rauc
+# Install rauc (CLI) + rauc-service (daemon, systemd unit, D-Bus activation).
+# Without rauc-service, 'rauc install' and 'rauc status' fail because the
+# de.pengutronix.rauc D-Bus name has no owner.
+DEBIAN_FRONTEND=noninteractive apt-get install -y rauc rauc-service
 
 # Install service scripts
 mkdir -p /usr/lib/syncloud
