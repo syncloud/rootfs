@@ -7,9 +7,12 @@
 [ -f /etc/default/syncloud-update ] && . /etc/default/syncloud-update
 
 UPDATE_URL="${UPDATE_URL:-https://updates.syncloud.org}"
-COMPATIBLE=$(rauc status --output-format=shell | grep RAUC_SYSTEM_COMPATIBLE | cut -d= -f2 | tr -d '"')
-CURRENT_VERSION=$(rauc status --output-format=shell | grep RAUC_SLOT_STATUS_BUNDLE_VERSION | head -1 | cut -d= -f2 | tr -d '"')
-SLOT_STATUS=$(rauc status --output-format=shell)
+
+# rauc emits proper shell-quoted assignments
+# (RAUC_SYSTEM_COMPATIBLE='syncloud-amd64-uefi'); eval to unquote correctly.
+eval "$(rauc status --output-format=shell)"
+COMPATIBLE="$RAUC_SYSTEM_COMPATIBLE"
+CURRENT_VERSION="$RAUC_SLOT_STATUS_BUNDLE_VERSION"
 
 echo "Device: $COMPATIBLE"
 echo "Current version: $CURRENT_VERSION"
