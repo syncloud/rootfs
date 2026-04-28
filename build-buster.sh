@@ -29,10 +29,10 @@ docker run -d --privileged -i --name ${device} -p 22:22 ${device} /sbin/init
 ./integration/wait-ssh.sh docker root syncloud 22
 
 DOCKER_RUN="docker exec ${device}"
-docker cp $DIR/install.sh ${device}:/root/install.sh
-${DOCKER_RUN} chmod +x /root/install.sh
-${DOCKER_RUN} /root/install.sh
-${DOCKER_RUN} rm /root/install.sh
+docker cp $DIR/install-buster.sh ${device}:/root/install-buster.sh
+${DOCKER_RUN} chmod +x /root/install-buster.sh
+${DOCKER_RUN} /root/install-buster.sh
+${DOCKER_RUN} rm /root/install-buster.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 docker container export --output="docker-rootfs.tar" ${device}
 
