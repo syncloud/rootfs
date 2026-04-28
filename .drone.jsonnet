@@ -1,8 +1,8 @@
 local name = "rootfs";
 
-local build(arch, distro, dind) = [{
+local bookworm_build(arch, dind) = [{
     kind: "pipeline",
-    name: distro + "-" + arch,
+    name: "bookworm-" + arch,
 
     platform: {
         os: "linux",
@@ -11,9 +11,9 @@ local build(arch, distro, dind) = [{
     steps: [
         {
             name: "bootstrap",
-            image: "debian:" + distro + "-slim",
+            image: "debian:bookworm-slim",
             commands: [
-                "./bootstrap/bootstrap-" + distro + ".sh " + arch
+                "./bootstrap/bootstrap-bookworm.sh " + arch
             ],
             privileged: true
         },
@@ -21,10 +21,10 @@ local build(arch, distro, dind) = [{
             name: "build",
             image: "docker:" + dind,
             commands: [
-                "./build.sh " + distro + " " + arch
+                "./build.sh bookworm " + arch
             ],
             volumes: [
-         {
+                {
                     name: "dockersock",
                     path: "/var/run"
                 }
@@ -34,7 +34,7 @@ local build(arch, distro, dind) = [{
             name: "test",
             image: "docker:" + dind,
             commands: [
-                "./test.sh " + distro + " " + arch
+                "./test.sh bookworm " + arch
             ],
             volumes: [
                 {
@@ -45,7 +45,7 @@ local build(arch, distro, dind) = [{
         },
         {
             name: "cleanup",
-            image: "debian:buster-slim",
+            image: "debian:bookworm-slim",
             commands: [
                 "./cleanup.sh"
             ],
@@ -89,7 +89,7 @@ local build(arch, distro, dind) = [{
                 event: [ "tag" ]
             },
             commands: [
-                "./docker/push-bootstrap.sh " + distro + " " + arch
+                "./docker/push-bootstrap.sh bookworm " + arch
             ],
             volumes: [
                {
@@ -113,7 +113,7 @@ local build(arch, distro, dind) = [{
                 event: [ "tag" ]
             },
             commands: [
-                "./docker/push-platform.sh " + distro + " " + arch
+                "./docker/push-platform.sh bookworm " + arch
             ],
             volumes: [
                 {
@@ -135,11 +135,11 @@ local build(arch, distro, dind) = [{
                 },
                 timeout: "2m",
                 command_timeout: "2m",
-                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-" + distro + "-" + arch,
+                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-bookworm-" + arch,
                 source: [
                     "integration/log/*",
                     "log/*",
-                    "rootfs-" + distro + "-" + arch + ".tar.gz"
+                    "rootfs-bookworm-" + arch + ".tar.gz"
                 ]
             },
             when: {
@@ -168,6 +168,119 @@ local build(arch, distro, dind) = [{
     ]
 }];
 
-build("amd64", "bookworm", "20.10.21-dind") +
-build("arm64", "bookworm", "20.10.21-dind") +
-build("arm", "bookworm", "19.03.8-dind")
+// Buster pipeline: no debootstrap, no GitHub release, no bootstrap image.
+// Refreshes a pinned platform-buster base image by re-running snap install,
+// then republishes as a Docker test image only.
+local buster_build(arch, dind) = [{
+    kind: "pipeline",
+    name: "buster-" + arch,
+
+    platform: {
+        os: "linux",
+        arch: arch
+    },
+    steps: [
+        {
+            name: "build",
+            image: "docker:" + dind,
+            commands: [
+                "./build-buster.sh " + arch
+            ],
+            volumes: [
+                {
+                    name: "dockersock",
+                    path: "/var/run"
+                }
+            ]
+        },
+        {
+            name: "cleanup",
+            image: "debian:bookworm-slim",
+            commands: [
+                "./cleanup.sh"
+            ],
+            volumes: [
+                {
+                    name: "dockersock",
+                    path: "/var/run"
+                }
+            ],
+            when: {
+              status: [ "failure", "success" ]
+            }
+        },
+        {
+            name: "docker platform",
+            image: "docker:" + dind,
+            environment: {
+                DOCKER_USERNAME: {
+                    from_secret: "DOCKER_USERNAME"
+                },
+                DOCKER_PASSWORD: {
+                    from_secret: "DOCKER_PASSWORD"
+                }
+            },
+            when: {
+                event: [ "tag" ]
+            },
+            commands: [
+                "./docker/push-platform.sh buster " + arch
+            ],
+            volumes: [
+                {
+                    name: "dockersock",
+                    path: "/var/run"
+                }
+            ]
+        },
+        {
+            name: "artifact",
+            image: "appleboy/drone-scp:1.6.4",
+            settings: {
+                host: {
+                    from_secret: "artifact_host"
+                },
+                username: "artifact",
+                key: {
+                    from_secret: "artifact_key"
+                },
+                timeout: "2m",
+                command_timeout: "2m",
+                target: "/home/artifact/repo/" + name + "/${DRONE_BUILD_NUMBER}-buster-" + arch,
+                source: [
+                    "integration/log/*",
+                    "log/*"
+                ]
+            },
+            when: {
+              status: [ "failure", "success" ]
+            }
+        }
+    ],
+    services: [
+            {
+                name: "docker",
+                image: "docker:" + dind,
+                privileged: true,
+                volumes: [
+                    {
+                        name: "dockersock",
+                        path: "/var/run"
+                    }
+                ]
+            }
+    ],
+    volumes: [
+         {
+                name: "dockersock",
+                temp: {}
+            }
+    ]
+}];
+
+buster_build("amd64", "20.10.21-dind") +
+buster_build("arm64", "20.10.21-dind") +
+buster_build("arm", "19.03.8-dind") +
+bookworm_build("amd64", "20.10.21-dind") +
+bookworm_build("arm64", "20.10.21-dind") +
+bookworm_build("arm", "19.03.8-dind")
