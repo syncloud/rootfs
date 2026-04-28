@@ -33,11 +33,6 @@ docker cp $DIR/install.sh ${device}:/root/install.sh
 ${DOCKER_RUN} chmod +x /root/install.sh
 ${DOCKER_RUN} /root/install.sh
 ${DOCKER_RUN} rm /root/install.sh
-docker cp $DIR/v2-services ${device}:/root/v2-services
-docker cp $DIR/install-v2-services.sh ${device}:/root/install-v2-services.sh
-${DOCKER_RUN} chmod +x /root/install-v2-services.sh
-${DOCKER_RUN} /root/install-v2-services.sh
-${DOCKER_RUN} rm /root/install-v2-services.sh
 ${DOCKER_RUN} rm -rf /tmp/*
 docker container export --output="docker-rootfs.tar" ${device}
 
