@@ -17,6 +17,11 @@ BASE_IMAGE="syncloud/platform-buster-${ARCH}:25.02"
 
 apk add rsync sshpass
 
+while ! docker info >/dev/null 2>&1; do
+  echo "waiting for docker daemon"
+  sleep 1
+done
+
 device=rootfs
 docker pull ${BASE_IMAGE}
 docker tag ${BASE_IMAGE} ${device}
