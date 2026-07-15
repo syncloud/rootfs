@@ -278,9 +278,40 @@ local buster_build(arch, dind) = [{
     ]
 }];
 
+local manifest(image, distro) = {
+    kind: "pipeline",
+    name: image + "-" + distro + " manifest",
+    depends_on: [ distro + "-amd64", distro + "-arm64", distro + "-arm" ],
+    trigger: {
+        event: [ "tag" ]
+    },
+    steps: [
+        {
+            name: "manifest",
+            image: "plugins/manifest:1.4",
+            settings: {
+                username: {
+                    from_secret: "DOCKER_USERNAME"
+                },
+                password: {
+                    from_secret: "DOCKER_PASSWORD"
+                },
+                target: "syncloud/" + image + "-" + distro + ":${DRONE_TAG}",
+                template: "syncloud/" + image + "-" + distro + ":${DRONE_TAG}-ARCH",
+                platforms: [ "linux/amd64", "linux/arm64", "linux/arm" ]
+            }
+        }
+    ]
+};
+
 buster_build("amd64", "20.10.21-dind") +
 buster_build("arm64", "20.10.21-dind") +
 buster_build("arm", "19.03.8-dind") +
 bookworm_build("amd64", "20.10.21-dind") +
 bookworm_build("arm64", "20.10.21-dind") +
-bookworm_build("arm", "19.03.8-dind")
+bookworm_build("arm", "19.03.8-dind") +
+[
+    manifest("platform", "buster"),
+    manifest("platform", "bookworm"),
+    manifest("bootstrap", "bookworm")
+]

@@ -10,7 +10,7 @@ TAG=latest
 if [ -n "$DRONE_TAG" ]; then
     TAG=$DRONE_TAG
 fi
-IMAGE="syncloud/platform-${DISTRO}-${ARCH}:$TAG"
+IMAGE="syncloud/platform-${DISTRO}:${TAG}-${ARCH}"
 
 set +ex
 while ! docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; do

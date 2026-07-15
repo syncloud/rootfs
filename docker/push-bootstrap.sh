@@ -10,7 +10,7 @@ if [ -n "$DRONE_TAG" ]; then
     TAG=$DRONE_TAG
 fi
 
-IMAGE="syncloud/bootstrap-${DISTRO}-${ARCH}:$TAG"
+IMAGE="syncloud/bootstrap-${DISTRO}:${TAG}-${ARCH}"
 
 set +ex
 while ! docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; do
