@@ -306,10 +306,10 @@ local manifest(image, distro) = {
 
 buster_build("amd64", "20.10.21-dind") +
 buster_build("arm64", "20.10.21-dind") +
-buster_build("arm", "19.03.8-dind") +
+buster_build("arm", "24.0.9-dind") +
 bookworm_build("amd64", "20.10.21-dind") +
 bookworm_build("arm64", "20.10.21-dind") +
-bookworm_build("arm", "19.03.8-dind") +
+bookworm_build("arm", "24.0.9-dind") +
 [
     manifest("platform", "buster"),
     manifest("platform", "bookworm"),
